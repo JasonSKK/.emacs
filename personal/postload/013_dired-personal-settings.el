@@ -1,4 +1,4 @@
-;;; dired-personal-settings --- 2024-05-12 08:43:35 pm
+;;; dired-personal-settings --- 2024-05-13 02:15:06 pm
 ;;; Commentary:
 ;; Hide details when using dired
 

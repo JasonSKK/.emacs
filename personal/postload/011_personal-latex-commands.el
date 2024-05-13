@@ -1,4 +1,4 @@
-;;; personal-latex-commands --- 2024-05-12 08:43:35 pm
+;;; personal-latex-commands --- 2024-05-13 02:15:05 pm
 ;;  async compile current latex document with references and open it with external app
 (defun async-compile-latex-file-open-external ()
   (interactive)

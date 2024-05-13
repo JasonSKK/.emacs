@@ -1,4 +1,4 @@
-;;; authinfo-copy-password --- 2024-05-12 08:43:40 pm
+;;; authinfo-copy-password --- 2024-05-13 02:15:12 pm
 ;;; authinfo.el -- hiding unnecessary passwords
 ;;
 ;; Copyright (C) 2017  Alex Schroeder <alex@gnu.org>

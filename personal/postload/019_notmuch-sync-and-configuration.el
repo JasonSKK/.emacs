@@ -1,4 +1,4 @@
-;;; notmuch-sync-and-configuration --- 2024-05-12 08:43:37 pm
+;;; notmuch-sync-and-configuration --- 2024-05-13 02:15:08 pm
 ;; shell command output no window
 (defun no-output-shell-run (command)
   "Run shell COMMAND without displaying the output.  First ARG is COMMAND."
@@ -73,9 +73,9 @@ timestamp."
 (autoload 'notmuch "notmuch" "notmuch mail" t)
 (global-set-key (kbd "C-l n") 'notmuch)
 ;; sign emails
-(setq mml-secure-openpgp-sign-with-sender t)
+;;(setq mml-secure-openpgp-sign-with-sender t)
 ;; Sign messages by default.
-(add-hook 'message-setup-hook 'mml-secure-sign-pgpmime)
+;;(add-hook 'message-setup-hook 'mml-secure-sign-pgpmime)
 ;; fetch email on startup
 (no-output-shell-run "pushd /Users/jsk/Mail ; gmi sync ; popd ; notmuch new")
 ;; fetch email period

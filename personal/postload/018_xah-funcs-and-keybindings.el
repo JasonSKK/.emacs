@@ -1,4 +1,4 @@
-;;; xah-funcs-and-keybindings --- 2024-05-12 08:43:37 pm
+;;; xah-funcs-and-keybindings --- 2024-05-13 02:15:07 pm
 ;; copy current buffer path
 (defun xah-copy-file-path (&optional DirPathOnlyQ)
   "Copy current buffer file path or dired path.

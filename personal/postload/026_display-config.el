@@ -1,4 +1,4 @@
-;;; display-config --- 2024-05-12 08:43:39 pm
+;;; display-config --- 2024-05-13 02:15:10 pm
   ;; --- DISPLAY ---
   ;; (split-window-right) ;; split to 2 windows right on startup
   ;; display numbers
