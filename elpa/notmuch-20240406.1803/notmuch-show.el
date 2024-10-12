@@ -1604,7 +1604,9 @@ reset based on the original query."
 (defvar notmuch-show-part-map
   (let ((map (make-sparse-keymap)))
     (define-key map "s" 'notmuch-show-save-part)
-    (define-key map "v" 'notmuch-show-view-part)
+    ;; (define-key map "v" 'notmuch-show-view-part)
+    (define-key map "l" 'notmuch-show-jump-to-latest)
+    (define-key map "v" 'notmuch-show-view-html+)
     (define-key map "o" 'notmuch-show-interactively-view-part)
     (define-key map "|" 'notmuch-show-pipe-part)
     (define-key map "m" 'notmuch-show-choose-mime-of-part)

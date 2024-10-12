@@ -1,4 +1,4 @@
-;;; xah-funcs-and-keybindings --- 2024-05-13 02:15:07 pm
+;;; xah --- 2024-10-12  8:36:40 pm CEST
 ;; copy current buffer path
 (defun xah-copy-file-path (&optional DirPathOnlyQ)
   "Copy current buffer file path or dired path.
@@ -101,5 +101,5 @@ Version 2017-05-30"
 (global-set-key (kbd "C-a") 'xah-beginning-of-line-or-block) ;; replaces (crux-move-beginning-of-line ARG)
 (global-set-key (kbd "C-e") 'xah-end-of-line-or-block) ;; replaces (move-end-of-line ARG)
 
-(provide 'xah-funcs-and-keybindings)
-;;; 018_xah-funcs-and-keybindings.el ends here
+(provide 'xah)
+;;; 012_xah.el ends here

@@ -1,4 +1,4 @@
-;;; personal-latex-commands --- 2024-05-13 02:15:05 pm
+;;; latex-config --- 2024-10-12  8:36:39 pm CEST
 ;;  async compile current latex document with references and open it with external app
 (defun async-compile-latex-file-open-external ()
   (interactive)
@@ -22,5 +22,5 @@
   (shell-command (concat "/Library/TeX/texbin/texcount "
                          ; "uncomment then options go here "
                          (buffer-file-name))))
-(provide 'personal-latex-commands)
-;;; 011_personal-latex-commands.el ends here
+(provide 'latex-config)
+;;; 006_latex-config.el ends here

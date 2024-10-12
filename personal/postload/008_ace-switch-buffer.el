@@ -1,4 +1,4 @@
-;;; window_and_buffer_switching_ace_window --- 2024-05-13 02:15:06 pm
+;;; ace-switch-buffer --- 2024-10-12  8:36:39 pm CEST
 ;;; Commentary:
 ;;; move amngst windows and switch window position with cursor keys
 
@@ -16,5 +16,5 @@
 (global-set-key (kbd "C-O")  'ace-window)
 (global-set-key (kbd "C-x o")  'ace-window)
 (setq aw-keys '(?a ?b ?c ?d ?e ?f ?g ?h ?i ?j ?k ?l ?m ?n ?o ?p ?q))
-(provide 'window_and_buffer_switching_ace_window)
-;;; 014_window_and_buffer_switching_ace_window.el ends here
+(provide 'ace-switch-buffer)
+;;; 008_ace-switch-buffer.el ends here

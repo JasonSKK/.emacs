@@ -1,8 +1,8 @@
-;;; whitespace_and_visual_line_fixes --- 2024-05-13 02:15:03 pm
-;;; Commentary:
+;;; whitespace --- 2024-10-12  8:36:41 pm CEST
+  ;;; Commentary:
 ;;; turn off whitespace and turn on visual line modes,
 ;;; for these main modes:
-;;; js, css, web, html, markdown
+;;; js, css, web, html, markdown, python, latex
 
 (defun whitespace-off ()
   "Make turning whitespace mode off a command callable from key."
@@ -22,5 +22,5 @@
 (add-hook 'js-mode-hook 'visual-line-mode)
 (add-hook 'python-mode-hook 'visual-line-mode)
 (add-hook 'latex-mode-hook 'visual-line-mode)
-(provide 'whitespace_and_visual_line_fixes)
-;;; 005_whitespace_and_visual_line_fixes.el ends here
+(provide 'whitespace)
+;;; 019_whitespace.el ends here

@@ -1,4 +1,4 @@
-;;; org-mode --- 2024-05-13 02:15:05 pm
+;;; org-mode --- 2024-10-12  8:36:38 pm CEST
 ;;; Commentary:
 
 ;; customize some org mode settings
@@ -251,4 +251,4 @@ If called with ARG, do not insert time."
 ;; include docx when exporting to odt
 (setq org-odt-preferred-output-format "docx")
 (provide 'org-mode)
-;;; 010_org-mode.el ends here
+;;; 005_org-mode.el ends here

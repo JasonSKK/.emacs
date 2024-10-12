@@ -1,4 +1,4 @@
-;;; untangle_tangle_export_babel_from_master_file --- 2024-05-13 02:15:04 pm
+;;; org-el-untangle --- 2024-10-12  8:36:38 pm CEST
 ;;; Commentary:
 ;;; org-el-untangle:
 ;;; import muliple el files from one folder into one org mode file.
@@ -103,5 +103,5 @@ Skip sections marked with COMMENT."
      ;; Note: This keybinding is in analogy to the default keybinding:
      ;; C-c . -> org-time-stamp
      (define-key org-mode-map (kbd "C-c C-M-e") 'org-el-export-all-sections)))
-(provide 'untangle_tangle_export_babel_from_master_file)
-;;; 007_untangle_tangle_export_babel_from_master_file.el ends here
+(provide 'org-el-untangle)
+;;; 004_org-el-untangle.el ends here

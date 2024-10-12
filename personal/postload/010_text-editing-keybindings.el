@@ -1,10 +1,9 @@
-;;; various-personal-keybindings --- 2024-05-13 02:15:07 pm
-
+;;; text-editing-keybindings --- 2024-10-12  8:36:39 pm CEST
 ;;; Commentary:
 ;; Configuration for personal keybindings
 
 ;;; Code:
-;; Remove C-l mapping and define new
+;; Remove C-l mapping and define new keymap prefix
 (global-unset-key "\C-l")
 (defvar ctl-l-map (make-keymap)
      "Keymap for local bindings and functions, prefixed by (^L)")
@@ -19,17 +18,9 @@
 (define-key ctl-l-map "f"  'fill-region)
 ;; comment region
 (global-set-key (kbd "C-M-;") 'comment-region)
-
 ;; ------------------------------------
+;; indenting
+(global-set-key (kbd "C-x TAB") 'indent-rigidly)
 
-;; ------------ Dired Mode ------------
-;; q kills current buffer instead of quit
-(define-key dired-mode-map "q" 'kill-this-buffer)
-;; ------------------------------------
-
-;; ------- Console mode f7 as H -------
-(define-key function-key-map (kbd "<f7>") 'event-apply-hyper-modifier)
-;; -------------------------------------
-
-(provide 'various-personal-keybindings)
-;;; 016_various-personal-keybindings.el ends here
+(provide 'text-editing-keybindings)
+;;; 010_text-editing-keybindings.el ends here

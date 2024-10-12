@@ -1,4 +1,4 @@
-;;; display-config --- 2024-05-13 02:15:10 pm
+;;; appearance --- 2024-10-12  8:36:41 pm CEST
   ;; --- DISPLAY ---
   ;; (split-window-right) ;; split to 2 windows right on startup
   ;; display numbers
@@ -33,5 +33,13 @@
   (require 'telephone-line)
   (telephone-line-mode 1)
 
-(provide 'display-config)
-;;; 026_display-config.el ends here
+  ;; disable theme after loading another one
+    (defun disable-all-themes ()
+      "disable all active themes."
+      (dolist (i custom-enabled-themes)
+        (disable-theme i)))
+    (defadvice load-theme (before disable-themes-first activate)
+      (disable-all-themes))
+
+(provide 'appearance)
+;;; 018_appearance.el ends here
