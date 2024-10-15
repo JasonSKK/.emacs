@@ -1,4 +1,4 @@
-;;; prefix-ctrl-l --- 2024-10-12  8:36:39 pm CEST
+;;; prefix-ctrl-l --- 2024-10-15  8:55:11 pm CEST
 
 ;;; Commentary:
 ;; Configuration for personal keybindings
@@ -10,6 +10,5 @@
      "Keymap for local bindings and functions, prefixed by (^L)")
 (define-key global-map "\C-l" 'Control-L-prefix)
 (fset 'Control-L-prefix ctl-l-map)
-
 (provide 'prefix-ctrl-l)
 ;;; 009_prefix-ctrl-l.el ends here

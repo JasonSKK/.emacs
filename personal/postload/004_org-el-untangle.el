@@ -1,4 +1,4 @@
-;;; org-el-untangle --- 2024-10-12  8:36:38 pm CEST
+;;; org-el-untangle --- 2024-10-15  8:55:10 pm CEST
 ;;; Commentary:
 ;;; org-el-untangle:
 ;;; import muliple el files from one folder into one org mode file.

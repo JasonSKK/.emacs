@@ -1,4 +1,4 @@
-;;; whitespace --- 2024-10-12  8:36:41 pm CEST
+;;; whitespace --- 2024-10-15  8:55:14 pm CEST
   ;;; Commentary:
 ;;; turn off whitespace and turn on visual line modes,
 ;;; for these main modes:
@@ -23,4 +23,4 @@
 (add-hook 'python-mode-hook 'visual-line-mode)
 (add-hook 'latex-mode-hook 'visual-line-mode)
 (provide 'whitespace)
-;;; 019_whitespace.el ends here
+;;; 020_whitespace.el ends here
