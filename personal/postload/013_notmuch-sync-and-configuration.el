@@ -1,4 +1,4 @@
-;;; notmuch-sync-and-configuration --- 2024-10-15  8:55:12 pm CEST
+;;; notmuch-sync-and-configuration --- 2024-10-18  6:19:59 pm CEST
     ;; view html part in browser
     ;; mapped to ".v" in elpa/notmuch-20240406.1803/notmuch-show.el
     (defun notmuch-show-view-html+ ()

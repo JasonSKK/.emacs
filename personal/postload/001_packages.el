@@ -1,4 +1,4 @@
-;;; packages --- 2024-10-15  8:55:10 pm CEST
+;;; packages --- 2024-10-18  6:19:57 pm CEST
 
     ;;; Commentary:
     ;;; this is only some of the packags.

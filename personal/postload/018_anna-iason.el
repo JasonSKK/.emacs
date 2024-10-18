@@ -1,4 +1,4 @@
-;;; anna-iason --- 2024-10-15  8:55:13 pm CEST
+;;; anna-iason --- 2024-10-18  6:20:00 pm CEST
 (defun anna-iason-time-together ()
   "Calculate the number of years, months, and days between the start date (Feb 16, 2017) and today's date, including both dates."
   (interactive)

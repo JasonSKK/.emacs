@@ -1,4 +1,4 @@
-;;; whitespace --- 2024-10-15  8:55:14 pm CEST
+;;; whitespace --- 2024-10-18  6:20:01 pm CEST
   ;;; Commentary:
 ;;; turn off whitespace and turn on visual line modes,
 ;;; for these main modes:

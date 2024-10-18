@@ -1,4 +1,4 @@
-;;; latex-config --- 2024-10-15  8:55:11 pm CEST
+;;; latex-config --- 2024-10-18  6:19:58 pm CEST
 ;;  async compile current latex document with references and open it with external app
 (defun async-compile-latex-file-open-external ()
   (interactive)

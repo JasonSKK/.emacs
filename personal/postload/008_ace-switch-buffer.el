@@ -1,4 +1,4 @@
-;;; ace-switch-buffer --- 2024-10-15  8:55:11 pm CEST
+;;; ace-switch-buffer --- 2024-10-18  6:19:58 pm CEST
 ;;; Commentary:
 ;;; move amngst windows and switch window position with cursor keys
 
