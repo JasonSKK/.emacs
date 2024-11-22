@@ -1,4 +1,4 @@
-;;; multiple-cursors --- 2024-10-18  6:19:58 pm CEST
+;;; multiple-cursors --- 2024-11-22  8:09:45 pm CET
 
     (prelude-load-require-packages '(multiple-cursors ace-mc)) ;; mc-extras
     ;; ace-mc

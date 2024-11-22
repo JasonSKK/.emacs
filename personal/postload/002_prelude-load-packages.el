@@ -1,4 +1,4 @@
-;;; prelude-load-packages --- 2024-10-18  6:19:57 pm CEST
+;;; prelude-load-packages --- 2024-11-22  8:09:45 pm CET
     (prelude-load-require-packages '(avy-zap avy-menu auto-async-byte-compile anzu ace-window ace-popup-menu ace-isearch))
 
     ;;; re-builder package

@@ -1,4 +1,4 @@
-;;; appearance --- 2024-10-18  6:20:01 pm CEST
+;;; appearance --- 2024-11-22  8:09:49 pm CET
   ;; --- DISPLAY ---
   ;; (split-window-right) ;; split to 2 windows right on startup
   ;; display numbers

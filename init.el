@@ -260,7 +260,7 @@ by Prelude.")
 (setf epa-pinentry-mode 'loopback)
 
 ;; set python interpreter path
-(setq python-interpreter "/usr/local/anaconda3/bin/python")
+(setq python-interpreter "/home/iason1/venv/python3/bin/python3")
 
 ;; Startup time
 (defun efs/display-startup-time ()
