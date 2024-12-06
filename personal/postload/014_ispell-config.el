@@ -1,4 +1,4 @@
-;;; ispell-config --- 2024-11-22  8:09:48 pm CET
+;;; ispell-config --- 2024-12-06 12:30:59 pm CET
 ;; This contains a collection of Ispell configurations.
 
 ;;; Commentary:

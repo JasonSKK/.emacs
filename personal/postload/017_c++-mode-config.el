@@ -1,4 +1,4 @@
-;;; c++-mode-config --- 2024-11-22  8:09:48 pm CET
+;;; c++-mode-config --- 2024-12-06 12:30:59 pm CET
   ;; Set the default indentation level to 3 spaces for C/C++ modes
 (setq c-basic-offset 3)
 ;; Disable the use of tabs for indentation using spaces instead

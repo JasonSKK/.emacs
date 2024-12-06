@@ -1291,55 +1291,59 @@ Version 2017-05-30"</x-color>
 </x-color></x-bg-color><bold>* notmuch-sync-and-configuration</bold>
 <x-bg-color><param>#191a1b</param><x-color><param>#a8a8a8</param>#+BEGIN_SRC emacs-lisp
 
-</x-color></x-bg-color><x-color><param>#ffffff</param>      <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>view html part in browser
+</x-color></x-bg-color><x-color><param>#ffffff</param>  <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>view html part in browser
 
-</x-color>      <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>mapped to ".v" in elpa/notmuch-20240406.1803/notmuch-show.el
+</x-color>  <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>mapped to ".v" in elpa/notmuch-20240406.1803/notmuch-show.el
 
-</x-color>      <x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>defun</x-color> <x-color><param>#feacd0</param>notmuch-show-view-html+</x-color> <x-color><param>#ff62d4</param>()</x-color>
-        <x-color><param>#b0d6f5</param>"Open the text/html part of the current message using
-      `<x-color><param>#00bcff</param>notmuch-show-view-part</x-color>'."</x-color>
-        <x-color><param>#ff62d4</param>(</x-color><x-color><param>#b6a0ff</param>interactive</x-color><x-color><param>#ff62d4</param>)</x-color>
-        <x-color><param>#ff62d4</param>(</x-color><x-color><param>#b6a0ff</param>save-excursion</x-color>
-          <x-color><param>#3fdfd0</param>(</x-color>goto-char
-           <x-color><param>#fba849</param>(</x-color>prop-match-beginning
-            <x-color><param>#9f80ff</param>(</x-color>text-property-search-forward
-             <x-color><param>#f78fe7</param>:notmuch-part</x-color>
-             <x-color><param>#79a8ff</param>"text/html"</x-color>
-             <x-color><param>#4fe42f</param>(</x-color><x-color><param>#b6a0ff</param>lambda</x-color> <x-color><param>#fe6060</param>(</x-color>value notmuch-part<x-color><param>#fe6060</param>)</x-color>
-               <x-color><param>#fe6060</param>(</x-color>equal <x-color><param>#4fafff</param>(</x-color>plist-get notmuch-part <x-color><param>#f78fe7</param>:content-type</x-color><x-color><param>#4fafff</param>)</x-color>
-                      value<x-color><param>#fe6060</param>)</x-color><x-color><param>#4fe42f</param>)</x-color><x-color><param>#9f80ff</param>)</x-color><x-color><param>#fba849</param>)</x-color><x-color><param>#3fdfd0</param>)</x-color>
-          <x-color><param>#3fdfd0</param>(</x-color>notmuch-show-view-part<x-color><param>#3fdfd0</param>)</x-color><x-color><param>#ff62d4</param>)</x-color><x-color><param>#ffffff</param>)</x-color>
-
-
-        <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>shell command output no window
-</x-color>        <x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>defun</x-color> <x-color><param>#feacd0</param>no-output-shell-run</x-color> <x-color><param>#ff62d4</param>(</x-color>command<x-color><param>#ff62d4</param>)</x-color>
-          <x-color><param>#b0d6f5</param>"Run shell COMMAND without displaying the output.  First ARG is COMMAND."</x-color>
-          <x-color><param>#ff62d4</param>(</x-color><x-color><param>#b6a0ff</param>interactive</x-color> <x-color><param>#3fdfd0</param>(</x-color>list <x-color><param>#fba849</param>(</x-color>read-shell-command <x-color><param>#79a8ff</param>"$ "</x-color><x-color><param>#fba849</param>)</x-color><x-color><param>#3fdfd0</param>)</x-color><x-color><param>#ff62d4</param>)</x-color>
-          <x-color><param>#ff62d4</param>(</x-color>start-process-shell-command command nil command<x-color><param>#ff62d4</param>)</x-color><x-color><param>#ffffff</param>)</x-color>
-        <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>sync notmuch using lieer and notmuch new
-</x-color>        <x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>defun</x-color> <x-color><param>#feacd0</param>notmuch-sync</x-color> <x-color><param>#ff62d4</param>()</x-color>
-          <x-color><param>#b0d6f5</param>"Syncs notmuch using lieer.  ARG empty: Configuration file is /Users/jsk/Mail/gmi-sync.sh."</x-color>
-          <x-color><param>#ff62d4</param>(</x-color><x-color><param>#b6a0ff</param>interactive</x-color><x-color><param>#ff62d4</param>)</x-color>
-          <x-color><param>#ff62d4</param>(</x-color><x-color><param>#b6a0ff</param>let</x-color> <x-color><param>#3fdfd0</param>(</x-color><x-color><param>#fba849</param>(</x-color>lnr <x-color><param>#9f80ff</param>(</x-color>line-number-at-pos<x-color><param>#9f80ff</param>)</x-color><x-color><param>#fba849</param>)</x-color><x-color><param>#3fdfd0</param>)</x-color> <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>register cursor line number
-
-</x-color>          <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>synching config replaced by /Users/jsk/Mail/.notmuch/hooks/pre-new, now with 'notmuch new' lieer fetches and pushes
-
-</x-color>          <x-color><param>#3fdfd0</param>(</x-color>no-output-shell-run <x-color><param>#79a8ff</param>"notmuch new"</x-color><x-color><param>#3fdfd0</param>)</x-color>
-          <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>(no-output-shell-run "pushd /Users/jsk/Mail ; gmi sync ; popd ; notmuch new")
-
-</x-color>          <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>(no-output-shell-run "notmuch tag +work -- tag:new and to:iason.svoronoskanavas@gmail.com ; notmuch tag +gmail -- tag:new and to:jason.skk98@gmail.com")
-</x-color>            <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>"&& notmuch tag +gmail -- tag:new and to:jason.skk98@gmail.com && notmuch tag +windowslive -- tag:new and to:ko00@windowslive.com" ;; is in /Users/jsk/Mail/.notmuch/hooks/pre-new
-</x-color>            <x-color><param>#3fdfd0</param>(</x-color>notmuch-refresh-this-buffer<x-color><param>#3fdfd0</param>)</x-color> <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>refresh this buffer to reduce lag
-
-</x-color>            <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>(notmuch-refresh-all-buffers) ;; refresh all not much buffers ;; old version
-</x-color>            <x-color><param>#3fdfd0</param>(</x-color>goto-line lnr<x-color><param>#3fdfd0</param>)</x-color> <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>go to registered line number
-</x-color>            <x-color><param>#3fdfd0</param>(</x-color>message <x-color><param>#79a8ff</param>"notmuch & lieer on sync"</x-color><x-color><param>#3fdfd0</param>)</x-color><x-color><param>#ff62d4</param>)</x-color><x-color><param>#ffffff</param>)</x-color>
+</x-color>  <x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>defun</x-color> <x-color><param>#feacd0</param>notmuch-show-view-html+</x-color> <x-color><param>#ff62d4</param>()</x-color>
+  <x-color><param>#b0d6f5</param>"Open the text/html part of the current message using `<x-color><param>#00bcff</param>notmuch-show-view-part</x-color>' and bring Firefox to the foreground."</x-color>
+  <x-color><param>#ff62d4</param>(</x-color><x-color><param>#b6a0ff</param>interactive</x-color><x-color><param>#ff62d4</param>)</x-color>
+  <x-color><param>#ff62d4</param>(</x-color><x-color><param>#b6a0ff</param>save-excursion</x-color>
+    <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>Navigate to the text/html part
+</x-color>    <x-color><param>#3fdfd0</param>(</x-color>goto-char
+     <x-color><param>#fba849</param>(</x-color>prop-match-beginning
+      <x-color><param>#9f80ff</param>(</x-color>text-property-search-forward
+       <x-color><param>#f78fe7</param>:notmuch-part</x-color>
+       <x-color><param>#79a8ff</param>"text/html"</x-color>
+       <x-color><param>#4fe42f</param>(</x-color><x-color><param>#b6a0ff</param>lambda</x-color> <x-color><param>#fe6060</param>(</x-color>value notmuch-part<x-color><param>#fe6060</param>)</x-color>
+         <x-color><param>#fe6060</param>(</x-color>equal <x-color><param>#4fafff</param>(</x-color>plist-get notmuch-part <x-color><param>#f78fe7</param>:content-type</x-color><x-color><param>#4fafff</param>)</x-color>
+                value<x-color><param>#fe6060</param>)</x-color><x-color><param>#4fe42f</param>)</x-color><x-color><param>#9f80ff</param>)</x-color><x-color><param>#fba849</param>)</x-color><x-color><param>#3fdfd0</param>)</x-color>
+    <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>View the part in an external browser
+</x-color>    <x-color><param>#3fdfd0</param>(</x-color><x-color><param>#b6a0ff</param>let</x-color> <x-color><param>#fba849</param>(</x-color><x-color><param>#9f80ff</param>(</x-color>url <x-color><param>#4fe42f</param>(</x-color>notmuch-show-view-part<x-color><param>#4fe42f</param>)</x-color><x-color><param>#9f80ff</param>)</x-color><x-color><param>#fba849</param>)</x-color>
+      <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>After a short delay, bring Firefox to the foreground using wmctrl
+</x-color>      <x-color><param>#fba849</param>(</x-color>start-process <x-color><param>#79a8ff</param>"wmctrl-focus-firefox"</x-color> nil <x-color><param>#79a8ff</param>"sh"</x-color> <x-color><param>#79a8ff</param>"-c"</x-color>
+                     <x-color><param>#79a8ff</param>"sleep 0.5 && wmctrl -a Firefox"</x-color><x-color><param>#fba849</param>)</x-color><x-color><param>#3fdfd0</param>)</x-color><x-color><param>#ff62d4</param>)</x-color><x-color><param>#ffffff</param>)</x-color>
 
 
-        <x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>defun</x-color> <x-color><param>#feacd0</param>notmuch-batch-tag-per-email</x-color> <x-color><param>#ff62d4</param>()</x-color>
-          <x-color><param>#b0d6f5</param>"Batch sorts ko00 & gmail"</x-color>
-          <x-color><param>#ff62d4</param>(</x-color><x-color><param>#b6a0ff</param>interactive</x-color><x-color><param>#ff62d4</param>)</x-color>
-          <x-color><param>#ff62d4</param>(</x-color>no-output-shell-run <x-color><param>#79a8ff</param>"notmuch tag --batch <<<<EOM
+  <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>shell command output no window
+</x-color>  <x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>defun</x-color> <x-color><param>#feacd0</param>no-output-shell-run</x-color> <x-color><param>#ff62d4</param>(</x-color>command<x-color><param>#ff62d4</param>)</x-color>
+    <x-color><param>#b0d6f5</param>"Run shell COMMAND without displaying the output.  First ARG is COMMAND."</x-color>
+    <x-color><param>#ff62d4</param>(</x-color><x-color><param>#b6a0ff</param>interactive</x-color> <x-color><param>#3fdfd0</param>(</x-color>list <x-color><param>#fba849</param>(</x-color>read-shell-command <x-color><param>#79a8ff</param>"$ "</x-color><x-color><param>#fba849</param>)</x-color><x-color><param>#3fdfd0</param>)</x-color><x-color><param>#ff62d4</param>)</x-color>
+    <x-color><param>#ff62d4</param>(</x-color>start-process-shell-command command nil command<x-color><param>#ff62d4</param>)</x-color><x-color><param>#ffffff</param>)</x-color>
+  <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>sync notmuch using lieer and notmuch new
+</x-color>  <x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>defun</x-color> <x-color><param>#feacd0</param>notmuch-sync</x-color> <x-color><param>#ff62d4</param>()</x-color>
+    <x-color><param>#b0d6f5</param>"Syncs notmuch using lieer.  ARG empty: Configuration file is /Users/jsk/Mail/gmi-sync.sh."</x-color>
+    <x-color><param>#ff62d4</param>(</x-color><x-color><param>#b6a0ff</param>interactive</x-color><x-color><param>#ff62d4</param>)</x-color>
+    <x-color><param>#ff62d4</param>(</x-color><x-color><param>#b6a0ff</param>let</x-color> <x-color><param>#3fdfd0</param>(</x-color><x-color><param>#fba849</param>(</x-color>lnr <x-color><param>#9f80ff</param>(</x-color>line-number-at-pos<x-color><param>#9f80ff</param>)</x-color><x-color><param>#fba849</param>)</x-color><x-color><param>#3fdfd0</param>)</x-color> <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>register cursor line number
+
+</x-color>      <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>synching config replaced by /Users/jsk/Mail/.notmuch/hooks/pre-new, now with 'notmuch new' lieer fetches and pushes
+
+</x-color>      <x-color><param>#3fdfd0</param>(</x-color>no-output-shell-run <x-color><param>#79a8ff</param>"notmuch new"</x-color><x-color><param>#3fdfd0</param>)</x-color>
+      <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>(no-output-shell-run "pushd /Users/jsk/Mail ; gmi sync ; popd ; notmuch new")
+
+</x-color>      <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>(no-output-shell-run "notmuch tag +work -- tag:new and to:iason.svoronoskanavas@gmail.com ; notmuch tag +gmail -- tag:new and to:jason.skk98@gmail.com")
+</x-color>      <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>"&& notmuch tag +gmail -- tag:new and to:jason.skk98@gmail.com && notmuch tag +windowslive -- tag:new and to:ko00@windowslive.com" ;; is in /Users/jsk/Mail/.notmuch/hooks/pre-new
+</x-color>      <x-color><param>#3fdfd0</param>(</x-color>notmuch-refresh-this-buffer<x-color><param>#3fdfd0</param>)</x-color> <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>refresh this buffer to reduce lag
+
+</x-color>      <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>(notmuch-refresh-all-buffers) ;; refresh all not much buffers ;; old version
+</x-color>      <x-color><param>#3fdfd0</param>(</x-color>goto-line lnr<x-color><param>#3fdfd0</param>)</x-color> <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>go to registered line number
+</x-color>      <x-color><param>#3fdfd0</param>(</x-color>message <x-color><param>#79a8ff</param>"notmuch & lieer on sync"</x-color><x-color><param>#3fdfd0</param>)</x-color><x-color><param>#ff62d4</param>)</x-color><x-color><param>#ffffff</param>)</x-color>
+
+
+  <x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>defun</x-color> <x-color><param>#feacd0</param>notmuch-batch-tag-per-email</x-color> <x-color><param>#ff62d4</param>()</x-color>
+    <x-color><param>#b0d6f5</param>"Batch sorts ko00 & gmail"</x-color>
+    <x-color><param>#ff62d4</param>(</x-color><x-color><param>#b6a0ff</param>interactive</x-color><x-color><param>#ff62d4</param>)</x-color>
+    <x-color><param>#ff62d4</param>(</x-color>no-output-shell-run <x-color><param>#79a8ff</param>"notmuch tag --batch <<<<EOM
           +gmail -- to:jason.skk98@gmail.com
 
           +work -- to:"</x-color>iason.svoronoskanavas@gmail.com<x-color><param>#79a8ff</param>" <<iason.svoronoskanavas@gmail.com>
@@ -1347,105 +1351,107 @@ Version 2017-05-30"</x-color>
           EOM"</x-color><x-color><param>#ff62d4</param>)</x-color><x-color><param>#ffffff</param>)</x-color>
 
 
-      <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>mapped to ". l" in elpa/notmuch-20240406.1803/notmuch-show.el
+  <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>mapped to ". l" in elpa/notmuch-20240406.1803/notmuch-show.el
 
-</x-color>        <x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>defun</x-color> <x-color><param>#feacd0</param>notmuch-show-jump-to-latest</x-color> <x-color><param>#ff62d4</param>()</x-color>
-          <x-color><param>#b0d6f5</param>"Jump to the message in the current thread with the latest
+</x-color>  <x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>defun</x-color> <x-color><param>#feacd0</param>notmuch-show-jump-to-latest</x-color> <x-color><param>#ff62d4</param>()</x-color>
+    <x-color><param>#b0d6f5</param>"Jump to the message in the current thread with the latest
         timestamp."</x-color>
-          <x-color><param>#ff62d4</param>(</x-color><x-color><param>#b6a0ff</param>interactive</x-color><x-color><param>#ff62d4</param>)</x-color>
-          <x-color><param>#ff62d4</param>(</x-color><x-color><param>#b6a0ff</param>let</x-color> <x-color><param>#3fdfd0</param>(</x-color><x-color><param>#fba849</param>(</x-color>timestamp 0<x-color><param>#fba849</param>)</x-color>
-                latest<x-color><param>#3fdfd0</param>)</x-color>
-            <x-color><param>#3fdfd0</param>(</x-color>notmuch-show-mapc
-             <x-color><param>#fba849</param>(</x-color><x-color><param>#b6a0ff</param>lambda</x-color> <x-color><param>#9f80ff</param>()</x-color> <x-color><param>#9f80ff</param>(</x-color><x-color><param>#b6a0ff</param>let</x-color> <x-color><param>#4fe42f</param>(</x-color><x-color><param>#fe6060</param>(</x-color>ts <x-color><param>#4fafff</param>(</x-color>notmuch-show-get-prop <x-color><param>#f78fe7</param>:timestamp</x-color><x-color><param>#4fafff</param>)</x-color><x-color><param>#fe6060</param>)</x-color><x-color><param>#4fe42f</param>)</x-color>
-                          <x-color><param>#4fe42f</param>(</x-color><x-color><param>#b6a0ff</param>when</x-color> <x-color><param>#fe6060</param>(</x-color>> ts timestamp<x-color><param>#fe6060</param>)</x-color>
-                            <x-color><param>#fe6060</param>(</x-color><x-color><param>#b6a0ff</param>setq</x-color> timestamp ts
-                                  latest <x-color><param>#4fafff</param>(</x-color>point<x-color><param>#4fafff</param>)</x-color><x-color><param>#fe6060</param>)</x-color><x-color><param>#4fe42f</param>)</x-color><x-color><param>#9f80ff</param>)</x-color><x-color><param>#fba849</param>)</x-color><x-color><param>#3fdfd0</param>)</x-color>
-            <x-color><param>#3fdfd0</param>(</x-color><x-color><param>#b6a0ff</param>if</x-color> latest
-                <x-color><param>#fba849</param>(</x-color>goto-char latest<x-color><param>#fba849</param>)</x-color>
-              <x-color><param>#fba849</param>(</x-color><x-color><param>#dbbe5f</param>error</x-color> <x-color><param>#79a8ff</param>"Cannot find latest message."</x-color><x-color><param>#fba849</param>)</x-color><x-color><param>#3fdfd0</param>)</x-color><x-color><param>#ff62d4</param>)</x-color><x-color><param>#ffffff</param>)</x-color>
+    <x-color><param>#ff62d4</param>(</x-color><x-color><param>#b6a0ff</param>interactive</x-color><x-color><param>#ff62d4</param>)</x-color>
+    <x-color><param>#ff62d4</param>(</x-color><x-color><param>#b6a0ff</param>let</x-color> <x-color><param>#3fdfd0</param>(</x-color><x-color><param>#fba849</param>(</x-color>timestamp 0<x-color><param>#fba849</param>)</x-color>
+          latest<x-color><param>#3fdfd0</param>)</x-color>
+      <x-color><param>#3fdfd0</param>(</x-color>notmuch-show-mapc
+       <x-color><param>#fba849</param>(</x-color><x-color><param>#b6a0ff</param>lambda</x-color> <x-color><param>#9f80ff</param>()</x-color> <x-color><param>#9f80ff</param>(</x-color><x-color><param>#b6a0ff</param>let</x-color> <x-color><param>#4fe42f</param>(</x-color><x-color><param>#fe6060</param>(</x-color>ts <x-color><param>#4fafff</param>(</x-color>notmuch-show-get-prop <x-color><param>#f78fe7</param>:timestamp</x-color><x-color><param>#4fafff</param>)</x-color><x-color><param>#fe6060</param>)</x-color><x-color><param>#4fe42f</param>)</x-color>
+                    <x-color><param>#4fe42f</param>(</x-color><x-color><param>#b6a0ff</param>when</x-color> <x-color><param>#fe6060</param>(</x-color>> ts timestamp<x-color><param>#fe6060</param>)</x-color>
+                      <x-color><param>#fe6060</param>(</x-color><x-color><param>#b6a0ff</param>setq</x-color> timestamp ts
+                            latest <x-color><param>#4fafff</param>(</x-color>point<x-color><param>#4fafff</param>)</x-color><x-color><param>#fe6060</param>)</x-color><x-color><param>#4fe42f</param>)</x-color><x-color><param>#9f80ff</param>)</x-color><x-color><param>#fba849</param>)</x-color><x-color><param>#3fdfd0</param>)</x-color>
+      <x-color><param>#3fdfd0</param>(</x-color><x-color><param>#b6a0ff</param>if</x-color> latest
+          <x-color><param>#fba849</param>(</x-color>goto-char latest<x-color><param>#fba849</param>)</x-color>
+        <x-color><param>#fba849</param>(</x-color><x-color><param>#dbbe5f</param>error</x-color> <x-color><param>#79a8ff</param>"Cannot find latest message."</x-color><x-color><param>#fba849</param>)</x-color><x-color><param>#3fdfd0</param>)</x-color><x-color><param>#ff62d4</param>)</x-color><x-color><param>#ffffff</param>)</x-color>
 
-        <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>global, it syncs email database even without notmuch buffer open
-</x-color>        <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>(global-set-key (kbd "C-l s") 'notmuch-sync) ;; global ;; prefix for slack C-l s ...
+  <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>global, it syncs email database even without notmuch buffer open
+</x-color>  <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>(global-set-key (kbd "C-l s") 'notmuch-sync) ;; global ;; prefix for slack C-l s ...
 </x-color>
-        <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>notmuch hooks
-</x-color>        <x-color><param>#ffffff</param>(</x-color>add-hook 'notmuch-search-mode-hook
-                  '<x-color><param>#ff62d4</param>(</x-color>lambda <x-color><param>#3fdfd0</param>()</x-color>
-                  <x-color><param>#3fdfd0</param>(</x-color>define-key notmuch-search-mode-map <x-color><param>#fba849</param>(</x-color>kbd <x-color><param>#79a8ff</param>"."</x-color><x-color><param>#fba849</param>)</x-color> 'notmuch-sync<x-color><param>#3fdfd0</param>)</x-color><x-color><param>#ff62d4</param>)</x-color><x-color><param>#ffffff</param>)</x-color>
+  <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>notmuch hooks
+</x-color>  <x-color><param>#ffffff</param>(</x-color>add-hook 'notmuch-search-mode-hook
+            '<x-color><param>#ff62d4</param>(</x-color>lambda <x-color><param>#3fdfd0</param>()</x-color>
+               <x-color><param>#3fdfd0</param>(</x-color>define-key notmuch-search-mode-map <x-color><param>#fba849</param>(</x-color>kbd <x-color><param>#79a8ff</param>"."</x-color><x-color><param>#fba849</param>)</x-color> 'notmuch-sync<x-color><param>#3fdfd0</param>)</x-color><x-color><param>#ff62d4</param>)</x-color><x-color><param>#ffffff</param>)</x-color>
 
 
-        <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>disable wrap, characters
+  <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>disable wrap, characters
 
-</x-color>        <x-color><param>#ffffff</param>(</x-color>add-hook 'notmuch-mode <x-color><param>#ff62d4</param>(</x-color>turn-off-auto-fill<x-color><param>#ff62d4</param>)</x-color><x-color><param>#ffffff</param>)</x-color>
+</x-color>  <x-color><param>#ffffff</param>(</x-color>add-hook 'notmuch-mode <x-color><param>#ff62d4</param>(</x-color>turn-off-auto-fill<x-color><param>#ff62d4</param>)</x-color><x-color><param>#ffffff</param>)</x-color>
 
-        <x-color><param>#ffffff</param>(</x-color>add-hook 'notmuch-message-mode <x-color><param>#ff62d4</param>(</x-color>turn-off-auto-fill<x-color><param>#ff62d4</param>)</x-color><x-color><param>#ffffff</param>)</x-color>
+  <x-color><param>#ffffff</param>(</x-color>add-hook 'notmuch-message-mode <x-color><param>#ff62d4</param>(</x-color>turn-off-auto-fill<x-color><param>#ff62d4</param>)</x-color><x-color><param>#ffffff</param>)</x-color>
 
-        <x-color><param>#ffffff</param>(</x-color>add-hook 'notmuch-message-mode-hook <x-color><param>#ff62d4</param>(</x-color><x-color><param>#b6a0ff</param>lambda</x-color> <x-color><param>#3fdfd0</param>()</x-color> <x-color><param>#3fdfd0</param>(</x-color>auto-fill-mode -1<x-color><param>#3fdfd0</param>)</x-color><x-color><param>#ff62d4</param>)</x-color><x-color><param>#ffffff</param>)</x-color>
+  <x-color><param>#ffffff</param>(</x-color>add-hook 'notmuch-message-mode-hook <x-color><param>#ff62d4</param>(</x-color><x-color><param>#b6a0ff</param>lambda</x-color> <x-color><param>#3fdfd0</param>()</x-color> <x-color><param>#3fdfd0</param>(</x-color>auto-fill-mode -1<x-color><param>#3fdfd0</param>)</x-color><x-color><param>#ff62d4</param>)</x-color><x-color><param>#ffffff</param>)</x-color>
 
 
-        <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>mode specific notmuch-hello-mode -- fetch email every 25 sec
-</x-color>        <x-color><param>cyan</param>;;</x-color><x-color><param>gray80</param>(add-hook 'notmuch-hello-mode-hook
-</x-color>        <x-color><param>cyan</param>;;          </x-color><x-color><param>gray80</param>'(lambda ()
-</x-color>                     <x-color><param>cyan</param>;;</x-color><x-color><param>gray80</param>(run-with-timer 0 notmuch-sync-period  ;; every 25 sec do:
-</x-color>                                     <x-color><param>cyan</param>;;</x-color><x-color><param>gray80</param>'(lambda ()
-</x-color>        <x-color><param>cyan</param>;;                                </x-color><x-color><param>gray80</param>(if
-</x-color>        <x-color><param>cyan</param>;;                                    </x-color><x-color><param>gray80</param>(get-buffer "*notmuch-hello*")  ;; if notmuch buffer exists fetch email
-</x-color>        <x-color><param>cyan</param>;;                                    </x-color><x-color><param>gray80</param>(no-output-shell-run "cd /Users/jsk/Mail ; gmi sync ; notmuch new")
-</x-color>        <x-color><param>cyan</param>;;</x-color><x-color><param>gray80</param>)))
-</x-color>                                            <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>(no-output-shell-run "pushd /Users/jsk/Mail && gmi sync && popd && notmuch new && notmuch-hooks.sh") ;; auto-tag gmail
-</x-color>                                          <x-color><param>cyan</param>;;</x-color><x-color><param>gray80</param>(cancel-function-timers "no-output-shell-run"))))))  ;; cancel timer if buffer does not exist
-</x-color>        <x-color><param>cyan</param>;;  </x-color><x-color><param>gray80</param>post hooks notmuch
-</x-color>        <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>(add-hook 'notmuch-new-hook #'(lambda () (start-process-shell-command "notmuch-hooks" nil "/Users/jsk/scripts/notmuch-hooks.sh")))
+  <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>mode specific notmuch-hello-mode -- fetch email every 25 sec
+</x-color>  <x-color><param>cyan</param>;;</x-color><x-color><param>gray80</param>(add-hook 'notmuch-hello-mode-hook
+</x-color>  <x-color><param>cyan</param>;;          </x-color><x-color><param>gray80</param>'(lambda ()
+</x-color>  <x-color><param>cyan</param>;;</x-color><x-color><param>gray80</param>(run-with-timer 0 notmuch-sync-period  ;; every 25 sec do:
+</x-color>  <x-color><param>cyan</param>;;</x-color><x-color><param>gray80</param>'(lambda ()
+</x-color>  <x-color><param>cyan</param>;;                                </x-color><x-color><param>gray80</param>(if
+</x-color>  <x-color><param>cyan</param>;;                                    </x-color><x-color><param>gray80</param>(get-buffer "*notmuch-hello*")  ;; if notmuch buffer exists fetch email
+</x-color>  <x-color><param>cyan</param>;;                                    </x-color><x-color><param>gray80</param>(no-output-shell-run "cd /Users/jsk/Mail ; gmi sync ; notmuch new")
+</x-color>  <x-color><param>cyan</param>;;</x-color><x-color><param>gray80</param>)))
+</x-color>  <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>(no-output-shell-run "pushd /Users/jsk/Mail && gmi sync && popd && notmuch new && notmuch-hooks.sh") ;; auto-tag gmail
+</x-color>  <x-color><param>cyan</param>;;</x-color><x-color><param>gray80</param>(cancel-function-timers "no-output-shell-run"))))))  ;; cancel timer if buffer does not exist
+</x-color>  <x-color><param>cyan</param>;;  </x-color><x-color><param>gray80</param>post hooks notmuch
+</x-color>  <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>(add-hook 'notmuch-new-hook #'(lambda () (start-process-shell-command "notmuch-hooks" nil "/Users/jsk/scripts/notmuch-hooks.sh")))
 </x-color>
-        <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>NOTMUCH
-</x-color>        <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>notmuch auto-load
-</x-color>        <x-color><param>#ffffff</param>(</x-color>autoload 'notmuch <x-color><param>#79a8ff</param>"notmuch"</x-color> <x-color><param>#b0d6f5</param>"notmuch mail"</x-color> t<x-color><param>#ffffff</param>)</x-color>
-        <x-color><param>#ffffff</param>(</x-color>global-set-key <x-color><param>#ff62d4</param>(</x-color>kbd <x-color><param>#79a8ff</param>"C-l n"</x-color><x-color><param>#ff62d4</param>)</x-color> 'notmuch<x-color><param>#ffffff</param>)</x-color>
-        <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>sign emails
-</x-color>        <x-color><param>cyan</param>;;</x-color><x-color><param>gray80</param>(setq mml-secure-openpgp-sign-with-sender t)
-</x-color>        <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>Sign messages by default.
-</x-color>        <x-color><param>cyan</param>;;</x-color><x-color><param>gray80</param>(add-hook 'message-setup-hook 'mml-secure-sign-pgpmime)
-</x-color>        <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>fetch email on startup
-</x-color>        <x-color><param>#ffffff</param>(</x-color>no-output-shell-run <x-color><param>#79a8ff</param>"pushd /home/iason1/.mail ; gmi sync ; popd ; notmuch new"</x-color><x-color><param>#ffffff</param>)</x-color>
-        <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>fetch email period
-</x-color>    <x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>setq</x-color> notmuch-sync-period 25<x-color><param>#ffffff</param>)</x-color> <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>every 25 sec
+  <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>NOTMUCH
+</x-color>  <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>notmuch auto-load
+</x-color>  <x-color><param>#ffffff</param>(</x-color>autoload 'notmuch <x-color><param>#79a8ff</param>"notmuch"</x-color> <x-color><param>#b0d6f5</param>"notmuch mail"</x-color> t<x-color><param>#ffffff</param>)</x-color>
+  <x-color><param>#ffffff</param>(</x-color>global-set-key <x-color><param>#ff62d4</param>(</x-color>kbd <x-color><param>#79a8ff</param>"C-l n"</x-color><x-color><param>#ff62d4</param>)</x-color> 'notmuch<x-color><param>#ffffff</param>)</x-color>
+  <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>sign emails
+</x-color>  <x-color><param>cyan</param>;;</x-color><x-color><param>gray80</param>(setq mml-secure-openpgp-sign-with-sender t)
+</x-color>  <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>Sign messages by default.
+</x-color>  <x-color><param>cyan</param>;;</x-color><x-color><param>gray80</param>(add-hook 'message-setup-hook 'mml-secure-sign-pgpmime)
+</x-color>  <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>fetch email on startup
+</x-color>  <x-color><param>#ffffff</param>(</x-color>no-output-shell-run <x-color><param>#79a8ff</param>"pushd /home/iason1/.mail ; gmi sync ; popd ; notmuch new"</x-color><x-color><param>#ffffff</param>)</x-color>
+  <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>fetch email period
+</x-color>  <x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>setq</x-color> notmuch-sync-period 25<x-color><param>#ffffff</param>)</x-color> <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>every 25 sec
 
 </x-color>
-    <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>SMTP Settings
+  <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>SMTP Settings
 
-</x-color>    <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>set up smtpmail
+</x-color>  <x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>setq</x-color> message-directory <x-color><param>#79a8ff</param>"~/.mail"</x-color><x-color><param>#ffffff</param>)</x-color>
 
-</x-color>    <x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>require</x-color> '<x-color><param>#00bcff</param>smtpmail</x-color><x-color><param>#ffffff</param>)</x-color>
-    <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>Set the SMTP server and port
-</x-color>    <x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>setq</x-color> smtpmail-smtp-server <x-color><param>#79a8ff</param>"smtp.gmail.com"</x-color><x-color><param>#ffffff</param>)</x-color>
+  <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>set up smtpmail
+
+</x-color>  <x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>require</x-color> '<x-color><param>#00bcff</param>smtpmail</x-color><x-color><param>#ffffff</param>)</x-color>
+  <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>Set the SMTP server and port
+</x-color>  <x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>setq</x-color> smtpmail-smtp-server <x-color><param>#79a8ff</param>"smtp.gmail.com"</x-color><x-color><param>#ffffff</param>)</x-color>
   <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>Enable STARTTLS / SSL/TLS
 
-</x-color>  <x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>setq</x-color> smtpmail-smtp-service 587<x-color><param>#ffffff</param>)</x-color>
+</x-color>  <x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>setq</x-color> smtpmail-smtp-servicetpmail-smtp-service 587<x-color><param>#ffffff</param>)</x-color>
   <x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>setq</x-color> smtpmail-stream-type 'starttls<x-color><param>#ffffff</param>)</x-color>
 
   <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>(setq smtpmail-smtp-service 465) ;; unsafe TLS
 
 </x-color>  <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>(setq smtpmail-stream-type 'tls)
-</x-color>    <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>make sure smtpmail reads from .authinfo
-</x-color>    <x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>setq</x-color> smtpmail-auth-credentials <x-color><param>#ff62d4</param>(</x-color>expand-file-name <x-color><param>#79a8ff</param>"~/.authinfo"</x-color><x-color><param>#ff62d4</param>)</x-color><x-color><param>#ffffff</param>)</x-color>
+</x-color>  <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>make sure smtpmail reads from .authinfo
+</x-color>  <x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>setq</x-color> smtpmail-auth-credentials <x-color><param>#ff62d4</param>(</x-color>expand-file-name <x-color><param>#79a8ff</param>"~/.authinfo"</x-color><x-color><param>#ff62d4</param>)</x-color><x-color><param>#ffffff</param>)</x-color>
 
-    <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>use smptmail-send-it
+  <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>use smptmail-send-it
 
-</x-color>    <x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>setq</x-color> message-send-mail-function 'smtpmail-send-it<x-color><param>#ffffff</param>)</x-color>
-
-
-    <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>send email from multiple accounts
-
-</x-color>    <x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>setq</x-color> message-sendmail-envelope-from 'header<x-color><param>#ffffff</param>)</x-color>
-
-    <x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>setq</x-color> message-alternative-emails
-          '<x-color><param>#ff62d4</param>(</x-color><x-color><param>#79a8ff</param>"jason.skk98@gmail.com"</x-color> <x-color><param>#79a8ff</param>"iason.svoronoskanavas@gmail.com"</x-color><x-color><param>#ff62d4</param>)</x-color><x-color><param>#ffffff</param>)</x-color>
-
-    <x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>setq</x-color> notmuch-always-prompt-for-sender t<x-color><param>#ffffff</param>)</x-color>
+</x-color>  <x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>setq</x-color> message-send-mail-function 'smtpmail-send-it<x-color><param>#ffffff</param>)</x-color>
 
 
-    <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>dynamically setting smtp server
+  <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>send email from multiple accounts
 
-</x-color>    <x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>defun</x-color> <x-color><param>#feacd0</param>my-set-smtp-server</x-color> <x-color><param>#ff62d4</param>()</x-color>
+</x-color>  <x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>setq</x-color> message-sendmail-envelope-from 'header<x-color><param>#ffffff</param>)</x-color>
+
+  <x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>setq</x-color> message-alternative-emails
+        '<x-color><param>#ff62d4</param>(</x-color><x-color><param>#79a8ff</param>"jason.skk98@gmail.com"</x-color> <x-color><param>#79a8ff</param>"iason.svoronoskanavas@gmail.com"</x-color><x-color><param>#ff62d4</param>)</x-color><x-color><param>#ffffff</param>)</x-color>
+
+  <x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>setq</x-color> notmuch-always-prompt-for-sender t<x-color><param>#ffffff</param>)</x-color>
+
+
+  <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>dynamically setting smtp server
+
+</x-color>  <x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>defun</x-color> <x-color><param>#feacd0</param>my-set-smtp-server</x-color> <x-color><param>#ff62d4</param>()</x-color>
     <x-color><param>#b0d6f5</param>"Set the SMTP server and user based on the From address."</x-color>
     <x-color><param>#ff62d4</param>(</x-color><x-color><param>#b6a0ff</param>let</x-color> <x-color><param>#3fdfd0</param>(</x-color><x-color><param>#fba849</param>(</x-color>from <x-color><param>#9f80ff</param>(</x-color>message-fetch-field <x-color><param>#79a8ff</param>"from"</x-color><x-color><param>#9f80ff</param>)</x-color><x-color><param>#fba849</param>)</x-color><x-color><param>#3fdfd0</param>)</x-color>
       <x-color><param>#3fdfd0</param>(</x-color><x-color><param>#b6a0ff</param>cond</x-color>
@@ -1465,7 +1471,7 @@ Version 2017-05-30"</x-color>
 
 
 </x-color><x-bg-color><param>#3a5a5f</param><x-color><param>gray99</param>#+END_SRC
-</x-color></x-bg-color><bold>* </bold><x-color><param>#a8a8a8</param>COMMENT</x-color><bold> unbound</bold>
+</x-color></x-bg-color><bold>* <x-color><param>#a8a8a8</param>COMMENT</x-color><bold> unbound</bold>
 
 <x-bg-color><param>#191a1b</param><x-color><param>#a8a8a8</param>  #+BEGIN_SRC emacs-lisp
 </x-color></x-bg-color><x-color><param>#ffffff</param>
@@ -2590,7 +2596,7 @@ don't cause as much overhead."</x-color>
 <x-color><param>#ffffff</param>(</x-color>add-hook 'doc-view-mode-hook 'doc-view-autofit-mode<x-color><param>#ffffff</param>)</x-color>
 
 </x-color><x-bg-color><param>#3a5a5f</param><x-color><param>gray99</param>  #+END_SRC
-</x-color></x-bg-color><bold>* </bold><x-color><param>#a8a8a8</param>COMMENT</x-color><bold> emacs-slack</bold>
+</x-color></x-bg-color><bold>* <x-color><param>#a8a8a8</param>COMMENT</x-color><bold> emacs-slack</bold>
 <x-bg-color><param>#191a1b</param><x-color><param>#a8a8a8</param>#+BEGIN_SRC emacs-lisp
 </x-color></x-bg-color><x-color><param>#ffffff</param>
 <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>enable emoji support in emacs-slack
@@ -2856,4 +2862,4 @@ The passwords to be removed are temporarily stored in
 
 <x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>provide</x-color> '<x-color><param>#00bcff</param>authinfo</x-color><x-color><param>#ffffff</param>)</x-color>
 </x-color><x-bg-color><param>#3a5a5f</param><x-color><param>gray99</param>#+END_SRC
-</x-color></x-bg-color>
+</x-color></x-bg-color></bold></bold>

@@ -312,6 +312,8 @@ by Prelude.")
 ;; Open the scratch buffer on the left
 (switch-to-buffer "*scratch*")
 
+(set-frame-font "IBMPlexMono" nil t)
+
 (provide 'init)
 
 ;;; init.el ends here

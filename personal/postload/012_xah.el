@@ -1,4 +1,4 @@
-;;; xah --- 2024-11-22  8:09:47 pm CET
+;;; xah --- 2024-12-06 12:30:58 pm CET
 ;; copy current buffer path
 (defun xah-copy-file-path (&optional DirPathOnlyQ)
   "Copy current buffer file path or dired path.
