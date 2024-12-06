@@ -1076,14 +1076,14 @@ If called with ARG, do not insert time."</x-color>
 <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>------------------------------------</x-color></indent></indent></indent></indent><x-color><param>gray80</param>
 
 </x-color></x-color><x-bg-color><param>#3a5a5f</param><x-color><param>gray99</param>  #+END_SRC
-</x-color></x-bg-color><bold>* ace-switch-buffer</bold>
+</x-color></x-bg-color><bold>* </bold><x-color><param>#a8a8a8</param>COMMENT</x-color><bold> ace-switch-buffer</bold>
 
 <x-bg-color><param>#191a1b</param><x-color><param>#a8a8a8</param>  #+BEGIN_SRC emacs-lisp
 </x-color></x-bg-color><x-color><param>cyan</param><x-color><param>#ffffff</param>;;; </x-color></x-color><x-color><param>#ffffff</param><x-color><param>gray80</param>Commentary:
 </x-color><x-color><param>cyan</param>;;; </x-color><x-color><param>gray80</param>move amngst windows and switch window position with cursor keys
 </x-color>
-<x-color><param>#ffffff</param>(</x-color>prelude-require-package 'buffer-move<x-color><param>#ffffff</param>)</x-color>
-<x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>(require 'windmove) required by buffermove
+<x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>(prelude-require-package 'buffer-move)
+</x-color><x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>(require 'windmove) required by buffermove
 </x-color><x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>(winner-mode -1)
 
 </x-color><x-color><param>cyan</param>;;</x-color><x-color><param>gray80</param>(global-set-key (kbd "s-<<left>")  'windmove-left)
@@ -1096,7 +1096,7 @@ If called with ARG, do not insert time."</x-color>
 </x-color><x-color><param>cyan</param>;;</x-color><x-color><param>gray80</param>(global-set-key (kbd "s-S-<<right>")  'buf-move-right)
 </x-color><x-color><param>#ffffff</param>(</x-color>global-set-key <x-color><param>#ff62d4</param>(</x-color>kbd <x-color><param>#79a8ff</param>"C-O"</x-color><x-color><param>#ff62d4</param>)</x-color>  'ace-window<x-color><param>#ffffff</param>)</x-color>
 <x-color><param>#ffffff</param>(</x-color>global-set-key <x-color><param>#ff62d4</param>(</x-color>kbd <x-color><param>#79a8ff</param>"C-x o"</x-color><x-color><param>#ff62d4</param>)</x-color>  'ace-window<x-color><param>#ffffff</param>)</x-color>
-<x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>setq</x-color> aw-keys '<x-color><param>#ff62d4</param>(</x-color>?a ?b ?c ?d ?e ?f ?g ?h ?i ?j ?k ?l ?m ?n ?o ?p ?q<x-color><param>#ff62d4</param>)</x-color><x-color><param>#ffffff</param>)</x-color>
+<x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>setq</x-color> aw-keys '<x-color><param>#ff62d4</param>(</x-color>?a ?b ?c ?d ?e ?f ?g ?h ?i ?j ?k ?kl ?m ?n ?o ?p ?q<x-color><param>#ff62d4</param>)</x-color><x-color><param>#ffffff</param>)</x-color>
 
 </x-color><x-bg-color><param>#3a5a5f</param><x-color><param>gray99</param>  #+END_SRC
 </x-color></x-bg-color><bold>* prefix-ctrl-l</bold>
@@ -1471,7 +1471,7 @@ Version 2017-05-30"</x-color>
 
 
 </x-color><x-bg-color><param>#3a5a5f</param><x-color><param>gray99</param>#+END_SRC
-</x-color></x-bg-color><bold>* <x-color><param>#a8a8a8</param>COMMENT</x-color><bold> unbound</bold>
+</x-color></x-bg-color><bold>* </bold><x-color><param>#a8a8a8</param>COMMENT</x-color><bold> unbound</bold>
 
 <x-bg-color><param>#191a1b</param><x-color><param>#a8a8a8</param>  #+BEGIN_SRC emacs-lisp
 </x-color></x-bg-color><x-color><param>#ffffff</param>
@@ -2596,7 +2596,7 @@ don't cause as much overhead."</x-color>
 <x-color><param>#ffffff</param>(</x-color>add-hook 'doc-view-mode-hook 'doc-view-autofit-mode<x-color><param>#ffffff</param>)</x-color>
 
 </x-color><x-bg-color><param>#3a5a5f</param><x-color><param>gray99</param>  #+END_SRC
-</x-color></x-bg-color><bold>* <x-color><param>#a8a8a8</param>COMMENT</x-color><bold> emacs-slack</bold>
+</x-color></x-bg-color><bold>* </bold><x-color><param>#a8a8a8</param>COMMENT</x-color><bold> emacs-slack</bold>
 <x-bg-color><param>#191a1b</param><x-color><param>#a8a8a8</param>#+BEGIN_SRC emacs-lisp
 </x-color></x-bg-color><x-color><param>#ffffff</param>
 <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>enable emoji support in emacs-slack
@@ -2862,4 +2862,4 @@ The passwords to be removed are temporarily stored in
 
 <x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>provide</x-color> '<x-color><param>#00bcff</param>authinfo</x-color><x-color><param>#ffffff</param>)</x-color>
 </x-color><x-bg-color><param>#3a5a5f</param><x-color><param>gray99</param>#+END_SRC
-</x-color></x-bg-color></bold></bold>
+</x-color></x-bg-color>

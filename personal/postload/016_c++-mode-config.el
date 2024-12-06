@@ -1,4 +1,4 @@
-;;; c++-mode-config --- 2024-12-06 12:30:59 pm CET
+;;; c++-mode-config --- 2024-12-06  4:23:53 pm CET
   ;; Set the default indentation level to 3 spaces for C/C++ modes
 (setq c-basic-offset 3)
 ;; Disable the use of tabs for indentation using spaces instead
@@ -13,4 +13,4 @@
 ;; Prevent company-mode from automatically lowercasing completions
 (setq company-dabbrev-downcase nil)
 (provide 'c++-mode-config)
-;;; 017_c++-mode-config.el ends here
+;;; 016_c++-mode-config.el ends here

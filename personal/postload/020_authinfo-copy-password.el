@@ -1,4 +1,4 @@
-;;; authinfo-copy-password --- 2024-12-06 12:31:00 pm CET
+;;; authinfo-copy-password --- 2024-12-06  4:23:54 pm CET
 ;;; authinfo.el -- hiding unnecessary passwords
 ;;
 ;; Copyright (C) 2017  Alex Schroeder <alex@gnu.org>
@@ -91,4 +91,4 @@ The passwords to be removed are temporarily stored in
     (list host user)))
 (provide 'authinfo)
 (provide 'authinfo-copy-password)
-;;; 021_authinfo-copy-password.el ends here
+;;; 020_authinfo-copy-password.el ends here

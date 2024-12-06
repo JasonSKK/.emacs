@@ -1,4 +1,4 @@
-;;; appearance --- 2024-12-06 12:31:00 pm CET
+;;; appearance --- 2024-12-06  4:23:53 pm CET
   ;; --- DISPLAY ---
   ;; (split-window-right) ;; split to 2 windows right on startup
   ;; display numbers
@@ -42,4 +42,4 @@
       (disable-all-themes))
 
 (provide 'appearance)
-;;; 019_appearance.el ends here
+;;; 018_appearance.el ends here

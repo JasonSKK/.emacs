@@ -1,4 +1,4 @@
-;;; ispell-config --- 2024-12-06 12:30:59 pm CET
+;;; ispell-config --- 2024-12-06  4:23:52 pm CET
 ;; This contains a collection of Ispell configurations.
 
 ;;; Commentary:
@@ -36,4 +36,4 @@
 ;;  (add-hook 'hack-local-variables-hook #'flyspell-buffer))
 
 (provide 'ispell-config)
-;;; 014_ispell-config.el ends here
+;;; 013_ispell-config.el ends here

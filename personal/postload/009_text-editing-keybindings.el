@@ -1,4 +1,4 @@
-;;; text-editing-keybindings --- 2024-12-06 12:30:58 pm CET
+;;; text-editing-keybindings --- 2024-12-06  4:23:51 pm CET
 ;;; Commentary:
 ;; Configuration for personal keybindings
 
@@ -23,4 +23,4 @@
 (global-set-key (kbd "C-x TAB") 'indent-rigidly)
 
 (provide 'text-editing-keybindings)
-;;; 010_text-editing-keybindings.el ends here
+;;; 009_text-editing-keybindings.el ends here

@@ -1,4 +1,4 @@
-;;; dired-config --- 2024-12-06 12:30:57 pm CET
+;;; dired-config --- 2024-12-06  4:23:51 pm CET
 ;;; Commentary:
 ;; Hide details when using dired
 

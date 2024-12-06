@@ -1,4 +1,4 @@
-;;; resize-frame --- 2024-12-06 12:30:59 pm CET
+;;; resize-frame --- 2024-12-06  4:23:52 pm CET
 
 ;; Copyright (C) 2014  kuanyui
 
@@ -46,4 +46,4 @@ C-c C-c to apply."
 (provide '042_resize-frame)
 ;;; 042_resize-frame.el ends here
 (provide 'resize-frame)
-;;; 015_resize-frame.el ends here
+;;; 014_resize-frame.el ends here

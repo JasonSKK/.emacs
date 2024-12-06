@@ -1,4 +1,4 @@
-;;; prefix-ctrl-l --- 2024-12-06 12:30:58 pm CET
+;;; prefix-ctrl-l --- 2024-12-06  4:23:51 pm CET
 
 ;;; Commentary:
 ;; Configuration for personal keybindings
@@ -11,4 +11,4 @@
 (define-key global-map "\C-l" 'Control-L-prefix)
 (fset 'Control-L-prefix ctl-l-map)
 (provide 'prefix-ctrl-l)
-;;; 009_prefix-ctrl-l.el ends here
+;;; 008_prefix-ctrl-l.el ends here

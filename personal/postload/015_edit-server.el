@@ -1,4 +1,4 @@
-;;; edit-server --- 2024-12-06 12:30:59 pm CET
+;;; edit-server --- 2024-12-06  4:23:52 pm CET
 
 ;; Copyright (C) 2009-2013  Alex BennÃ©e
 ;; Copyright (C) 2010-2011  Riccardo Murri
@@ -603,4 +603,4 @@ but don't kill the editing buffer."
   (interactive)
   (edit-server-done t t))
 (provide 'edit-server)
-;;; 016_edit-server.el ends here
+;;; 015_edit-server.el ends here

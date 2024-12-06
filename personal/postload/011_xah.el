@@ -1,4 +1,4 @@
-;;; xah --- 2024-12-06 12:30:58 pm CET
+;;; xah --- 2024-12-06  4:23:51 pm CET
 ;; copy current buffer path
 (defun xah-copy-file-path (&optional DirPathOnlyQ)
   "Copy current buffer file path or dired path.
@@ -102,4 +102,4 @@ Version 2017-05-30"
 (global-set-key (kbd "C-e") 'xah-end-of-line-or-block) ;; replaces (move-end-of-line ARG)
 
 (provide 'xah)
-;;; 012_xah.el ends here
+;;; 011_xah.el ends here
