@@ -1,4 +1,4 @@
-;;; resize-frame --- 2024-12-06  4:23:52 pm CET
+;;; resize-frame --- 2024-12-16  9:15:29 pm CET
 
 ;; Copyright (C) 2014  kuanyui
 

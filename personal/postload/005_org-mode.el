@@ -1,4 +1,4 @@
-;;; org-mode --- 2024-12-06  4:23:50 pm CET
+;;; org-mode --- 2024-12-16  9:15:27 pm CET
 ;;; Commentary:
 
 ;; customize some org mode settings

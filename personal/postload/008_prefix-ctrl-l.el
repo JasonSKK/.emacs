@@ -1,4 +1,4 @@
-;;; prefix-ctrl-l --- 2024-12-06  4:23:51 pm CET
+;;; prefix-ctrl-l --- 2024-12-16  9:15:27 pm CET
 
 ;;; Commentary:
 ;; Configuration for personal keybindings

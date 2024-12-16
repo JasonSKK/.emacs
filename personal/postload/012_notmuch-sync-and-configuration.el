@@ -1,4 +1,4 @@
-;;; notmuch-sync-and-configuration --- 2024-12-06  4:23:52 pm CET
+;;; notmuch-sync-and-configuration --- 2024-12-16  9:15:28 pm CET
   ;; view html part in browser
   ;; mapped to ".v" in elpa/notmuch-20240406.1803/notmuch-show.el
   (defun notmuch-show-view-html+ ()
@@ -125,6 +125,10 @@
   (setq message-alternative-emails
         '("jason.skk98@gmail.com" "iason.svoronoskanavas@gmail.com"))
   (setq notmuch-always-prompt-for-sender t)
+
+  ;; specify save drafts
+  (setq message-auto-save-directory "~/.mail/drafts")
+  (setq message-draft-headers "Subject:")
 
   ;; dynamically setting smtp server
   (defun my-set-smtp-server ()

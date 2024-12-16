@@ -1449,6 +1449,12 @@ Version 2017-05-30"</x-color>
   <x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>setq</x-color> notmuch-always-prompt-for-sender t<x-color><param>#ffffff</param>)</x-color>
 
 
+  <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>specify save drafts
+
+</x-color><indent><x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>setq</x-color> message-auto-save-directory <x-color><param>#79a8ff</param>"~/.mail/drafts"</x-color><x-color><param>#ffffff</param>)</x-color>
+  </indent><x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>setq</x-color> message-draft-headers <x-color><param>#79a8ff</param>"Subject:"</x-color><x-color><param>#ffffff</param>)</x-color>
+
+
   <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>dynamically setting smtp server
 
 </x-color>  <x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>defun</x-color> <x-color><param>#feacd0</param>my-set-smtp-server</x-color> <x-color><param>#ff62d4</param>()</x-color>
@@ -2596,7 +2602,7 @@ don't cause as much overhead."</x-color>
 <x-color><param>#ffffff</param>(</x-color>add-hook 'doc-view-mode-hook 'doc-view-autofit-mode<x-color><param>#ffffff</param>)</x-color>
 
 </x-color><x-bg-color><param>#3a5a5f</param><x-color><param>gray99</param>  #+END_SRC
-</x-color></x-bg-color><bold>* </bold><x-color><param>#a8a8a8</param>COMMENT</x-color><bold> emacs-slack</bold>
+</x-color></x-bg-color><bold>* <x-color><param>#a8a8a8</param>COMMENT</x-color><bold> emacs-slack</bold>
 <x-bg-color><param>#191a1b</param><x-color><param>#a8a8a8</param>#+BEGIN_SRC emacs-lisp
 </x-color></x-bg-color><x-color><param>#ffffff</param>
 <x-color><param>cyan</param>;; </x-color><x-color><param>gray80</param>enable emoji support in emacs-slack
@@ -2862,4 +2868,4 @@ The passwords to be removed are temporarily stored in
 
 <x-color><param>#ffffff</param>(</x-color><x-color><param>#b6a0ff</param>provide</x-color> '<x-color><param>#00bcff</param>authinfo</x-color><x-color><param>#ffffff</param>)</x-color>
 </x-color><x-bg-color><param>#3a5a5f</param><x-color><param>gray99</param>#+END_SRC
-</x-color></x-bg-color>
+</x-color></x-bg-color></bold>
