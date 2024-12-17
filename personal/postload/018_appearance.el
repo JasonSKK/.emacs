@@ -1,4 +1,4 @@
-;;; appearance --- 2024-12-16  9:15:30 pm CET
+;;; appearance --- 2024-12-17  8:37:56 pm CET
   ;; --- DISPLAY ---
   ;; (split-window-right) ;; split to 2 windows right on startup
   ;; display numbers
@@ -34,12 +34,12 @@
   (telephone-line-mode 1)
 
   ;; disable theme after loading another one
-    (defun disable-all-themes ()
-      "disable all active themes."
-      (dolist (i custom-enabled-themes)
-        (disable-theme i)))
-    (defadvice load-theme (before disable-themes-first activate)
-      (disable-all-themes))
+  (defun disable-all-themes ()
+    "disable all active themes."
+    (dolist (i custom-enabled-themes)
+      (disable-theme i)))
+  (defadvice load-theme (before disable-themes-first activate)
+    (disable-all-themes))
 
 (provide 'appearance)
 ;;; 018_appearance.el ends here

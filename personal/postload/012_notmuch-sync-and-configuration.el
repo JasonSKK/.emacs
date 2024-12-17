@@ -1,24 +1,24 @@
-;;; notmuch-sync-and-configuration --- 2024-12-16  9:15:28 pm CET
+;;; notmuch-sync-and-configuration --- 2024-12-17  8:37:54 pm CET
   ;; view html part in browser
   ;; mapped to ".v" in elpa/notmuch-20240406.1803/notmuch-show.el
   (defun notmuch-show-view-html+ ()
-  "Open the text/html part of the current message using `notmuch-show-view-part' and bring Firefox to the foreground."
-  (interactive)
-  (save-excursion
-    ;; Navigate to the text/html part
-    (goto-char
-     (prop-match-beginning
-      (text-property-search-forward
-       :notmuch-part
-       "text/html"
-       (lambda (value notmuch-part)
-         (equal (plist-get notmuch-part :content-type)
-                value)))))
-    ;; View the part in an external browser
-    (let ((url (notmuch-show-view-part)))
-      ;; After a short delay, bring Firefox to the foreground using wmctrl
-      (start-process "wmctrl-focus-firefox" nil "sh" "-c"
-                     "sleep 0.5 && wmctrl -a Firefox"))))
+    "Open the text/html part of the current message using `notmuch-show-view-part' and bring Firefox to the foreground."
+    (interactive)
+    (save-excursion
+      ;; Navigate to the text/html part
+      (goto-char
+       (prop-match-beginning
+        (text-property-search-forward
+         :notmuch-part
+         "text/html"
+         (lambda (value notmuch-part)
+           (equal (plist-get notmuch-part :content-type)
+                  value)))))
+      ;; View the part in an external browser
+      (let ((url (notmuch-show-view-part)))
+        ;; After a short delay, bring Firefox to the foreground using wmctrl
+        (start-process "wmctrl-focus-firefox" nil "sh" "-c"
+                       "sleep 0.5 && wmctrl -a Firefox"))))
 
   ;; shell command output no window
   (defun no-output-shell-run (command)
@@ -91,7 +91,6 @@
   ;;  post hooks notmuch
   ;; (add-hook 'notmuch-new-hook #'(lambda () (start-process-shell-command "notmuch-hooks" nil "/Users/jsk/scripts/notmuch-hooks.sh")))
 
-  ;; NOTMUCH
   ;; notmuch auto-load
   (autoload 'notmuch "notmuch" "notmuch mail" t)
   (global-set-key (kbd "C-l n") 'notmuch)
@@ -129,6 +128,16 @@
   ;; specify save drafts
   (setq message-auto-save-directory "~/.mail/drafts")
   (setq message-draft-headers "Subject:")
+
+  ;; Automatically collapse certain MIME types in notmuch-show and message mode
+  (setq mm-inline-override-types '("text/x-diff"
+                                   "text/x-patch"
+                                   ;; "application/pdf"
+                                   ;; "application/octet-stream"
+                                   "image/jpeg"
+                                   "image/png"
+                                   ;; "application/zip"
+                                   ))
 
   ;; dynamically setting smtp server
   (defun my-set-smtp-server ()
