@@ -1,5 +1,7 @@
-;;; whitespace --- 2024-12-17  8:37:56 pm CET
-    ;;; Commentary:
+;;; whitespace --- Exported from Org Mode
+;;; 2025-02-25 10:08:39 pm CET
+
+  ;;; Commentary:
   ;;; turn off whitespace and turn on visual line modes,
   ;;; for these main modes:
   ;;; js, css, web, html, markdown, python, latex
@@ -22,5 +24,6 @@
   (add-hook 'js-mode-hook 'visual-line-mode)
   (add-hook 'python-mode-hook 'visual-line-mode)
   (add-hook 'latex-mode-hook 'visual-line-mode)
+
 (provide 'whitespace)
 ;;; 019_whitespace.el ends here

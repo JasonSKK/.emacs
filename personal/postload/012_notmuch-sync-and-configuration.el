@@ -1,4 +1,6 @@
-;;; notmuch-sync-and-configuration --- 2024-12-17  8:37:54 pm CET
+;;; notmuch-sync-and-configuration --- Exported from Org Mode
+;;; 2025-02-25 10:08:39 pm CET
+
   ;; view html part in browser
   ;; mapped to ".v" in elpa/notmuch-20240406.1803/notmuch-show.el
   (defun notmuch-show-view-html+ ()
@@ -44,15 +46,15 @@
     "Batch sorts ko00 & gmail"
     (interactive)
     (no-output-shell-run "notmuch tag --batch <<EOM
-          +gmail -- to:jason.skk98@gmail.com
-          +work -- to:"iason.svoronoskanavas@gmail.com" <iason.svoronoskanavas@gmail.com>
-          +windowslive -- to:ko00@windowslive.com
-          EOM"))
+  +gmail -- to:jason.skk98@gmail.com
+  +work -- to:"iason.svoronoskanavas@gmail.com" <iason.svoronoskanavas@gmail.com>
+  +windowslive -- to:ko00@windowslive.com
+  EOM"))
 
   ;; mapped to ". l" in elpa/notmuch-20240406.1803/notmuch-show.el
   (defun notmuch-show-jump-to-latest ()
     "Jump to the message in the current thread with the latest
-        timestamp."
+  timestamp."
     (interactive)
     (let ((timestamp 0)
           latest)
@@ -155,6 +157,7 @@
               smtpmail-smtp-server "smtp.gmail.com"
               smtpmail-smtp-service 587)))))
   (add-hook 'message-send-hook 'my-set-smtp-server)
+
 
 
 (provide 'notmuch-sync-and-configuration)

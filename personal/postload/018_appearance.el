@@ -1,4 +1,6 @@
-;;; appearance --- 2024-12-17  8:37:56 pm CET
+;;; appearance --- Exported from Org Mode
+;;; 2025-02-25 10:08:39 pm CET
+
   ;; --- DISPLAY ---
   ;; (split-window-right) ;; split to 2 windows right on startup
   ;; display numbers
@@ -40,6 +42,7 @@
       (disable-theme i)))
   (defadvice load-theme (before disable-themes-first activate)
     (disable-all-themes))
+
 
 (provide 'appearance)
 ;;; 018_appearance.el ends here

@@ -1,4 +1,6 @@
-;;; org-el-untangle --- 2024-12-17  8:37:52 pm CET
+;;; org-el-untangle --- Exported from Org Mode
+;;; 2025-02-25 10:08:38 pm CET
+
   ;;; Commentary:
   ;;; org-el-untangle:
   ;;; import muliple el files from one folder into one org mode file.
@@ -6,6 +8,8 @@
   ;;; export each sections' emacs-lisp block to a separate file.
 
   ;;; Code:
+  (defvar org-el-export-counter 0
+  "Counter for numbering exported emacs-lisp sections.")
 
   (defun org-el-import-all-files (directory)
     "Import muliple el files from one folder into one org mode file."
@@ -62,46 +66,57 @@
         ((index 0)
          (root-dir (file-name-directory (buffer-file-name)))
          buffers)
-      ;;; First delete old entries, before creating new ones.
-      ;;; Prevent duplicate entries due to renumbering.
+  ;;; First delete old entries, before creating new ones.
+  ;;; Prevent duplicate entries due to renumbering.
       (mapc 'delete-file (file-expand-wildcards (concat root-dir "*.el")))
       (org-map-entries 'org-el-export-1-section)
       (mapc 'kill-buffer buffers)))
-  (defun org-el-export-1-section ()
-    "Export this sections' emacs-lisp block to a separate file.
-  Add header and footer parts required by flycheck.
-  Skip sections marked with COMMENT."
-    (let* (body-element
-           (element (cadr (org-element-at-point)))
-           (title (plist-get element :title))
-           (commented (plist-get element :commentedp))
-           (filename))
-      ;; skip commented sections
-      (unless commented
-        (setq index (+ 1 index))
-        (search-forward "#+BEGIN_SRC")
-        (setq body-element (cadr (org-element-at-point)))
-        ;; (message
-        ;;  (replace-regexp-in-string " " "_" (plist-get element :title)))
-        ;; (message "%s" body-element)
-        (setq title (replace-regexp-in-string " " "_" title))
-        (setq filename (format "%03d_%s.el" index title))
-        (find-file filename)
-        (erase-buffer)
-        (insert (format ";;; %s --- %s"
-                        title
-                        (format-time-string "%F %r\n")))
-        (goto-char (point-max))
-        (insert (plist-get body-element :value))
-        (goto-char (point-max))
-        (insert (format "(provide '%s)\n;;; %s ends here" title filename))
-        (save-buffer)
-        (setq buffers (cons (current-buffer) buffers))
-        (kill-buffer))))
+(defun org-el-export-1-section ()
+  "Export the first emacs-lisp block in the current section to a separate file.
+Adds necessary headers and footers for Flycheck. Skips COMMENT sections."
+  (interactive)
+  (let* ((element (org-element-at-point)) ;; Get the element at point
+         (title (org-get-heading t t t t)) ;; Fetch the title safely
+         (commented (org-element-property :commentedp element)) ;; Check if commented
+         filename body-element)
+
+    ;; Skip commented sections
+    (unless commented
+      (setq org-el-export-counter (+ org-el-export-counter 1)) ;; Increment global counter
+
+      ;; Get the current subtree content
+      (let ((section-end (org-element-property :end element))
+            (section-start (org-element-property :begin element)))
+        (setq body-element
+              (org-element-map (org-element-parse-buffer) 'src-block
+                (lambda (src)
+                  (when (and (string= (org-element-property :language src) "emacs-lisp")
+                             (> (org-element-property :begin src) section-start)
+                             (< (org-element-property :begin src) section-end))
+                    src))
+                nil t)))) ;; Stop after first match
+
+      (if (not body-element)
+          (message "WARNING: No valid emacs-lisp src block found in section: %s" title)
+        (progn
+          ;; Sanitize title for filename
+          (setq title (replace-regexp-in-string "[^a-zA-Z0-9_-]" "_" title))
+          (setq filename (format "%03d_%s.el" org-el-export-counter title))
+
+          ;; Create and write to file
+          (with-temp-buffer
+            (insert (format ";;; %s --- Exported from Org Mode\n" title))
+            (insert (format ";;; %s\n\n" (format-time-string "%F %r")))
+            (insert (org-element-property :value body-element)) ;; Extract correct code
+            (insert (format "\n(provide '%s)\n;;; %s ends here\n" title filename))
+            (write-file filename))
+
+          (message "Exported section '%s' to file: %s" title filename)))))
   (eval-after-load 'org
     '(progn
        ;; Note: This keybinding is in analogy to the default keybinding:
        ;; C-c . -> org-time-stamp
        (define-key org-mode-map (kbd "C-c C-M-e") 'org-el-export-all-sections)))
+
 (provide 'org-el-untangle)
 ;;; 004_org-el-untangle.el ends here

@@ -1,4 +1,6 @@
-;;; ispell-config --- 2024-12-17  8:37:54 pm CET
+;;; ispell-config --- Exported from Org Mode
+;;; 2025-02-25 10:08:39 pm CET
+
   ;; This contains a collection of Ispell configurations.
 
   ;;; Commentary:
@@ -34,6 +36,7 @@
   ;; (add-hook 'flyspell-mode-hook #'flyspell-local-vars)
   ;; (defun flyspell-local-vars ()
   ;;  (add-hook 'hack-local-variables-hook #'flyspell-buffer))
+
 
 (provide 'ispell-config)
 ;;; 013_ispell-config.el ends here

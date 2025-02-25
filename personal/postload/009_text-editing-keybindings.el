@@ -1,4 +1,6 @@
-;;; text-editing-keybindings --- 2024-12-17  8:37:54 pm CET
+;;; text-editing-keybindings --- Exported from Org Mode
+;;; 2025-02-25 10:08:39 pm CET
+
   ;;; Commentary:
   ;; Configuration for personal keybindings
 
@@ -21,6 +23,7 @@
   ;; ------------------------------------
   ;; indenting
   (global-set-key (kbd "C-x TAB") 'indent-rigidly)
+
 
 (provide 'text-editing-keybindings)
 ;;; 009_text-editing-keybindings.el ends here

@@ -283,15 +283,16 @@ by Prelude.")
 
 ;; go-translate config
 ;; your languages pair used to translate
-(require 'go-translate)
-(setq gts-translate-list '(("en" "ru") ("ru" "en") ("el" "en") ("en" "el") ("de" "en") ("en" "de")))
 
-;; (setq gts-default-translator (gts-translator :engines (gts-bing-engine)))
-(setq gts-default-translator
-      (gts-translator
-       :picker (gts-prompt-picker)
-       :engines (list (gts-bing-engine) (gts-google-engine))
-       :render (gts-buffer-render)))
+;; (require 'go-translate)
+;; (setq gts-translate-list '(("en" "ru") ("ru" "en") ("el" "en") ("en" "el") ("de" "en") ("en" "de")))
+
+;; ;; (setq gts-default-translator (gts-translator :engines (gts-bing-engine)))
+;; (setq gts-default-translator
+;;       (gts-translator
+;;        :picker (gts-prompt-picker)
+;;        :engines (list (gts-bing-engine) (gts-google-engine))
+;;        :render (gts-buffer-render)))
 
 ;; plantuml config
 ;; active Org-babel languages
@@ -305,6 +306,8 @@ by Prelude.")
 
 ;; enable xclip-mode globally
 (xclip-mode 1)
+;; sync kill ring into system clipboard
+(setq x-select-enable-clipboard t)
 
 ;; startup buffers
 ;; Split the window horizontally
@@ -313,6 +316,14 @@ by Prelude.")
 (switch-to-buffer "*scratch*")
 
 (set-frame-font "IBMPlexMono" nil t)
+
+;: Enable gccjit in Emacs
+;; gccjit (GNU Compiler Collection Just-In-Time compilation) allows Emacs to natively compile Elisp code into machine code for improved performance.
+(setq native-comp-async-report-warnings-errors 'silent)
+(setq native-comp-speed 3)
+(setq native-comp-deferred-compilation t)
+(setq package-native-compile t)
+
 
 (provide 'init)
 

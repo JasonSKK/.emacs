@@ -1,4 +1,6 @@
-;;; now-today-text-insert --- 2024-12-17  8:37:54 pm CET
+;;; now-today-text-insert --- Exported from Org Mode
+;;; 2025-02-25 10:08:39 pm CET
+
   ;; This file provides a number of personal function definitions
 
   ;;; Commentary:
@@ -15,5 +17,6 @@
   i.e. Sunday, 17 September, 2000."
     (interactive) ;; permit invocation in minibuffer
     (insert (format-time-string "%A, %e %B, %Y")))
+
 (provide 'now-today-text-insert)
 ;;; 010_now-today-text-insert.el ends here

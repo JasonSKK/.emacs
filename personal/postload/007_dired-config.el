@@ -1,8 +1,10 @@
-;;; dired-config --- 2024-12-17  8:37:53 pm CET
+;;; dired-config --- Exported from Org Mode
+;;; 2025-02-25 10:08:39 pm CET
+
   ;;; Commentary:
   ;; Hide details when using dired
 
-              ;;; Code:
+  ;;; Code:
   (defun dired-open-dir-in-finder ()
     "Open the current directory in Finder."
     (interactive)
@@ -19,7 +21,8 @@
 
 
   ;; q kills current buffer instead of quit
-  (define-key dired-mode-map "q" 'kill-this-buffer)
+  (define-key dired-mode-map "q" 'kill-current-buffer)
   ;; ------------------------------------
+
 (provide 'dired-config)
 ;;; 007_dired-config.el ends here

@@ -1,4 +1,6 @@
-;;; latex-config --- 2024-12-17  8:37:53 pm CET
+;;; latex-config --- Exported from Org Mode
+;;; 2025-02-25 10:08:38 pm CET
+
   ;;  async compile current latex document with references and open it with external app
   (defun async-compile-latex-file-open-external ()
     (interactive)
@@ -22,5 +24,6 @@
     (shell-command (concat "/Library/TeX/texbin/texcount "
                                           ; "uncomment then options go here "
                            (buffer-file-name))))
+
 (provide 'latex-config)
 ;;; 006_latex-config.el ends here

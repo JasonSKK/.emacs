@@ -1,4 +1,6 @@
-;;; resize-frame --- 2024-12-17  8:37:55 pm CET
+;;; resize-frame --- Exported from Org Mode
+;;; 2025-02-25 10:08:39 pm CET
+
 
   ;; Copyright (C) 2014  kuanyui
 
@@ -45,5 +47,6 @@
   (global-set-key (kbd "ESC `") 'resize-frame)
   (provide '042_resize-frame)
   ;;; 042_resize-frame.el ends here
+
 (provide 'resize-frame)
 ;;; 014_resize-frame.el ends here

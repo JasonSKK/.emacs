@@ -1,4 +1,6 @@
-;;; authinfo-copy-password --- 2024-12-17  8:37:56 pm CET
+;;; authinfo-copy-password --- Exported from Org Mode
+;;; 2025-02-25 10:08:39 pm CET
+
   ;;; authinfo.el -- hiding unnecessary passwords
   ;;
   ;; Copyright (C) 2017  Alex Schroeder <alex@gnu.org>
@@ -90,5 +92,6 @@
                    (car users))))
       (list host user)))
   (provide 'authinfo)
+
 (provide 'authinfo-copy-password)
 ;;; 020_authinfo-copy-password.el ends here

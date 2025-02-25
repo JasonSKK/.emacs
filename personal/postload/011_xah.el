@@ -1,4 +1,6 @@
-;;; xah --- 2024-12-17  8:37:54 pm CET
+;;; xah --- Exported from Org Mode
+;;; 2025-02-25 10:08:39 pm CET
+
   ;; copy current buffer path
   (defun xah-copy-file-path (&optional DirPathOnlyQ)
     "Copy current buffer file path or dired path.
@@ -100,6 +102,7 @@
   (global-set-key (kbd "C-c o") 'xah-open-in-external-app)
   (global-set-key (kbd "C-a") 'xah-beginning-of-line-or-block) ;; replaces (crux-move-beginning-of-line ARG)
   (global-set-key (kbd "C-e") 'xah-end-of-line-or-block) ;; replaces (move-end-of-line ARG)
+
 
 (provide 'xah)
 ;;; 011_xah.el ends here
