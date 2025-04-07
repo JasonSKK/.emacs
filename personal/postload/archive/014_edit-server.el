@@ -1,5 +1,5 @@
 ;;; edit-server --- Exported from Org Mode
-;;; 2025-04-07  5:31:36 pm CEST
+;;; 2025-03-04  6:47:37 pm CET
 
 
   ;; Copyright (C) 2009-2013  Alex BennÃ©e
@@ -432,7 +432,7 @@
   `buffer' is the process buffer which contains any potential contents
   to be passed into the kill ring.
   The new frame will have a specific frame parameter of
-  `edit-server-forground-frame' set to 't"
+    `edit-server-forground-frame' set to 't"
     (when (bufferp buffer)
       (with-current-buffer buffer
         (kill-ring-save (point-min) (point-max))))
@@ -506,10 +506,10 @@
   (defun edit-server-send-response (proc &optional body progress)
     "Send an HTTP 200 OK response back to process PROC.
   Optional second argument BODY specifies the response content:
-  - If nil, the HTTP response will have null content.
-  - If a string, the string is sent as response content.
-  - Any other value will cause the contents of the current
-  buffer to be sent.
+      - If nil, the HTTP response will have null content.
+      - If a string, the string is sent as response content.
+      - Any other value will cause the contents of the current
+        buffer to be sent.
   If optional third argument progress is non-nil, then the response
   will include x-file and x-open headers to allow continuation of editing."
     (interactive)
@@ -606,4 +606,4 @@
     (edit-server-done t t))
 
 (provide 'edit-server)
-;;; 015_edit-server.el ends here
+;;; 014_edit-server.el ends here

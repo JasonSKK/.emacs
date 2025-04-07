@@ -68,123 +68,123 @@
 * org-el-untangle
 
 #+BEGIN_SRC emacs-lisp
-      ;;; Commentary:
-      ;;; org-el-untangle:
-      ;;; import muliple el files from one folder into one org mode file.
-      ;;; org-el-tangle-sections
-      ;;; export each sections' emacs-lisp block to a separate file.
+    ;;; Commentary:
+    ;;; org-el-untangle:
+    ;;; import muliple el files from one folder into one org mode file.
+    ;;; org-el-tangle-sections
+    ;;; export each sections' emacs-lisp block to a separate file.
 
-      ;;; Code:
-    (defvar org-el-export-counter 0
-      "Counter for numbering exported emacs-lisp sections.")
+    ;;; Code:
+  (defvar org-el-export-counter 0
+    "Counter for numbering exported emacs-lisp sections.")
 
-    (defun org-el-import-all-files (directory)
-      "Import muliple el files from one folder into one org mode file."
-      (interactive "D")
-      (let
-          ((filename (concat "MASTER-FILE-" (format-time-string "%y%m%d") ".org"))
-           (files (file-expand-wildcards (concat directory "*.el")))
-           (target-buffer))
-        ;; (message (concat (file-truename directory) filename))
-        (find-file filename)
-        (erase-buffer)
-        (setq target-buffer (current-buffer))
-        (insert "#+STARTUP: overview\n")
-        (goto-char (point-max))
-        (mapc 'org-el-import-1-file files)))
-    (defun org-el-import-1-file (fname)
-      "Insert file FNAME into the master org file.
-      Create org header and SRC block from data in FNAME file."
-      (message fname)
-      (save-excursion
-        (let*
-            ((fname-base (substring (file-name-base fname) 4 nil))
-             found body-start body-end body)
-          (find-file fname)
-          (goto-char (point-min)) ;; in case we are already editing the buffer!
-          (setq found
-                (search-forward fname-base (line-end-position 1) t 1))
-          (cond
-           (found
-            (forward-line 1)
-            (setq body-start (point)))
-           (t (setq body-start (point-min))))
-          (setq found
-                (search-forward (format "provide '%s" fname-base) nil t 1))
-          (cond
-           (found (setq body-end (line-beginning-position)))
-           (t (setq body-end (point-max))))
-          (setq body (buffer-substring body-start body-end))
-          (kill-buffer (current-buffer))
-          (with-current-buffer target-buffer
-            (goto-char (point-max))
-            (insert (replace-regexp-in-string
-                     "  " " "
-                     (format "\n* %s\n"
-                             (replace-regexp-in-string "_" " " fname-base))))
-            (insert "\n#+BEGIN_SRC emacs-lisp\n")
-            (insert body)
-            (insert "#+END_SRC")))))
-    (defun org-el-export-all-sections ()
-      "Export each sections' emacs-lisp block to a separate file.
-      Add header and footer parts required by flycheck."
-      (interactive)
-      (let
-          ((index 0)
-           (root-dir (file-name-directory (buffer-file-name)))
-           buffers)
-      ;;; First delete old entries, before creating new ones.
-      ;;; Prevent duplicate entries due to renumbering.
-        (mapc 'delete-file (file-expand-wildcards (concat root-dir "*.el")))
-        (org-map-entries 'org-el-export-1-section)
-        (mapc 'kill-buffer buffers))
-      (setq org-el-export-counter 0))
-    (defun org-el-export-1-section ()
-      "Export the first emacs-lisp block in the current section to a separate file.
-    Adds necessary headers and footers for Flycheck. Skips COMMENT sections."
-      (interactive)
-      (let* ((element (org-element-at-point)) ;; Get the element at point
-             (title (org-get-heading t t t t)) ;; Fetch the title safely
-             (commented (org-element-property :commentedp element)) ;; Check if commented
-             filename body-element)
+  (defun org-el-import-all-files (directory)
+    "Import muliple el files from one folder into one org mode file."
+    (interactive "D")
+    (let
+        ((filename (concat "MASTER-FILE-" (format-time-string "%y%m%d") ".org"))
+         (files (file-expand-wildcards (concat directory "*.el")))
+         (target-buffer))
+      ;; (message (concat (file-truename directory) filename))
+      (find-file filename)
+      (erase-buffer)
+      (setq target-buffer (current-buffer))
+      (insert "#+STARTUP: overview\n")
+      (goto-char (point-max))
+      (mapc 'org-el-import-1-file files)))
+  (defun org-el-import-1-file (fname)
+    "Insert file FNAME into the master org file.
+    Create org header and SRC block from data in FNAME file."
+    (message fname)
+    (save-excursion
+      (let*
+          ((fname-base (substring (file-name-base fname) 4 nil))
+           found body-start body-end body)
+        (find-file fname)
+        (goto-char (point-min)) ;; in case we are already editing the buffer!
+        (setq found
+              (search-forward fname-base (line-end-position 1) t 1))
+        (cond
+         (found
+          (forward-line 1)
+          (setq body-start (point)))
+         (t (setq body-start (point-min))))
+        (setq found
+              (search-forward (format "provide '%s" fname-base) nil t 1))
+        (cond
+         (found (setq body-end (line-beginning-position)))
+         (t (setq body-end (point-max))))
+        (setq body (buffer-substring body-start body-end))
+        (kill-buffer (current-buffer))
+        (with-current-buffer target-buffer
+          (goto-char (point-max))
+          (insert (replace-regexp-in-string
+                   "  " " "
+                   (format "\n* %s\n"
+                           (replace-regexp-in-string "_" " " fname-base))))
+          (insert "\n#+BEGIN_SRC emacs-lisp\n")
+          (insert body)
+          (insert "#+END_SRC")))))
+  (defun org-el-export-all-sections ()
+    "Export each sections' emacs-lisp block to a separate file.
+    Add header and footer parts required by flycheck."
+    (interactive)
+    (let
+        ((index 0)
+         (root-dir (file-name-directory (buffer-file-name)))
+         buffers)
+    ;;; First delete old entries, before creating new ones.
+    ;;; Prevent duplicate entries due to renumbering.
+      (mapc 'delete-file (file-expand-wildcards (concat root-dir "*.el")))
+      (org-map-entries 'org-el-export-1-section)
+      (mapc 'kill-buffer buffers))
+    (setq org-el-export-counter 0))
+  (defun org-el-export-1-section ()
+    "Export the first emacs-lisp block in the current section to a separate file.
+  Adds necessary headers and footers for Flycheck. Skips COMMENT sections."
+    (interactive)
+    (let* ((element (org-element-at-point)) ;; Get the element at point
+           (title (org-get-heading t t t t)) ;; Fetch the title safely
+           (commented (org-element-property :commentedp element)) ;; Check if commented
+           filename body-element)
 
-        ;; Skip commented sections
-        (unless commented
-          (setq org-el-export-counter (+ org-el-export-counter 1)) ;; Increment global counter
+      ;; Skip commented sections
+      (unless commented
+        (setq org-el-export-counter (+ org-el-export-counter 1)) ;; Increment global counter
 
-          ;; Get the current subtree content
-          (let ((section-end (org-element-property :end element))
-                (section-start (org-element-property :begin element)))
-            (setq body-element
-                  (org-element-map (org-element-parse-buffer) 'src-block
-                    (lambda (src)
-                      (when (and (string= (org-element-property :language src) "emacs-lisp")
-                                 (> (org-element-property :begin src) section-start)
-                                 (< (org-element-property :begin src) section-end))
-                        src))
-                    nil t)))) ;; Stop after first match
+        ;; Get the current subtree content
+        (let ((section-end (org-element-property :end element))
+              (section-start (org-element-property :begin element)))
+          (setq body-element
+                (org-element-map (org-element-parse-buffer) 'src-block
+                  (lambda (src)
+                    (when (and (string= (org-element-property :language src) "emacs-lisp")
+                               (> (org-element-property :begin src) section-start)
+                               (< (org-element-property :begin src) section-end))
+                      src))
+                  nil t)))) ;; Stop after first match
 
-        (if (not body-element)
-            (message "WARNING: No valid emacs-lisp src block found in section: %s" title)
-          (progn
-            ;; Sanitize title for filename
-            (setq title (replace-regexp-in-string "[^a-zA-Z0-9_-]" "_" title))
-            (setq filename (format "%03d_%s.el" org-el-export-counter title))
+      (if (not body-element)
+          (message "WARNING: No valid emacs-lisp src block found in section: %s" title)
+        (progn
+          ;; Sanitize title for filename
+          (setq title (replace-regexp-in-string "[^a-zA-Z0-9_-]" "_" title))
+          (setq filename (format "%03d_%s.el" org-el-export-counter title))
 
-            ;; Create and write to file
-            (with-temp-buffer
-              (insert (format ";;; %s --- Exported from Org Mode\n" title))
-              (insert (format ";;; %s\n\n" (format-time-string "%F %r")))
-              (insert (org-element-property :value body-element)) ;; Extract correct code
-              (insert (format "\n(provide '%s)\n;;; %s ends here\n" title filename))
-              (write-file filename))
+          ;; Create and write to file
+          (with-temp-buffer
+            (insert (format ";;; %s --- Exported from Org Mode\n" title))
+            (insert (format ";;; %s\n\n" (format-time-string "%F %r")))
+            (insert (org-element-property :value body-element)) ;; Extract correct code
+            (insert (format "\n(provide '%s)\n;;; %s ends here\n" title filename))
+            (write-file filename))
 
-            (message "Exported section '%s' to file: %s" title filename)))))
-    (eval-after-load 'org
-      '(progn
-         ;; Note: This keybinding is in analogy to the default keybinding:
-         ;; C-c . -> org-time-stamp
-         (define-key org-mode-map (kbd "C-c C-M-e") 'org-el-export-all-sections)))
+          (message "Exported section '%s' to file: %s" title filename)))))
+  (eval-after-load 'org
+    '(progn
+       ;; Note: This keybinding is in analogy to the default keybinding:
+       ;; C-c . -> org-time-stamp
+       (define-key org-mode-map (kbd "C-c C-M-e") 'org-el-export-all-sections)))
 #+END_SRC
 * org-mode
 
@@ -349,6 +349,10 @@
 
   ;; include docx when exporting to odt
   (setq org-odt-preferred-output-format "docx")
+  ;; start an org file with all headers collapsed
+  (setq org-startup-folded t)
+  ;; syntax highlighting in src-blocks
+  (setq org-src-fontify-natively t)
 #+END_SRC
 * latex-config
 
@@ -594,6 +598,10 @@
         ;; After a short delay, bring Firefox to the foreground using wmctrl
         (start-process "wmctrl-focus-firefox" nil "sh" "-c"
                        "sleep 0.5 && wmctrl -a Firefox"))))
+  ;; overwrite default
+  (with-eval-after-load 'notmuch
+    (define-key notmuch-show-part-map "v" 'notmuch-show-view-html+))
+
 
   ;; shell command output no window
   (defun no-output-shell-run (command)
@@ -616,15 +624,15 @@
     "Batch sorts ko00 & gmail"
     (interactive)
     (no-output-shell-run "notmuch tag --batch <<EOM
-  +gmail -- to:jason.skk98@gmail.com
-  +work -- to:"iason.svoronoskanavas@gmail.com" <iason.svoronoskanavas@gmail.com>
-  +windowslive -- to:ko00@windowslive.com
-  EOM"))
+    +gmail -- to:jason.skk98@gmail.com
+    +work -- to:"iason.svoronoskanavas@gmail.com" <iason.svoronoskanavas@gmail.com>
+    +windowslive -- to:ko00@windowslive.com
+    EOM"))
 
   ;; mapped to ". l" in elpa/notmuch-20240406.1803/notmuch-show.el
   (defun notmuch-show-jump-to-latest ()
     "Jump to the message in the current thread with the latest
-  timestamp."
+    timestamp."
     (interactive)
     (let ((timestamp 0)
           latest)
@@ -636,6 +644,8 @@
       (if latest
           (goto-char latest)
         (error "Cannot find latest message."))))
+    (with-eval-after-load 'notmuch
+    (define-key notmuch-show-part-map "l" 'notmuch-show-jump-to-latest))
   ;; global, it syncs email database even without notmuch buffer open
   ;; (global-set-key (kbd "C-l s") 'notmuch-sync) ;; global ;; prefix for slack C-l s ...
 
@@ -740,7 +750,7 @@
   ;;; Code:
   ;; for cycling through Greek and UK English when using Ispell <C-1>
   ;; You should have aspell-gr and aspell-en packages installed
-  (let ((langs '("british" "el" "ru")))
+  (let ((langs '("british" "el" "de")))
     (setq lang-ring (make-ring (length langs)))
     (dolist (elem langs) (ring-insert lang-ring elem)))
   (defun cycle-ispell-languages ()
@@ -748,7 +758,7 @@
     (let ((lang (ring-ref lang-ring -1)))
       (ring-insert lang-ring lang)
       (ispell-change-dictionary lang)))
-  (global-set-key (kbd "C-!") 'cycle-ispell-languages)
+  (global-set-key (kbd "C-M-!") 'cycle-ispell-languages)
   ;; ignore spelling in LaTeX \commands
   (setq ispell-tex-skip-alists
         (list
@@ -1626,4 +1636,117 @@
                    (car users))))
       (list host user)))
   (provide 'authinfo)
+#+END_SRC
+* go-translate
+#+BEGIN_SRC emacs-lisp
+  ;; go-translate v3 configuration
+  (require 'go-translate)
+
+  ;; Define preset translators (recommended)
+  (setq gt-preset-translators
+        `((ts-en-ru . ,(gt-translator
+                        :taker (gt-taker :langs '(en ru))
+                        :engines (list (gt-bing-engine) (gt-google-engine))
+                        :render (gt-buffer-render)))
+          (ts-ru-en . ,(gt-translator
+                        :taker (gt-taker :langs '(ru en))
+                        :engines (list (gt-bing-engine) (gt-google-engine))
+                        :render (gt-buffer-render)))
+          (ts-el-en . ,(gt-translator
+                        :taker (gt-taker :langs '(el en))
+                        :engines (list (gt-bing-engine) (gt-google-engine))
+                        :render (gt-buffer-render)))
+          (ts-en-el . ,(gt-translator
+                        :taker (gt-taker :langs '(e
+                                                  n el))
+                        :engines (list (gt-bing-engine) (gt-google-engine))
+                        :render (gt-buffer-render)))
+          (ts-de-en . ,(gt-translator
+                        :taker (gt-taker :langs '(de en))
+                        :engines (list (gt-bing-engine) (gt-google-engine))
+                        :render (gt-buffer-render)))
+          (ts-en-de . ,(gt-translator
+                        :taker (gt-taker :langs '(en de))
+                        :engines (list (gt-bing-engine) (gt-google-engine))
+                        :render (gt-buffer-render)))))
+
+  ;; Optional: Set a default translator (if you don't want to use the first preset as default)
+  ;; If gt-default-translator is nil, the first preset in gt-preset-translators will be used.
+  ;; (setq gt-default-translator nil) ;; or you can set it to one of the preset translator
+
+  ;; Example of setting a default translator
+  ;; (setq gt-default-translator
+  ;;       (gt-translator
+  ;;        :taker (gt-taker :langs '(en ru))
+  ;;        :engines (list (gt-bing-engine) (gt-google-engine))
+  ;;        :render (gt-buffer-render)))
+
+  ;; Optional: Configure global languages (used if taker doesn't specify langs)
+  ;; (setq gt-langs '(en ru))
+
+  ;; Optional: Configure taker defaults (if you want to change the default behavior)
+  ;; (setq gt-taker-text 'word)      ; Default: word under cursor
+  ;; (setq gt-taker-pick 'paragraph) ; Default: split by paragraphs
+  ;; (setq gt-taker-prompt nil)      ; Default: no prompt
+
+  ;; Optional: Configure default HTTP client (plz.el with curl is recommended)
+  ;; (require 'plz) ;; Ensure plz is loaded
+
+  ;; (setq gt-default-http-client
+  ;;       (gt-plz-http-client :args '("--proxy" "socks5://127.0.0.1:9999")))
+
+  ;; Optional: Configure default cache
+  ;; (setq gt-cache-p t) ;; Enable global cache, or disable it.
+  ;; (setq gt-default-cacher (gt-memory-cacher :if 'word)) ;; only cache words.
+
+  ;; Example of using gt-insert-render
+  ;; (setq gt-default-translator
+  ;;       (gt-translator
+  ;;        :taker (gt-taker :text 'paragraph :pick nil)
+  ;;        :engines (gt-google-engine)
+  ;;        :render (gt-insert-render :type 'replace)))
+
+  ;; Example of using gt-overlay-render
+  ;; (setq gt-default-translator
+  ;;       (gt-translator
+  ;;        :taker (gt-taker :text 'buffer :pick 'word :pick-pred (lambda (w) (length> w 5)))
+  ;;        :engines (gt-google-engine)
+  ;;        :render (gt-overlay-render :type 'help-echo)))
+
+  ;; Example of using gt-posframe-pop-render
+  ;; (require 'posframe) ;;Ensure posframe is installed
+  ;; (setq gt-default-translator
+  ;;       (gt-translator
+  ;;        :taker (gt-taker :text 'word)
+  ;;        :engines (gt-google-engine)
+  ;;        :render (gt-posframe-pop-render)))
+
+  ;; Example of using gt-stardict-engine
+  ;; (setq gt-default-translator
+  ;;       (gt-translator
+  ;;        :engines (gt-stardict-engine
+  ;;                  :dir "~/.stardict/dic"
+  ;;                  :dict "dict-name"
+  ;;                  :exact t)
+  ;;        :render (gt-buffer-render)))
+
+  ;; Example of using gt-deepl-engine
+  ;; (setq gt-default-translator
+  ;;       (gt-translator
+  ;;        :engines (gt-deepl-engine :key "***")
+  ;;        :render (gt-buffer-render)))
+
+  ;; Example of using gt-chatgpt-engine
+  ;; (setq gt-chatgpt-key "YOUR-KEY") ;; or in your .authinfo
+  ;; (setq gt-default-translator
+  ;;       (gt-translator
+  ;;        :engines (gt-chatgpt-engine :stream t)
+  ;;        :render (gt-buffer-render)))
+
+  ;; Example of using gt-text-utility
+  ;; (defun my-generate-qr ()
+  ;;   (interactive)
+  ;;   (gt-start (gt-translator
+  ;;              :engines (gt-text-utility :type 'qrcode)
+  ;;              :render (gt-buffer-render))))
 #+END_SRC

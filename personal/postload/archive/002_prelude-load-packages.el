@@ -1,8 +1,7 @@
 ;;; prelude-load-packages --- Exported from Org Mode
-;;; 2025-04-07  5:31:35 pm CEST
+;;; 2025-03-04  6:47:37 pm CET
 
   (prelude-load-require-packages '(avy-zap avy-menu auto-async-byte-compile anzu ace-window ace-popup-menu ace-isearch))
-  (prelude-load-require-packages '(multiple-cursors ace-mc)) ;; mc-extras
 
   ;;; re-builder package
   ;; https://www.masteringemacs.org/article/re-builder-interactive-regexp-builder

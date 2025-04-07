@@ -1,5 +1,5 @@
 ;;; ispell-config --- Exported from Org Mode
-;;; 2025-04-07  5:31:36 pm CEST
+;;; 2025-03-04  6:47:37 pm CET
 
   ;; This contains a collection of Ispell configurations.
 
@@ -8,7 +8,7 @@
   ;;; Code:
   ;; for cycling through Greek and UK English when using Ispell <C-1>
   ;; You should have aspell-gr and aspell-en packages installed
-  (let ((langs '("british" "el" "de")))
+  (let ((langs '("british" "el" "ru")))
     (setq lang-ring (make-ring (length langs)))
     (dolist (elem langs) (ring-insert lang-ring elem)))
   (defun cycle-ispell-languages ()
@@ -16,7 +16,7 @@
     (let ((lang (ring-ref lang-ring -1)))
       (ring-insert lang-ring lang)
       (ispell-change-dictionary lang)))
-  (global-set-key (kbd "C-M-!") 'cycle-ispell-languages)
+  (global-set-key (kbd "C-!") 'cycle-ispell-languages)
   ;; ignore spelling in LaTeX \commands
   (setq ispell-tex-skip-alists
         (list
@@ -39,4 +39,4 @@
 
 
 (provide 'ispell-config)
-;;; 013_ispell-config.el ends here
+;;; 012_ispell-config.el ends here

@@ -1,6 +1,8 @@
 ;;; multiple-cursors --- Exported from Org Mode
-;;; 2025-04-07  5:31:35 pm CEST
+;;; 2025-03-04  6:47:37 pm CET
 
+
+  (prelude-load-require-packages '(multiple-cursors ace-mc)) ;; mc-extras
   ;; ace-mc
   (global-set-key (kbd "C-c )") 'ace-mc-add-multiple-cursors)
   (global-set-key (kbd "C-M-)") 'ace-mc-add-single-cursor)

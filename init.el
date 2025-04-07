@@ -302,7 +302,7 @@ by Prelude.")
    (plantuml . t)))
 
 (setq org-plantuml-jar-path
-      (expand-file-name "/Users/jsk/Code/emacs/plantuml-1.2024.4.jar"))
+      (expand-file-name "/home/iason1/bin/plantuml/plantuml-1.2025.2.jar"))
 
 ;; enable xclip-mode globally
 (xclip-mode 1)

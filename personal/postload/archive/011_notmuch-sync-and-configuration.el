@@ -1,5 +1,5 @@
 ;;; notmuch-sync-and-configuration --- Exported from Org Mode
-;;; 2025-04-07  5:31:36 pm CEST
+;;; 2025-03-04  6:47:37 pm CET
 
   ;; view html part in browser
   ;; mapped to ".v" in elpa/notmuch-20240406.1803/notmuch-show.el
@@ -21,10 +21,6 @@
         ;; After a short delay, bring Firefox to the foreground using wmctrl
         (start-process "wmctrl-focus-firefox" nil "sh" "-c"
                        "sleep 0.5 && wmctrl -a Firefox"))))
-  ;; overwrite default
-  (with-eval-after-load 'notmuch
-    (define-key notmuch-show-part-map "v" 'notmuch-show-view-html+))
-
 
   ;; shell command output no window
   (defun no-output-shell-run (command)
@@ -36,26 +32,29 @@
     "Syncs notmuch using lieer.  ARG empty: Configuration file is /Users/jsk/Mail/gmi-sync.sh."
     (interactive)
     (let ((lnr (line-number-at-pos))) ;; register cursor line number
-      ;; synching config ~/.mail/.notmuch/hooks/pre-new
-      ;; 'notmuch new' lieer fetches and pushes
+      ;; synching config replaced by /Users/jsk/Mail/.notmuch/hooks/pre-new, now with 'notmuch new' lieer fetches and pushes
       (no-output-shell-run "notmuch new")
+      ;; (no-output-shell-run "pushd /Users/jsk/Mail ; gmi sync ; popd ; notmuch new")
+      ;; (no-output-shell-run "notmuch tag +work -- tag:new and to:iason.svoronoskanavas@gmail.com ; notmuch tag +gmail -- tag:new and to:jason.skk98@gmail.com")
+      ;; "&& notmuch tag +gmail -- tag:new and to:jason.skk98@gmail.com && notmuch tag +windowslive -- tag:new and to:ko00@windowslive.com" ;; is in /Users/jsk/Mail/.notmuch/hooks/pre-new
       (notmuch-refresh-this-buffer) ;; refresh this buffer to reduce lag
+      ;; (notmuch-refresh-all-buffers) ;; refresh all not much buffers ;; old version
       (goto-line lnr) ;; go to registered line number
-      (message "Notmuch/Lieer sync completed at %s." (format-time-string "%Y-%m-%d %H:%M:%S"))))
+      (message "notmuch & lieer on sync")))
 
   (defun notmuch-batch-tag-per-email ()
     "Batch sorts ko00 & gmail"
     (interactive)
     (no-output-shell-run "notmuch tag --batch <<EOM
-    +gmail -- to:jason.skk98@gmail.com
-    +work -- to:"iason.svoronoskanavas@gmail.com" <iason.svoronoskanavas@gmail.com>
-    +windowslive -- to:ko00@windowslive.com
-    EOM"))
+          +gmail -- to:jason.skk98@gmail.com
+          +work -- to:"iason.svoronoskanavas@gmail.com" <iason.svoronoskanavas@gmail.com>
+          +windowslive -- to:ko00@windowslive.com
+          EOM"))
 
   ;; mapped to ". l" in elpa/notmuch-20240406.1803/notmuch-show.el
   (defun notmuch-show-jump-to-latest ()
     "Jump to the message in the current thread with the latest
-    timestamp."
+        timestamp."
     (interactive)
     (let ((timestamp 0)
           latest)
@@ -67,8 +66,6 @@
       (if latest
           (goto-char latest)
         (error "Cannot find latest message."))))
-    (with-eval-after-load 'notmuch
-    (define-key notmuch-show-part-map "l" 'notmuch-show-jump-to-latest))
   ;; global, it syncs email database even without notmuch buffer open
   ;; (global-set-key (kbd "C-l s") 'notmuch-sync) ;; global ;; prefix for slack C-l s ...
 
@@ -164,4 +161,4 @@
 
 
 (provide 'notmuch-sync-and-configuration)
-;;; 012_notmuch-sync-and-configuration.el ends here
+;;; 011_notmuch-sync-and-configuration.el ends here

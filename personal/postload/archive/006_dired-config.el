@@ -1,10 +1,10 @@
 ;;; dired-config --- Exported from Org Mode
-;;; 2025-04-07  5:31:36 pm CEST
+;;; 2025-03-04  6:47:37 pm CET
 
-  ;;; Commentary:
+    ;;; Commentary:
   ;; Hide details when using dired
 
-  ;;; Code:
+                ;;; Code:
   (defun dired-open-dir-in-finder ()
     "Open the current directory in Finder."
     (interactive)
@@ -25,4 +25,4 @@
   ;; ------------------------------------
 
 (provide 'dired-config)
-;;; 007_dired-config.el ends here
+;;; 006_dired-config.el ends here

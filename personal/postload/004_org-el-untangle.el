@@ -1,15 +1,15 @@
 ;;; org-el-untangle --- Exported from Org Mode
-;;; 2025-02-25 10:08:38 pm CET
+;;; 2025-04-07  5:31:35 pm CEST
 
-  ;;; Commentary:
-  ;;; org-el-untangle:
-  ;;; import muliple el files from one folder into one org mode file.
-  ;;; org-el-tangle-sections
-  ;;; export each sections' emacs-lisp block to a separate file.
+    ;;; Commentary:
+    ;;; org-el-untangle:
+    ;;; import muliple el files from one folder into one org mode file.
+    ;;; org-el-tangle-sections
+    ;;; export each sections' emacs-lisp block to a separate file.
 
-  ;;; Code:
+    ;;; Code:
   (defvar org-el-export-counter 0
-  "Counter for numbering exported emacs-lisp sections.")
+    "Counter for numbering exported emacs-lisp sections.")
 
   (defun org-el-import-all-files (directory)
     "Import muliple el files from one folder into one org mode file."
@@ -27,7 +27,7 @@
       (mapc 'org-el-import-1-file files)))
   (defun org-el-import-1-file (fname)
     "Insert file FNAME into the master org file.
-  Create org header and SRC block from data in FNAME file."
+    Create org header and SRC block from data in FNAME file."
     (message fname)
     (save-excursion
       (let*
@@ -60,41 +60,42 @@
           (insert "#+END_SRC")))))
   (defun org-el-export-all-sections ()
     "Export each sections' emacs-lisp block to a separate file.
-  Add header and footer parts required by flycheck."
+    Add header and footer parts required by flycheck."
     (interactive)
     (let
         ((index 0)
          (root-dir (file-name-directory (buffer-file-name)))
          buffers)
-  ;;; First delete old entries, before creating new ones.
-  ;;; Prevent duplicate entries due to renumbering.
+    ;;; First delete old entries, before creating new ones.
+    ;;; Prevent duplicate entries due to renumbering.
       (mapc 'delete-file (file-expand-wildcards (concat root-dir "*.el")))
       (org-map-entries 'org-el-export-1-section)
-      (mapc 'kill-buffer buffers)))
-(defun org-el-export-1-section ()
-  "Export the first emacs-lisp block in the current section to a separate file.
-Adds necessary headers and footers for Flycheck. Skips COMMENT sections."
-  (interactive)
-  (let* ((element (org-element-at-point)) ;; Get the element at point
-         (title (org-get-heading t t t t)) ;; Fetch the title safely
-         (commented (org-element-property :commentedp element)) ;; Check if commented
-         filename body-element)
+      (mapc 'kill-buffer buffers))
+    (setq org-el-export-counter 0))
+  (defun org-el-export-1-section ()
+    "Export the first emacs-lisp block in the current section to a separate file.
+  Adds necessary headers and footers for Flycheck. Skips COMMENT sections."
+    (interactive)
+    (let* ((element (org-element-at-point)) ;; Get the element at point
+           (title (org-get-heading t t t t)) ;; Fetch the title safely
+           (commented (org-element-property :commentedp element)) ;; Check if commented
+           filename body-element)
 
-    ;; Skip commented sections
-    (unless commented
-      (setq org-el-export-counter (+ org-el-export-counter 1)) ;; Increment global counter
+      ;; Skip commented sections
+      (unless commented
+        (setq org-el-export-counter (+ org-el-export-counter 1)) ;; Increment global counter
 
-      ;; Get the current subtree content
-      (let ((section-end (org-element-property :end element))
-            (section-start (org-element-property :begin element)))
-        (setq body-element
-              (org-element-map (org-element-parse-buffer) 'src-block
-                (lambda (src)
-                  (when (and (string= (org-element-property :language src) "emacs-lisp")
-                             (> (org-element-property :begin src) section-start)
-                             (< (org-element-property :begin src) section-end))
-                    src))
-                nil t)))) ;; Stop after first match
+        ;; Get the current subtree content
+        (let ((section-end (org-element-property :end element))
+              (section-start (org-element-property :begin element)))
+          (setq body-element
+                (org-element-map (org-element-parse-buffer) 'src-block
+                  (lambda (src)
+                    (when (and (string= (org-element-property :language src) "emacs-lisp")
+                               (> (org-element-property :begin src) section-start)
+                               (< (org-element-property :begin src) section-end))
+                      src))
+                  nil t)))) ;; Stop after first match
 
       (if (not body-element)
           (message "WARNING: No valid emacs-lisp src block found in section: %s" title)

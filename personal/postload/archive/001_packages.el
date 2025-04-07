@@ -1,5 +1,6 @@
 ;;; packages --- Exported from Org Mode
-;;; 2025-04-07  5:31:35 pm CEST
+;;; 2025-03-04  6:47:37 pm CET
+
 
   ;;; Commentary:
   ;;; this is only some of the packags.
@@ -14,7 +15,7 @@
   ;; this loads packages which are not (auto-) loaded otherwise.
   ;; apparently prelude-required packages will be available after restarting emacs twice ...
   (defun prelude-load-require-package (package)
-    "Install PACKAGE unwless already installed."
+    "Install PACKAGE unless already installed."
     (unless (memq package prelude-packages)
       (add-to-list 'prelude-packages package))
     (unless (package-installed-p package)
@@ -29,6 +30,7 @@
      powerline
      ;; multi-term
      ))
+
 
 (provide 'packages)
 ;;; 001_packages.el ends here

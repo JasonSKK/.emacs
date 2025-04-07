@@ -1,5 +1,9 @@
 ;;; appearance --- Exported from Org Mode
-;;; 2025-04-07  5:31:36 pm CEST
+;;; 2025-03-04  6:47:37 pm CET
+
+
+  ;; zenburn disable
+  (disable-theme 'zenburn)
 
   ;; --- DISPLAY ---
   ;; (split-window-right) ;; split to 2 windows right on startup
@@ -45,4 +49,4 @@
 
 
 (provide 'appearance)
-;;; 018_appearance.el ends here
+;;; 017_appearance.el ends here

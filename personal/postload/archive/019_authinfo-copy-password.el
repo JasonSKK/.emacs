@@ -1,5 +1,5 @@
 ;;; authinfo-copy-password --- Exported from Org Mode
-;;; 2025-04-07  5:31:36 pm CEST
+;;; 2025-03-04  6:47:37 pm CET
 
   ;;; authinfo.el -- hiding unnecessary passwords
   ;;
@@ -94,4 +94,4 @@
   (provide 'authinfo)
 
 (provide 'authinfo-copy-password)
-;;; 020_authinfo-copy-password.el ends here
+;;; 019_authinfo-copy-password.el ends here

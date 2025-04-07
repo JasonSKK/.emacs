@@ -1,5 +1,5 @@
 ;;; org-mode --- Exported from Org Mode
-;;; 2025-02-25 10:08:38 pm CET
+;;; 2025-04-07  5:31:35 pm CEST
 
   ;;; Commentary:
 
@@ -161,6 +161,10 @@
 
   ;; include docx when exporting to odt
   (setq org-odt-preferred-output-format "docx")
+  ;; start an org file with all headers collapsed
+  (setq org-startup-folded t)
+  ;; syntax highlighting in src-blocks
+  (setq org-src-fontify-natively t)
 
 (provide 'org-mode)
 ;;; 005_org-mode.el ends here
