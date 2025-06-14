@@ -1,36 +1,15 @@
 ;;; go-translate --- Exported from Org Mode
-;;; 2025-04-07  5:31:36 pm CEST
+;;; 2025-06-14  7:34:08 pm CEST
 
   ;; go-translate v3 configuration
   (require 'go-translate)
 
   ;; Define preset translators (recommended)
-  (setq gt-preset-translators
-        `((ts-en-ru . ,(gt-translator
-                        :taker (gt-taker :langs '(en ru))
-                        :engines (list (gt-bing-engine) (gt-google-engine))
-                        :render (gt-buffer-render)))
-          (ts-ru-en . ,(gt-translator
-                        :taker (gt-taker :langs '(ru en))
-                        :engines (list (gt-bing-engine) (gt-google-engine))
-                        :render (gt-buffer-render)))
-          (ts-el-en . ,(gt-translator
-                        :taker (gt-taker :langs '(el en))
-                        :engines (list (gt-bing-engine) (gt-google-engine))
-                        :render (gt-buffer-render)))
-          (ts-en-el . ,(gt-translator
-                        :taker (gt-taker :langs '(e
-                                                  n el))
-                        :engines (list (gt-bing-engine) (gt-google-engine))
-                        :render (gt-buffer-render)))
-          (ts-de-en . ,(gt-translator
-                        :taker (gt-taker :langs '(de en))
-                        :engines (list (gt-bing-engine) (gt-google-engine))
-                        :render (gt-buffer-render)))
-          (ts-en-de . ,(gt-translator
-                        :taker (gt-taker :langs '(en de))
-                        :engines (list (gt-bing-engine) (gt-google-engine))
-                        :render (gt-buffer-render)))))
+  (setq gt-default-translator
+        (gt-translator
+         :taker   (gt-taker :langs '(de en el ru) :text 'buffer :pick 'paragraph)
+         :engines (list (gt-bing-engine) (gt-google-engine))
+         :render  (gt-buffer-render)))
 
   ;; Optional: Set a default translator (if you don't want to use the first preset as default)
   ;; If gt-default-translator is nil, the first preset in gt-preset-translators will be used.

@@ -1,5 +1,5 @@
 ;;; notmuch-sync-and-configuration --- Exported from Org Mode
-;;; 2025-04-07  5:31:36 pm CEST
+;;; 2025-06-14  7:34:08 pm CEST
 
   ;; view html part in browser
   ;; mapped to ".v" in elpa/notmuch-20240406.1803/notmuch-show.el

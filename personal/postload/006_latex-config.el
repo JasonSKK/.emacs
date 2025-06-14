@@ -1,5 +1,5 @@
 ;;; latex-config --- Exported from Org Mode
-;;; 2025-04-07  5:31:36 pm CEST
+;;; 2025-06-14  7:34:08 pm CEST
 
   ;;  async compile current latex document with references and open it with external app
   (defun async-compile-latex-file-open-external ()

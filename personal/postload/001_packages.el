@@ -1,5 +1,5 @@
 ;;; packages --- Exported from Org Mode
-;;; 2025-04-07  5:31:35 pm CEST
+;;; 2025-06-14  7:34:07 pm CEST
 
   ;;; Commentary:
   ;;; this is only some of the packags.

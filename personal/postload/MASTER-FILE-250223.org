@@ -1643,32 +1643,11 @@
   (require 'go-translate)
 
   ;; Define preset translators (recommended)
-  (setq gt-preset-translators
-        `((ts-en-ru . ,(gt-translator
-                        :taker (gt-taker :langs '(en ru))
-                        :engines (list (gt-bing-engine) (gt-google-engine))
-                        :render (gt-buffer-render)))
-          (ts-ru-en . ,(gt-translator
-                        :taker (gt-taker :langs '(ru en))
-                        :engines (list (gt-bing-engine) (gt-google-engine))
-                        :render (gt-buffer-render)))
-          (ts-el-en . ,(gt-translator
-                        :taker (gt-taker :langs '(el en))
-                        :engines (list (gt-bing-engine) (gt-google-engine))
-                        :render (gt-buffer-render)))
-          (ts-en-el . ,(gt-translator
-                        :taker (gt-taker :langs '(e
-                                                  n el))
-                        :engines (list (gt-bing-engine) (gt-google-engine))
-                        :render (gt-buffer-render)))
-          (ts-de-en . ,(gt-translator
-                        :taker (gt-taker :langs '(de en))
-                        :engines (list (gt-bing-engine) (gt-google-engine))
-                        :render (gt-buffer-render)))
-          (ts-en-de . ,(gt-translator
-                        :taker (gt-taker :langs '(en de))
-                        :engines (list (gt-bing-engine) (gt-google-engine))
-                        :render (gt-buffer-render)))))
+  (setq gt-default-translator
+        (gt-translator
+         :taker   (gt-taker :langs '(de en el ru) :text 'buffer :pick 'paragraph)
+         :engines (list (gt-bing-engine) (gt-google-engine))
+         :render  (gt-buffer-render)))
 
   ;; Optional: Set a default translator (if you don't want to use the first preset as default)
   ;; If gt-default-translator is nil, the first preset in gt-preset-translators will be used.
@@ -1749,4 +1728,17 @@
   ;;   (gt-start (gt-translator
   ;;              :engines (gt-text-utility :type 'qrcode)
   ;;              :render (gt-buffer-render))))
+#+END_SRC
+* reverse-im
+#+BEGIN_SRC emacs-lisp
+  (require 'reverse-im)
+
+  (setq reverse-im-input-methods '("greek")) ; important: match the OS-level Greek layout
+  (reverse-im-mode 1)
+
+  ;; some key-bindings just do not work and need to be mapped manually
+  (global-set-key (kbd "C-ζ") 'yank)
+  (global-set-key (kbd "M-»") 'end-of-buffer)
+  (global-set-key (kbd "M-«") 'beggining-of-buffer)
+
 #+END_SRC
