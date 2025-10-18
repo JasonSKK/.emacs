@@ -93,7 +93,10 @@ by Prelude.")
 
 ;; reduce the frequency of garbage collection by making it happen on
 ;; each 50MB of allocated data (the default is on every 0.76MB)
-(setq gc-cons-threshold 50000000)
+;; Temporarily increase GC threshold during init
+(setq gc-cons-threshold (* 50 1000 1000))  ;; 50MB
+(add-hook 'emacs-startup-hook
+          (lambda () (setq gc-cons-threshold (* 2 1000 1000))))  ;; 2MB after init
 
 ;; warn when opening files bigger than 100MB
 (setq large-file-warning-threshold 100000000)
@@ -164,17 +167,17 @@ by Prelude.")
 
 ;;================== SCLANG-MODE ===================
 ;;(add-to-list 'load-path "/usr/local/bin/sclang")
-(require 'sclang)
+;; (require 'sclang)
 
 ;;-- open .scd files with sclang mode and auto complete
-(setq auto-mode-alist (cons '("\\.scd$" . sclang-mode) auto-mode-alist))
+;; (setq auto-mode-alist (cons '("\\.scd$" . sclang-mode) auto-mode-alist))
 ;;(add-to-list 'load-path "~/.emacs.d/personal/packages/el")
 ;;(require 'sclang)
 ;;(setq auto-mode-alist (cons '("\\.scd$" . sclang-mode) auto-mode-alist))
-(add-hook 'sclang-library-startup-hook
-          (lambda () (and sclang-show-workspace-on-startup
-                          (not (eq major-mode 'sclang-mode))
-                          (sclang-switch-to-workspace))))
+;; (add-hook 'sclang-library-startup-hook
+;;           (lambda () (and sclang-show-workspace-on-startup
+;;                           (not (eq major-mode 'sclang-mode))
+;;                           (sclang-switch-to-workspace))))
 
 ;; -------------------- START LIVE CODING --------------------
 ;; foxdot-mode
@@ -314,16 +317,6 @@ by Prelude.")
 (split-window-horizontally)
 ;; Open the scratch buffer on the left
 (switch-to-buffer "*scratch*")
-
-(set-frame-font "IBMPlexMono" nil t)
-
-;: Enable gccjit in Emacs
-;; gccjit (GNU Compiler Collection Just-In-Time compilation) allows Emacs to natively compile Elisp code into machine code for improved performance.
-(setq native-comp-async-report-warnings-errors 'silent)
-(setq native-comp-speed 3)
-(setq native-comp-deferred-compilation t)
-(setq package-native-compile t)
-
 
 (provide 'init)
 

@@ -779,6 +779,18 @@
   ;; (defun flyspell-local-vars ()
   ;;  (add-hook 'hack-local-variables-hook #'flyspell-buffer))
 
+  ;; check the full buffer when you open a file (e.g., in text-mode, org-mode, etc.):
+(dolist (hook '(org-mode-hook
+                latex-mode-hook
+                message-mode-hook
+                markdown-mode-hook
+                text-mode-hook)) ;; keep if you still want it for plain text
+  (add-hook hook
+            (lambda ()
+              (flyspell-mode 1)
+              (flyspell-buffer))))
+
+
 #+END_SRC
 * resize-frame
 
@@ -1454,6 +1466,16 @@
   ;; Prevent company-mode from automatically lowercasing completions
   (setq company-dabbrev-downcase nil)
 #+END_SRC
+* gccjit
+#+begin_src emacs-lisp
+;: Enable gccjit  in Emacs
+;; gccjit (GNU Compiler Collection Just-In-Time compilation) allows Emacs to natively compile Elisp code into machine code for improved performance.
+(setq native-comp-async-report-warnings-errors 'silent)
+(setq native-comp-speed 3)
+(setq native-comp-deferred-compilation t)
+(setq package-native-compile t)
+#+end_src
+
 * anna-iason
 
 #+BEGIN_SRC emacs-lisp
@@ -1472,6 +1494,10 @@
 * appearance
 
 #+BEGIN_SRC emacs-lisp
+
+  ;; emacsclient new frames maximised
+  (add-to-list 'default-frame-alist '(fullscreen . maximized))
+
   ;; --- DISPLAY ---
   ;; (split-window-right) ;; split to 2 windows right on startup
   ;; display numbers
@@ -1497,8 +1523,9 @@
           (width . 132)      ; Width of the frame
           (height . 61)))  ; Height of the frame
   ;; set alpha value: transparency
-  (set-frame-parameter(selected-frame)'alpha '(92. 50))
-  (add-to-list 'default-frame-alist '(alpha . (92. 50)))
+  ;; (set-frame-parameter(selected-frame)'alpha '(100. 0))
+  ;;(add-to-list 'default-frame-alist '(alpha . (100. 0)))
+
   ;; telephone-line-config
   (setq telephone-line-subseparator-faces '())
   (setq telephone-line-height 24
@@ -1729,16 +1756,71 @@
   ;;              :engines (gt-text-utility :type 'qrcode)
   ;;              :render (gt-buffer-render))))
 #+END_SRC
+* greek-qwertz
+#+begin_src emacs-lisp
+;;; greek-qwertz.el --- Greek input method on German QWERTZ with symbols unchanged -*- lexical-binding: t; -*-
+
+(require 'quail)
+
+(quail-define-package
+ "greek-qwertz" "Greek" "GR-QWERTZ" nil
+ "Greek letters mapped to a German QWERTZ keyboard. All symbols and punctuation follow German layout 1:1."
+ nil t t t t nil nil nil nil nil t)
+
+(quail-define-rules
+ ;; Number row and punctuation as on German keyboard
+ ("1" ?1) ("2" ?2) ("3" ?3) ("4" ?4) ("5" ?5)
+ ("6" ?6) ("7" ?7) ("8" ?8) ("9" ?9) ("0" ?0)
+ ("ß" ?ß) ("´" ?´) ("^" ?^) ("+" ?+) ("#" ?#)
+ ("<" ?<) (">" ?>) ("-" ?-) ("_" ?_) ("=" ?=)
+ ("§" ?§) ("!" ?!) ("\"" ?\") ("$" ?$) ("%" ?%)
+ ("&" ?&) ("/" ?/) ("(" ?\() (")" ?\)) ("?" ??)
+ ("\\" ?\\) ("[" ?\[) ("]" ?\]) ("{" ?{) ("}" ?})
+ (";" ?-) (":" ?:)
+ ("«" ?<) ("»" ?>)
+
+ ;; QWERTZ: letters mapped to Greek
+ ("q" ?θ) ("Q" ?Θ)
+ ("w" ?ω) ("W" ?Ω)
+ ("e" ?ε) ("E" ?Ε)
+ ("r" ?ρ) ("R" ?Ρ)
+ ("t" ?τ) ("T" ?Τ)
+ ("z" ?ζ) ("Z" ?Ζ)  ;; Z key = ζ
+ ("u" ?υ) ("U" ?Υ)
+ ("i" ?ι) ("I" ?Ι)
+ ("o" ?ο) ("O" ?Ο)
+ ("p" ?π) ("P" ?Π)
+
+ ("a" ?α) ("A" ?Α)
+ ("s" ?σ) ("S" ?Σ)
+ ("d" ?δ) ("D" ?Δ)
+ ("f" ?φ) ("F" ?Φ)
+ ("g" ?γ) ("G" ?Γ)
+ ("h" ?η) ("H" ?Η)
+ ("j" ?ξ) ("J" ?Ξ)
+ ("k" ?κ) ("K" ?Κ)
+ ("l" ?λ) ("L" ?Λ)
+
+ ("y" ?υ) ("Y" ?Υ)  ;; Y key = υ (swapped with Z)
+ ("x" ?χ) ("X" ?Χ)
+ ("c" ?ψ) ("C" ?Ψ)
+ ("v" ?ν) ("V" ?Ν)
+ ("b" ?β) ("B" ?Β)
+ ("n" ?η) ("N" ?Η)
+ ("m" ?μ) ("M" ?Μ)
+)
+
+#+end_src
 * reverse-im
 #+BEGIN_SRC emacs-lisp
   (require 'reverse-im)
 
-  (setq reverse-im-input-methods '("greek")) ; important: match the OS-level Greek layout
+  (setq reverse-im-input-methods '("greek-qwertz")) ; important: match the OS-level Greek layout
   (reverse-im-mode 1)
 
   ;; some key-bindings just do not work and need to be mapped manually
-  (global-set-key (kbd "C-ζ") 'yank)
-  (global-set-key (kbd "M-»") 'end-of-buffer)
-  (global-set-key (kbd "M-«") 'beggining-of-buffer)
+  ;; (global-set-key (kbd "C-ζ") 'yank)
+  ;; (global-set-key (kbd "M-»") 'end-of-buffer)
+  ;; (global-set-key (kbd "M-«") 'beggining-of-buffer)
 
 #+END_SRC

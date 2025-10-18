@@ -1,5 +1,5 @@
 ;;; ispell-config --- Exported from Org Mode
-;;; 2025-06-14  7:34:08 pm CEST
+;;; 2025-10-18  1:45:20 pm CEST
 
   ;; This contains a collection of Ispell configurations.
 
@@ -36,6 +36,18 @@
   ;; (add-hook 'flyspell-mode-hook #'flyspell-local-vars)
   ;; (defun flyspell-local-vars ()
   ;;  (add-hook 'hack-local-variables-hook #'flyspell-buffer))
+
+  ;; check the full buffer when you open a file (e.g., in text-mode, org-mode, etc.):
+(dolist (hook '(org-mode-hook
+                latex-mode-hook
+                message-mode-hook
+                markdown-mode-hook
+                text-mode-hook)) ;; keep if you still want it for plain text
+  (add-hook hook
+            (lambda ()
+              (flyspell-mode 1)
+              (flyspell-buffer))))
+
 
 
 (provide 'ispell-config)

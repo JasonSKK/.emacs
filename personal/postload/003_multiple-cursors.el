@@ -1,5 +1,5 @@
 ;;; multiple-cursors --- Exported from Org Mode
-;;; 2025-06-14  7:34:07 pm CEST
+;;; 2025-10-18  1:45:20 pm CEST
 
   ;; ace-mc
   (global-set-key (kbd "C-c )") 'ace-mc-add-multiple-cursors)
