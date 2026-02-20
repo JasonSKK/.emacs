@@ -1,5 +1,5 @@
 ;;; whitespace --- Exported from Org Mode
-;;; 2025-10-18  1:45:20 pm CEST
+;;; 2026-02-20 11:07:34 pm CET
 
   ;;; Commentary:
   ;;; turn off whitespace and turn on visual line modes,

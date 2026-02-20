@@ -1,13 +1,13 @@
 ;;; org-el-untangle --- Exported from Org Mode
-;;; 2025-10-18  1:45:20 pm CEST
+;;; 2026-02-20 11:07:33 pm CET
 
-    ;;; Commentary:
-    ;;; org-el-untangle:
-    ;;; import muliple el files from one folder into one org mode file.
-    ;;; org-el-tangle-sections
-    ;;; export each sections' emacs-lisp block to a separate file.
+      ;;; Commentary:
+      ;;; org-el-untangle:
+      ;;; import muliple el files from one folder into one org mode file.
+      ;;; org-el-tangle-sections
+      ;;; export each sections' emacs-lisp block to a separate file.
 
-    ;;; Code:
+      ;;; Code:
   (defvar org-el-export-counter 0
     "Counter for numbering exported emacs-lisp sections.")
 
@@ -27,7 +27,7 @@
       (mapc 'org-el-import-1-file files)))
   (defun org-el-import-1-file (fname)
     "Insert file FNAME into the master org file.
-    Create org header and SRC block from data in FNAME file."
+      Create org header and SRC block from data in FNAME file."
     (message fname)
     (save-excursion
       (let*
@@ -60,21 +60,21 @@
           (insert "#+END_SRC")))))
   (defun org-el-export-all-sections ()
     "Export each sections' emacs-lisp block to a separate file.
-    Add header and footer parts required by flycheck."
+      Add header and footer parts required by flycheck."
     (interactive)
     (let
         ((index 0)
          (root-dir (file-name-directory (buffer-file-name)))
          buffers)
-    ;;; First delete old entries, before creating new ones.
-    ;;; Prevent duplicate entries due to renumbering.
+      ;;; First delete old entries, before creating new ones.
+      ;;; Prevent duplicate entries due to renumbering.
       (mapc 'delete-file (file-expand-wildcards (concat root-dir "*.el")))
       (org-map-entries 'org-el-export-1-section)
       (mapc 'kill-buffer buffers))
     (setq org-el-export-counter 0))
   (defun org-el-export-1-section ()
     "Export the first emacs-lisp block in the current section to a separate file.
-  Adds necessary headers and footers for Flycheck. Skips COMMENT sections."
+    Adds necessary headers and footers for Flycheck. Skips COMMENT sections."
     (interactive)
     (let* ((element (org-element-at-point)) ;; Get the element at point
            (title (org-get-heading t t t t)) ;; Fetch the title safely

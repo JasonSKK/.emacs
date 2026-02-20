@@ -261,9 +261,8 @@ by Prelude.")
 
 ;; solves epa-decrypt-region -- bug
 (setf epa-pinentry-mode 'loopback)
-
 ;; set python interpreter path
-(setq python-interpreter "/home/iason1/venv/python3/bin/python3")
+(setq python-interpreter "$HOME/venv/python3/bin/python3")
 
 ;; Startup time
 (defun efs/display-startup-time ()
@@ -317,6 +316,16 @@ by Prelude.")
 (split-window-horizontally)
 ;; Open the scratch buffer on the left
 (switch-to-buffer "*scratch*")
+
+;; flycheck slows emacs down FIX
+;; Flycheck uses default config to check when a new-line is inserted or idle-change event occurs.
+;; To change this:
+(setq flycheck-check-syntax-automatically '(save mode-enable))
+;; the default value was '(save idle-change new-line mode-enabled)
+
+
+;; This way, syntax checking will occur only when you save your file or change the major mode.
+(setq flycheck-check-syntax-automatically '(save mode-enable))
 
 (provide 'init)
 
