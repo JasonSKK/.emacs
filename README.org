@@ -1,0 +1,88 @@
+#+TITLE: .emacs.d debian minimal optimised
+GNU Emacs 30.1 (build 2, x86_64-pc-linux-gnu, GTK+ Version 3.24.38, cairo version 1.16.0) of 2025-02-25
+
+* checkout minimal optimised
+#+begin_src
+cd ~/
+mv -vn .emacs.d .emacs.d.bak # dont f overwrite your prev config
+git clone git@github.com:JasonSKK/.emacs.git 
+git checkout debian-minimal
+mv -vn .emacs.git .emacs.d # rename with safety
+#+end_src
+
+* Build optimised GNU Emacs 30.1
+
+0. Clean the Previous Build (if required)
+
+#+BEGIN_SRC emacs-lisp
+make clean
+make distclean
+#+END_SRC
+
+1. Install Dependencies
+
+Run the following command based on your distro:
+Debian/Ubuntu
+
+#+BEGIN_SRC emacs-lisp
+sudo apt update && sudo apt install -y \
+  build-essential libgccjit-12-dev libjansson-dev libtree-sitter-dev \
+  libgif-dev libjpeg-dev libpng-dev libtiff-dev libwebp-dev librsvg2-dev \
+  libxpm-dev libgtk-3-dev libharfbuzz-dev libncurses-dev \
+  libmagickwand-dev libxml2-dev libgnutls28-dev \
+  libsqlite3-dev libxaw3dxft-dev libgccjit0
+#+END_SRC
+
+2 Download and Extract Emacs Source Code
+
+#+BEGIN_SRC emacs-lisp
+curl -4O https://ftp.gnu.org/gnu/emacs/emacs-30.1.tar.xz
+tar -xf emacs-30.1.tar.xz
+cd emacs-30.1/
+#+END_SRC
+
+3 Configure with Optimal Flags
+
+Run:
+
+#+BEGIN_SRC emacs-lisp
+./configure --prefix=/opt/emacs30 \
+            --with-native-compilation=aot \
+            --with-tree-sitter \
+            --with-imagemagick \
+            --with-harfbuzz \
+            --with-cairo \
+            --with-xinput2 \
+            --with-mailutils \
+            --with-x-toolkit=gtk3 \
+            --with-threads \
+            --enable-link-time-optimization \
+            CFLAGS='-march=native -O3 -pipe -fomit-frame-pointer' \
+            LDFLAGS='-Wl,-O1,--sort-common,--as-needed'
+#+END_SRC
+
+[!] Brief Explanation of Flags
+Flag	Purpose
+--prefix=/opt/emacs30	Install Emacs in /opt/emacs30 (no system interference).
+--with-native-compilation=aot	Ahead-of-time (AOT) compile Elisp to native code (faster execution).
+--with-json	Enable JSON support for packages like lsp-mode.
+--with-tree-sitter	Syntax highlighting improvements via tree-sitter.
+--with-imagemagick	Advanced image processing support.
+--with-harfbuzz	Better text rendering (ligatures, complex scripts).
+--with-cairo	Modern rendering backend (faster UI).
+--with-xinput2	Improved input handling (trackpads, touchscreens, gestures).
+--with-mailutils	Enables fetching mail in RMAIL.
+--with-x-toolkit=gtk3	Use GTK3 UI (better integration on modern desktops).
+--with-threads	Enable threading support.
+--enable-link-time-optimization	Optimize linking for smaller & faster binaries.
+CFLAGS='-march=native -O3 -pipe -fomit-frame-pointer'	Optimized compiler flags for best CPU performance.
+LDFLAGS='-Wl,-O1,--sort-common,--as-needed'	Optimize linking for faster execution.
+
+4 Compile and Install
+
+#+BEGIN_SRC emacs-lisp
+make -j$(nproc)
+sudo make install
+#+END_SRC
+
+
