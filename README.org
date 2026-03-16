@@ -1,6 +1,0 @@
-#+TITLE: .emacs.d dir personal configuration
-
-+ Based on bbatsov's [[https://github.com/bbatsov/prelude/][prelude]]
-+ This config does not use the symbolic link
-+ Emacs 29.3 version
-+ MacOS 10.13.6 High Sierra
