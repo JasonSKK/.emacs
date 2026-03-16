@@ -1,5 +1,5 @@
 ;;; anna-iason --- Exported from Org Mode
-;;; 2026-02-20 11:07:34 pm CET
+;;; 2026-03-13 10:14:14 pm CET
 
   (defun anna-iason-time-together ()
     "Calculate the number of years, months, and days between the start date (Feb 16, 2017) and today's date, including both dates."
@@ -14,4 +14,4 @@
       (message "We have been together for %d years, %d months, and %d days. (%d days in total)" years months days total-days)))
 
 (provide 'anna-iason)
-;;; 018_anna-iason.el ends here
+;;; 016_anna-iason.el ends here

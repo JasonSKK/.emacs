@@ -1,5 +1,5 @@
 ;;; prelude-load-packages --- Exported from Org Mode
-;;; 2026-02-20 11:07:33 pm CET
+;;; 2026-03-13 10:14:13 pm CET
 
   (prelude-load-require-packages '(avy-zap avy-menu auto-async-byte-compile anzu ace-window ace-popup-menu ace-isearch))
   (prelude-load-require-packages '(multiple-cursors ace-mc)) ;; mc-extras

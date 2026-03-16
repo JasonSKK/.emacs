@@ -1,5 +1,5 @@
 ;;; appearance --- Exported from Org Mode
-;;; 2026-02-20 11:07:34 pm CET
+;;; 2026-03-13 10:14:14 pm CET
 
 
   ;; emacsclient new frames maximised
@@ -50,4 +50,4 @@
 
 
 (provide 'appearance)
-;;; 019_appearance.el ends here
+;;; 017_appearance.el ends here

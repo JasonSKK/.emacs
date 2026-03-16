@@ -1,5 +1,5 @@
 ;;; notmuch-lieer-sync --- Exported from Org Mode
-;;; 2026-02-20 11:07:33 pm CET
+;;; 2026-03-13 10:14:13 pm CET
 
 
   ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Lexical-Binding.html
@@ -32,6 +32,7 @@
                  (let* ((code (process-exit-status proc))
                         (buf (process-buffer proc)))
                    (setq notmuch-sync--process nil)
+                   (notmuch-refresh-this-buffer)
                    (when (buffer-live-p buf)
                      (with-current-buffer buf
                        (goto-char (point-max))
@@ -171,4 +172,4 @@
 
 
 (provide 'notmuch-lieer-sync)
-;;; 012_notmuch-lieer-sync.el ends here
+;;; 010_notmuch-lieer-sync.el ends here

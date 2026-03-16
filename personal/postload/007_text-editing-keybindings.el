@@ -1,5 +1,5 @@
 ;;; text-editing-keybindings --- Exported from Org Mode
-;;; 2026-02-20 11:07:33 pm CET
+;;; 2026-03-13 10:14:13 pm CET
 
   ;;; Commentary:
   ;; Configuration for personal keybindings
@@ -26,4 +26,4 @@
 
 
 (provide 'text-editing-keybindings)
-;;; 009_text-editing-keybindings.el ends here
+;;; 007_text-editing-keybindings.el ends here

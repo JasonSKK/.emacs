@@ -186,7 +186,7 @@
        ;; C-c . -> org-time-stamp
        (define-key org-mode-map (kbd "C-c C-M-e") 'org-el-export-all-sections)))
 #+END_SRC
-* org-mode
+* COMMENT org-mode
 
 #+BEGIN_SRC emacs-lisp
   ;;; Commentary:
@@ -338,7 +338,7 @@
        ;; replace not functioning 'prelude-goto-symbol with useful imenu-anywhere
        (define-key org-mode-map (kbd "C-c i") 'imenu-anywhere)
        ;;     ;; extra prefix for projectile
-       (define-key org-mode-map (kbd "s-p") 'projectile-command-map)
+       ;; (define-key org-mode-map (kbd "s-p") 'projectile-command-map)
        ;;     ;; make some use of the Super key
        ;;(define-key org-mode-map (kbd "s-g") 'god-local-mode)
        (define-key org-mode-map (kbd "s-r") 'crux-recentf-ido-find-file)
@@ -354,7 +354,7 @@
   ;; syntax highlighting in src-blocks
   (setq org-src-fontify-natively t)
 #+END_SRC
-* latex-config
+* COMMENT latex-config
 
 #+BEGIN_SRC emacs-lisp
   ;;  async compile current latex document with references and open it with external app
@@ -612,6 +612,7 @@
                  (let* ((code (process-exit-status proc))
                         (buf (process-buffer proc)))
                    (setq notmuch-sync--process nil)
+                   (notmuch-refresh-this-buffer)
                    (when (buffer-live-p buf)
                      (with-current-buffer buf
                        (goto-char (point-max))
@@ -753,54 +754,54 @@
 * ispell-config
 
 #+BEGIN_SRC emacs-lisp
-      ;; This contains a collection of Ispell configurations.
+    ;; This contains a collection of Ispell configurations.
 
-      ;;; Commentary:
+    ;;; Commentary:
 
-      ;;; Code:
-      ;; for cycling through Greek and UK English when using Ispell <C-1>
-      ;; You should have aspell-gr and aspell-en packages installed
-      (let ((langs '("british" "el" "de")))
-        (setq lang-ring (make-ring (length langs)))
-        (dolist (elem langs) (ring-insert lang-ring elem)))
-      (defun cycle-ispell-languages ()
-        (interactive)
-        (let ((lang (ring-ref lang-ring -1)))
-          (ring-insert lang-ring lang)
-          (ispell-change-dictionary lang)))
-      (global-set-key (kbd "C-M-!") 'cycle-ispell-languages)
-      ;; ignore spelling in LaTeX \commands
-      (setq ispell-tex-skip-alists
-            (list
-             (append
-              (car ispell-tex-skip-alists)
-              '(("\\\\mycommand"       ispell-tex-arg-end)
-                ("\\\\mycommandtwo"      ispell-tex-arg-end 2)))
-             (cadr ispell-tex-skip-alists)))
-      ;; Ispell continue
-      (global-set-key (kbd "s-;") 'ispell-continue)
+    ;;; Code:
+    ;; for cycling through Greek and UK English when using Ispell <C-1>
+    ;; You should have aspell-gr and aspell-en packages installed
+    (let ((langs '("british" "el" "de")))
+      (setq lang-ring (make-ring (length langs)))
+      (dolist (elem langs) (ring-insert lang-ring elem)))
+    (defun cycle-ispell-languages ()
+      (interactive)
+      (let ((lang (ring-ref lang-ring -1)))
+        (ring-insert lang-ring lang)
+        (ispell-change-dictionary lang)))
+    (global-set-key (kbd "C-M-!") 'cycle-ispell-languages)
+    ;; ignore spelling in LaTeX \commands
+    (setq ispell-tex-skip-alists
+          (list
+           (append
+            (car ispell-tex-skip-alists)
+            '(("\\\\mycommand"       ispell-tex-arg-end)
+              ("\\\\mycommandtwo"      ispell-tex-arg-end 2)))
+           (cadr ispell-tex-skip-alists)))
+    ;; Ispell continue
+    (global-set-key (kbd "s-;") 'ispell-continue)
 
-      (add-hook 'LaTeX-mode-hook #'turn-on-flyspell)
-      ;; (add-hook 'org-mode-hook '(flyspell-mode t))
-      ;;(add-hook org-mode-hook #'turn-on-flyspell)
-      ;; toggle flyspell on open text-mode ~ all modes
-      ;; (add-hook 'text-mode-hook #'flyspell-mode)
-      ;; (add-hook 'flyspell-mode-hook #'flyspell-local-vars)
-      ;; (defun flyspell-local-vars ()
-      ;;  (add-hook 'hack-local-variables-hook #'flyspell-buffer))
+    ;; (add-hook 'LaTeX-mode-hook #'turn-on-flyspell)
+    ;;(add-hook 'org-mode-hook '(flyspell-mode t))
+    ;;(add-hook org-mode-hook #'turn-on-flyspell)
+    ;; toggle flyspell on open text-mode ~ all modes
+    ;; (add-hook 'text-mode-hook #'flyspell-mode)
+    ;; (add-hook 'flyspell-mode-hook #'flyspell-local-vars)
+    ;; (defun flyspell-local-vars ()
+    ;;  (add-hook 'hack-local-variables-hook #'flyspell-buffer))
 
-      ;; check the full buffer when you open a file (e.g., in text-mode, org-mode, etc.):
-    (dolist (hook '(
-                    ;; org-mode-hook
-                    latex-mode-hook
-                    message-mode-hook
-                    markdown-mode-hook
-                    ;;text-mode-hook
-                    )) ;; keep if you still want it for plain text
-      (add-hook hook
-                (lambda ()
-                  (flyspell-mode 1)
-                  (flyspell-buffer))))
+    ;; check the full buffer when you open a file (e.g., in text-mode, org-mode, etc.):
+  ;; (dolist (hook '(
+  ;;                 ;; org-mode-hook
+  ;;                 latex-mode-hook
+  ;;                 message-mode-hook
+  ;;                 markdown-mode-hook
+  ;;                 ;;text-mode-hook
+  ;;                 )) ;; keep if you still want it for plain text
+  ;;   (add-hook hook
+  ;;             (lambda ()
+  ;;               (flyspell-mode 1)
+  ;;               (flyspell-buffer))))
 
 
 #+END_SRC
@@ -1554,7 +1555,7 @@
     (disable-all-themes))
 
 #+END_SRC
-* whitespace
+* COMMENT whitespace
 
 #+BEGIN_SRC emacs-lisp
   ;;; Commentary:

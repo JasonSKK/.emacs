@@ -1,5 +1,5 @@
 ;;; greek-qwertz --- Exported from Org Mode
-;;; 2026-02-20 11:07:34 pm CET
+;;; 2026-03-13 10:14:14 pm CET
 
 ;;; greek-qwertz.el --- Greek input method on German QWERTZ with symbols unchanged -*- lexical-binding: t; -*-
 
@@ -55,4 +55,4 @@
 
 
 (provide 'greek-qwertz)
-;;; 023_greek-qwertz.el ends here
+;;; 020_greek-qwertz.el ends here
