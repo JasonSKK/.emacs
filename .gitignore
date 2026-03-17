@@ -1,0 +1,47 @@
+# Editor backups and compiled files
+*~
+*.elc
+
+# macOS / desktop junk
+.DS_Store
+
+# Emacs autosave and session/state
+/auto-save-list/
+/savefile/
+/savehist
+/saveplace
+/eshell/
+/semanticdb/
+/url/
+/tramp/
+/.cask/
+/.emacs.desktop
+/.emacs.desktop.lock
+/.smex-items
+/ac-comphist.dat
+/org-clock-save.el
+/.org-id-locations
+/projectile-bookmarks.eld
+/.projectile
+/srecode-map.el
+/network-security.data
+
+# Session files
+/session*
+
+# Local caches and temp data
+/var/pcache/
+/var/slack-files/
+
+# Nested git repo you do not want tracked
+/site-lisp/emacs-application-framework/.git/
+
+# backup pou den zitise kaneis
+/%backup%~
+
+# dated personal
+/personal-Mon 12 Dec 2016 02:55:23 EET
+
+# anaconda mode ti diaolo 
+/anaconda-mode/
+
