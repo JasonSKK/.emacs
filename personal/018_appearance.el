@@ -1,5 +1,5 @@
 ;; appearance --- Exported from Org Mode
-;; 2026-03-17  3:19:10 pm CET
+;; 2026-03-17  4:18:13 pm CET
 
 
   ;; tool-bar-mode disabled
@@ -18,9 +18,10 @@
   (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
   ;; --- DISPLAY ---
-  ;; (split-window-right) ;; split to 2 windows right on startup
-  ;; display numbers
-  ;;(global-display-line-numbers-mode) ;; display line numbers
+  
+  ;; line numbers
+  (global-display-line-numbers-mode) ;; display line numbers
+
   ;; Reverse colors for the border to have nicer line
   ;;(set-face-inverse-video-p 'vertical-border nil)
   ;;(set-face-background 'vertical-border (face-background 'default))

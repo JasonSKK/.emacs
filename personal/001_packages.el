@@ -1,5 +1,5 @@
 ;; packages --- Exported from Org Mode
-;; 2026-03-17  3:19:10 pm CET
+;; 2026-03-17  4:18:12 pm CET
 
   ;; Commentary:
   ;; this is all of the packages.
@@ -119,6 +119,20 @@
     (xclip-mode 1)
     ;; sync kill ring into system clipboard
     (setq x-select-enable-clipboard t))
+
+  ;; plantuml
+  ;; (use-package plantuml-mode
+  ;; :mode ("\\.puml\\'" "\\.plantuml\\'" "\\.pu\\'")
+  ;; :init
+  ;; (setq org-plantuml-jar-path
+  ;;       (expand-file-name "~/bin/plantuml/plantuml-1.2025.2.jar"))
+  ;; (setq plantuml-default-exec-mode 'jar)
+  ;; :config
+  ;; (org-babel-do-load-languages
+  ;;  'org-babel-load-languages
+  ;;  '((plantuml . t))))
+
+
 
 
 

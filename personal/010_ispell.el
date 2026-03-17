@@ -1,5 +1,5 @@
 ;; ispell --- Exported from Org Mode
-;; 2026-03-17  3:19:10 pm CET
+;; 2026-03-17  4:18:13 pm CET
 
   ;; This contains a collection of Ispell configurations.
 

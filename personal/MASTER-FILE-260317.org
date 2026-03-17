@@ -120,6 +120,20 @@
     ;; sync kill ring into system clipboard
     (setq x-select-enable-clipboard t))
 
+  ;; plantuml
+  ;; (use-package plantuml-mode
+  ;; :mode ("\\.puml\\'" "\\.plantuml\\'" "\\.pu\\'")
+  ;; :init
+  ;; (setq org-plantuml-jar-path
+  ;;       (expand-file-name "~/bin/plantuml/plantuml-1.2025.2.jar"))
+  ;; (setq plantuml-default-exec-mode 'jar)
+  ;; :config
+  ;; (org-babel-do-load-languages
+  ;;  'org-babel-load-languages
+  ;;  '((plantuml . t))))
+
+
+
 
 #+end_src
 * org-el-untangle
@@ -895,11 +909,12 @@ Version 2017-05-30"
 
 
 #+end_src
-* COMMENT flycheck
+* flycheck
 
 #+begin_src emacs-lisp
-  ;; I suffered from this in my previous config. For now it remains commented out until issue is observed again.
-  
+  ;; 260317, yes lag is observed, especially on autosave
+  ;; --> I suffered from this in my previous config. For now it remains commented out until issue is observed again.
+
   ;; flycheck slows emacs down FIX
   ;; Flycheck uses default config to check when a new-line is inserted or idle-change event occurs.
   ;; To change this:
@@ -1593,21 +1608,6 @@ but don't kill the editing buffer."
   ;; Prevent company-mode from automatically lowercasing completions
   (setq company-dabbrev-downcase nil)
 #+end_src
-* plantUML
-
-#+begin_src emacs-lisp
-
-  ;; active Org-babel languages
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '(;; other Babel languages
-     (plantuml . t)))
-
-  ;; set path plantuml lib
-  (setq org-plantuml-jar-path
-        (expand-file-name "~/bin/plantuml/plantuml-1.2025.2.jar"))
-
-#+end_src
 * gccjit
 
 #+begin_src emacs-lisp
@@ -1748,9 +1748,10 @@ The passwords to be removed are temporarily stored in
   (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
   ;; --- DISPLAY ---
-  ;; (split-window-right) ;; split to 2 windows right on startup
-  ;; display numbers
-  ;;(global-display-line-numbers-mode) ;; display line numbers
+  
+  ;; line numbers
+  (global-display-line-numbers-mode) ;; display line numbers
+
   ;; Reverse colors for the border to have nicer line
   ;;(set-face-inverse-video-p 'vertical-border nil)
   ;;(set-face-background 'vertical-border (face-background 'default))
