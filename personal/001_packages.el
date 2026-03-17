@@ -1,5 +1,5 @@
 ;; packages --- Exported from Org Mode
-;; 2026-03-17  5:09:14 pm CET
+;; 2026-03-17  8:59:53 pm CET
 
   ;; Commentary:
   ;; this is all of the packages.
@@ -126,11 +126,38 @@
     ;; sync kill ring into system clipboard
     (setq x-select-enable-clipboard t))
 
-  ;; undo-tree.el
-  (use-package undo-tree.el
+  ;; undo-tree
+  (use-package undo-tree
     :init
     (global-undo-tree-mode))
 
+  (use-package ispell
+  :ensure nil
+  :custom
+  (ispell-program-name "aspell")
+  (ispell-dictionary "british")
+  :config
+  (defvar my/ispell-dictionaries '("british" "el" "de"))
+
+  (defvar my/ispell-dictionary-ring
+    (let ((ring (make-ring (length my/ispell-dictionaries))))
+      (dolist (dict my/ispell-dictionaries ring)
+        (ring-insert ring dict))))
+
+  (defun my/cycle-ispell-dictionary ()
+    (interactive)
+    (let ((dict (ring-ref my/ispell-dictionary-ring -1)))
+      (ring-insert my/ispell-dictionary-ring dict)
+      ;; critical: reset personal dictionary when changing language
+      (setq-local ispell-local-dictionary dict)
+      (setq-local ispell-personal-dictionary nil)
+      (ispell-kill-ispell t)
+      (ispell-change-dictionary dict)
+      (message "Local Ispell dictionary set to %s" dict)))
+
+  (global-set-key (kbd "C-M-!") #'my/cycle-ispell-dictionary)
+  (global-set-key (kbd "s-;") #'ispell-continue))
+  
   ;; plantuml
   ;; (use-package plantuml-mode
   ;; :mode ("\\.puml\\'" "\\.plantuml\\'" "\\.pu\\'")

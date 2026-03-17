@@ -113,7 +113,10 @@
  '(org-modules
    '(ol-bbdb ol-bibtex ol-docview ol-doi ol-eww ol-gnus ol-info ol-irc
              ol-mhe ol-rmail org-tempo ol-w3m))
- '(package-selected-packages nil)
+ '(package-selected-packages
+   '(ace-mc ace-window auto-async-byte-compile avy-menu avy-zap consult
+            easy-kill gt key-chord marginalia notmuch orderless
+            plantuml-mode telephone-line undo-tree vertico xclip))
  '(send-mail-function 'smtpmail-send-it)
  '(smtpmail-smtp-server "smtp.gmail.com")
  '(smtpmail-smtp-service 25)

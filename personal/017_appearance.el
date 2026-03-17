@@ -1,5 +1,5 @@
 ;; appearance --- Exported from Org Mode
-;; 2026-03-17  5:09:14 pm CET
+;; 2026-03-17  8:59:54 pm CET
 
 
   ;; tool-bar-mode disabled
@@ -58,4 +58,4 @@
 
 
 (provide 'appearance)
-;; 018_appearance.el ends here
+;; 017_appearance.el ends here
