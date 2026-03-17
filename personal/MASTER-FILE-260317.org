@@ -1,0 +1,1859 @@
+* packages
+
+#+begin_src emacs-lisp
+  ;; Commentary:
+  ;; this is all of the packages.
+
+  ;; --- Package bootstrap ---
+  (require 'package)
+
+  (setq package-archives
+        '(("gnu"   . "https://elpa.gnu.org/packages/")
+          ("melpa" . "https://melpa.org/packages/")))
+
+  (package-initialize)
+
+  (unless package-archive-contents
+    (package-refresh-contents))
+
+  (unless (package-installed-p 'use-package)
+    (package-install 'use-package))
+
+  (require 'use-package)
+  (setq use-package-always-ensure t)
+
+  ;; --- Packages ---
+  ;; completion UI
+  (use-package vertico
+    :init
+    (vertico-mode))
+
+  ;; richer minibuffer commands
+  (use-package consult
+    :bind (("C-x b"   . consult-buffer)
+           ("C-x C-r" . consult-recent-file)
+           ("M-y"     . consult-yank-pop)
+           ("M-g g"   . consult-goto-line)
+           ("M-s r"   . consult-ripgrep)))
+
+  ;; better M-x, find-file annotations
+  (use-package marginalia
+    :init
+    (marginalia-mode 1))
+
+  ;; better M-x sorting history
+  (use-package savehist
+    :init
+    (savehist-mode))
+
+  ;; flexible fuzzy matching via orderless
+  (use-package orderless
+    :ensure t
+    :init
+    (setq completion-styles '(orderless basic)
+          completion-category-defaults nil
+          completion-category-overrides
+          '((file (styles basic partial-completion)))))
+
+  ;; ignores case for find file
+  (setq read-buffer-completion-ignore-case t
+        read-file-name-completion-ignore-case t)
+
+  ;; find recently opened files and more 
+  (use-package recentf
+    :init
+    (recentf-mode 1)
+    :custom
+    (recentf-max-saved-items 200)
+    (recentf-auto-cleanup 'never))
+
+  ;; translation
+  (use-package gt
+    :ensure t
+    :config
+    (setq gt-default-translator
+          (gt-translator
+           :taker   (gt-taker :langs '(de en el ru)
+                              :text 'buffer
+                              :pick 'paragraph)
+           :engines (list (gt-libre-engine)
+                          ;; (gt-google-engine)
+                          )
+           :render  (gt-buffer-render))))
+
+  ;; telephone line 
+  (use-package telephone-line
+    :init
+    (setq telephone-line-subseparator-faces '())
+    (setq telephone-line-height 24
+    telephone-line-evil-use-short-tag t)
+    (telephone-line-mode 1))
+
+  ;; key-chord
+  (use-package key-chord
+    :init
+    (key-chord-mode))
+
+  ;; notmuch
+  (use-package notmuch)
+
+  ;; avy-zap
+  (use-package avy-zap)
+
+  ;; avy-menu
+  (use-package avy-menu)
+
+  ;; auto-async-byte-compile
+  (use-package auto-async-byte-compile)
+
+  ;; ace window
+  (use-package ace-window)
+
+  ;; multiple-cursors
+  (use-package multiple-cursors)
+  (use-package ace-mc)
+
+  ;; xclip
+  (use-package xclip
+    :init
+    (xclip-mode 1)
+    ;; sync kill ring into system clipboard
+    (setq x-select-enable-clipboard t))
+
+  ;; plantuml
+  ;; (use-package plantuml-mode
+  ;; :mode ("\\.puml\\'" "\\.plantuml\\'" "\\.pu\\'")
+  ;; :init
+  ;; (setq org-plantuml-jar-path
+  ;;       (expand-file-name "~/bin/plantuml/plantuml-1.2025.2.jar"))
+  ;; (setq plantuml-default-exec-mode 'jar)
+  ;; :config
+  ;; (org-babel-do-load-languages
+  ;;  'org-babel-load-languages
+  ;;  '((plantuml . t))))
+
+
+
+
+#+end_src
+* org-el-untangle
+
+#+begin_src emacs-lisp
+    ;; Commentary:
+    ;; org-el-untangle:
+    ;; import muliple el files from one folder into one org mode file.
+    ;; org-el-tangle-sections
+    ;; export each sections' emacs-lisp block to a separate file.
+
+    ;; Code:
+(defvar org-el-export-counter 0
+  "Counter for numbering exported emacs-lisp sections.")
+
+(defun org-el-import-all-files (directory)
+  "Import muliple el files from one folder into one org mode file."
+  (interactive "D")
+  (let
+      ((filename (concat "MASTER-FILE-" (format-time-string "%y%m%d") ".org"))
+       (files (file-expand-wildcards (concat directory "*.el")))
+       (target-buffer))
+    ;; (message (concat (file-truename directory) filename))
+    (find-file filename)
+    (erase-buffer)
+    (setq target-buffer (current-buffer))
+    (insert "#+STARTUP: overview\n")
+    (goto-char (point-max))
+    (mapc 'org-el-import-1-file files)))
+(defun org-el-import-1-file (fname)
+  "Insert file FNAME into the master org file.
+    Create org header and SRC block from data in FNAME file."
+  (message fname)
+  (save-excursion
+    (let*
+        ((fname-base (substring (file-name-base fname) 4 nil))
+         found body-start body-end body)
+      (find-file fname)
+      (goto-char (point-min)) ;; in case we are already editing the buffer!
+      (setq found
+            (search-forward fname-base (line-end-position 1) t 1))
+      (cond
+       (found
+        (forward-line 1)
+        (setq body-start (point)))
+       (t (setq body-start (point-min))))
+      (setq found
+            (search-forward (format "provide '%s" fname-base) nil t 1))
+      (cond
+       (found (setq body-end (line-beginning-position)))
+       (t (setq body-end (point-max))))
+      (setq body (buffer-substring body-start body-end))
+      (kill-buffer (current-buffer))
+      (with-current-buffer target-buffer
+        (goto-char (point-max))
+        (insert (replace-regexp-in-string
+                 "  " " "
+                 (format "\n* %s\n"
+                         (replace-regexp-in-string "_" " " fname-base))))
+        (insert "\n#+begin_src emacs-lisp\n")
+        (insert body)
+        (insert "#+end_src")))))
+(defun org-el-export-all-sections ()
+  "Export each sections' emacs-lisp block to a separate file.
+    Add header and footer parts required by flycheck."
+  (interactive)
+  (let
+      ((index 0)
+       (root-dir (file-name-directory (buffer-file-name)))
+       buffers)
+    ;; First delete old entries, before creating new ones.
+    ;; Prevent duplicate entries due to renumbering.
+    (mapc 'delete-file (file-expand-wildcards (concat root-dir "*.el")))
+    (org-map-entries 'org-el-export-1-section)
+    (mapc 'kill-buffer buffers))
+  (setq org-el-export-counter 0))
+(defun org-el-export-1-section ()
+  "Export the first emacs-lisp block in the current section to a separate file.
+  Adds necessary headers and footers for Flycheck. Skips COMMENT sections."
+  (interactive)
+  (let* ((element (org-element-at-point)) ;; Get the element at point
+         (title (org-get-heading t t t t)) ;; Fetch the title safely
+         (commented (org-element-property :commentedp element)) ;; Check if commented
+         filename body-element)
+
+    ;; Skip commented sections
+    (unless commented
+      (setq org-el-export-counter (+ org-el-export-counter 1)) ;; Increment global counter
+
+      ;; Get the current subtree content
+      (let ((section-end (org-element-property :end element))
+            (section-start (org-element-property :begin element)))
+        (setq body-element
+              (org-element-map (org-element-parse-buffer) 'src-block
+                (lambda (src)
+                  (when (and (string= (org-element-property :language src) "emacs-lisp")
+                             (> (org-element-property :begin src) section-start)
+                             (< (org-element-property :begin src) section-end))
+                    src))
+                nil t)))) ;; Stop after first match
+
+    (if (not body-element)
+        (message "WARNING: No valid emacs-lisp src block found in section: %s" title)
+      (progn
+        ;; Sanitize title for filename
+        (setq title (replace-regexp-in-string "[^a-zA-Z0-9_-]" "_" title))
+        (setq filename (format "%03d_%s.el" org-el-export-counter title))
+
+        ;; Create and write to file
+        (with-temp-buffer
+          (insert (format ";; %s --- Exported from Org Mode\n" title))
+          (insert (format ";; %s\n\n" (format-time-string "%F %r")))
+          (insert (org-element-property :value body-element)) ;; Extract correct code
+          (insert (format "\n(provide '%s)\n;; %s ends here\n" title filename))
+          (write-file filename))
+
+        (message "Exported section '%s' to file: %s" title filename)))))
+(eval-after-load 'org
+  '(progn
+     ;; Note: This keybinding is in analogy to the default keybinding:
+     ;; C-c . -> org-time-stamp
+     (define-key org-mode-map (kbd "C-c C-M-e") 'org-el-export-all-sections)))
+#+end_src
+* multiple-cursors
+
+#+begin_src emacs-lisp
+;; ace-mc
+(global-set-key (kbd "C-c )") 'ace-mc-add-multiple-cursors)
+(global-set-key (kbd "C-M-)") 'ace-mc-add-single-cursor)
+
+;; multiple-cursors
+
+(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+(global-set-key (kbd "C->") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+;; mc-extras
+
+;; (define-key mc/keymap (kbd "C-. C-d") 'mc/remove-current-cursor)
+;; (define-key mc/keymap (kbd "C-. d")   'mc/remove-duplicated-cursors)
+;; (define-key mc/keymap (kbd "C-. C-.") 'mc/freeze-fake-cursors-dwim)
+;; (define-key mc/keymap (kbd "C-. =")   'mc/compare-chars)
+;; ;; Emacs 24.4+ comes with rectangle-mark-mode.
+(define-key rectangle-mark-mode-map (kbd "C-. C-,")
+            'mc/rect-rectangle-to-multiple-cursors)
+;;(define-key cua--rectangle-keymap   (kbd "C-. C-,")
+;;'mc/cua-rectangle-to-multiple-cursors)
+;;(mc/cua-rectangle-setup)
+#+end_src
+* COMMENT org-mode
+
+#+begin_src emacs-lisp
+;; Commentary:
+
+;; customize some org mode settings
+;; define some useful functions
+
+;; Code:
+
+;; pretty bullets
+;;   (prelude-require-package 'org-bullets)
+;;(require 'org-bullets)
+;;(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+;; load util to insert recipes for export customization:
+;; (require 'org-export-recipes) ;; is now part of postload!
+
+(defun org-set-date (&optional active property)
+  "Set DATE property with current time.  Active timestamp."
+  (interactive "P")
+  (org-set-property
+   (if property property "DATE")
+   (cond ((equal active nil)
+          (format-time-string (cdr org-time-stamp-formats) (current-time)))
+         ((equal active '(4))
+          (concat "["
+                  (substring
+                   (format-time-string (cdr org-time-stamp-formats) (current-time))
+                   1 -1)
+                  "]"))
+         ((equal active '(16))
+          (concat
+           "["
+           (substring
+            (format-time-string (cdr org-time-stamp-formats) (org-read-date t t))
+            1 -1)
+           "]"))
+         ((equal active '(64))
+          (format-time-string (cdr org-time-stamp-formats) (org-read-date t t))))))
+(defun org-insert-current-date (arg)
+  "Insert current date in format readable for org-capture minibuffer.
+If called with ARG, do not insert time."
+  (interactive "P")
+  (if arg
+      (insert (format-time-string "%e %b %Y"))
+    (insert (format-time-string "%e %b %Y %H:%M"))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; make heading movement commands skip initial * marks
+(defun org-jump-forward-heading-same-level (&optional do-cycle)
+  "Jump forward heading same level, and skip to beginning of heading itself."
+  (interactive "P")
+  (org-forward-heading-same-level 1)
+  (re-search-forward " ")
+  (if do-cycle (org-cycle)))
+(defun org-jump-backward-heading-same-level (&optional do-cycle)
+  "Jump backward heading same level, and skip to beginning of heading itself."
+  (interactive "P")
+  (org-backward-heading-same-level 1)
+  (re-search-forward " ")
+  (if do-cycle (org-cycle)))
+(defun jump-outline-up-heading (&optional do-cycle)
+  "Jump upward heading, and skip to beginning of heading itself."
+  (interactive "P")
+  (outline-up-heading 1)
+  (re-search-forward " ")
+  (if do-cycle (org-cycle)))
+(defun jump-outline-next-visible-heading ()
+  "Jump to next visible heading, and skip to beginning of heading itself."
+  (interactive)
+  (outline-next-visible-heading 1)
+  (re-search-forward " "))
+(defun jump-outline-previous-visible-heading ()
+  "Jump to previous visible heading, and skip to beginning of heading itself."
+  (interactive)
+  (outline-previous-visible-heading 1)
+  (re-search-forward " "))
+(defun jump-outline-previous-visible-heading-and-cycle ()
+  "Jump to previous visible heading, and hide subtree."
+  (interactive)
+  (outline-previous-visible-heading 1)
+  (re-search-forward " ")
+  (org-cycle))
+(defun jump-outline-next-visible-heading-and-cycle ()
+  "Jump to previous visible heading, and hide subtree."
+  (interactive)
+  (outline-next-visible-heading 1)
+  (re-search-forward " ")
+  (org-cycle))
+(defun org-find-next-src-block ()
+  "Search for next #+begin_src block header."
+  (interactive)
+  (re-search-forward "\\#\\+begin_src " nil t))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; This is run once after loading org for the first time
+;; It adds some org-mode specific key bindings.
+(eval-after-load 'org
+  '(progn
+     (define-key org-mode-map (kbd "C-c C-x t") 'org-insert-current-date)
+     ;; from: http://orgmode.org/worg/org-configs/org-config-examples.html
+     ;; section navigation
+     (define-key org-mode-map (kbd "M-n") 'jump-outline-next-visible-heading)
+     (define-key org-mode-map (kbd "C-M-n") 'jump-outline-next-visible-heading-and-cycle)
+     ;; (define-key org-mode-map (kbd "C-M-N") 'org-find-next-src-block)
+     (define-key org-mode-map (kbd "M-p") 'jump-outline-previous-visible-heading)
+     (define-key org-mode-map (kbd "C-M-p") 'jump-outline-previous-visible-heading-and-cycle)
+     (define-key org-mode-map (kbd "C-M-f") 'org-jump-forward-heading-same-level)
+     (define-key org-mode-map (kbd "C-M-b") 'org-jump-backward-heading-same-level)
+     (define-key org-mode-map (kbd "C-M-u") 'jump-outline-up-heading)
+     ;; table
+     (define-key org-mode-map (kbd "C-M-w") 'org-table-copy-region)
+     (define-key org-mode-map (kbd "C-M-y") 'org-table-paste-rectangle)
+     (define-key org-mode-map (kbd "C-M-l") 'org-table-sort-lines)
+     ;; display images
+     (define-key org-mode-map (kbd "M-I") 'org-toggle-iimage-in-org)
+     ;; Following are the prelude-mode binding, minus the conflicting table bindings.
+     ;; prelude-mode is turned off for org mode, below.
+     ;; old version: using crux-open-with
+     ;; (define-key org-mode-map (kbd "C-c o") 'crux-open-with)
+     (define-key org-mode-map (kbd "C-c o") 'xah-open-in-external-app)
+     ;; (define-key org-mode-map (kbd "C-c g") 'prelude-google)
+     ;; (define-key org-mode-map (kbd "C-c G") 'crux-github)
+     ;; (define-key org-mode-map (kbd "C-c y") 'prelude-youtube)
+     ;; (define-key org-mode-map (kbd "C-c U") 'prelude-duckduckgo)
+     ;;     ;; mimic popular IDEs binding, note that it doesn't work in a terminal session
+     (define-key org-mode-map [(shift return)] 'crux-smart-open-line)
+     (define-key org-mode-map (kbd "M-o") 'crux-smart-open-line)
+     (define-key org-mode-map [(control shift return)] 'crux-smart-open-line-above)
+     (define-key org-mode-map [(control shift up)]  'move-text-up)
+     (define-key org-mode-map [(control shift down)]  'move-text-down)
+     (define-key org-mode-map [(control meta shift up)]  'move-text-up)
+     (define-key org-mode-map [(control meta shift down)]  'move-text-down)
+     (define-key org-mode-map (kbd "C-c n") 'crux-cleanup-buffer-or-region)
+     (define-key org-mode-map (kbd "C-c f") 'crux-recentf-ido-find-file)
+     (define-key org-mode-map (kbd "C-M-z") 'crux-indent-defun)
+     (define-key org-mode-map (kbd "C-c u") 'crux-view-url)
+     (define-key org-mode-map (kbd "C-c e") 'crux-eval-and-replace)
+     (define-key org-mode-map (kbd "C-c s") 'crux-swap-windows)
+     (define-key org-mode-map (kbd "C-c D") 'crux-delete-file-and-buffer)
+     (define-key org-mode-map (kbd "C-c d") 'crux-duplicate-current-line-or-region)
+     (define-key org-mode-map (kbd "C-c M-d") 'crux-duplicate-and-comment-current-line-or-region)
+     (define-key org-mode-map (kbd "C-c r") 'crux-rename-buffer-and-file)
+     (define-key org-mode-map (kbd "C-c t") 'crux-visit-term-buffer)
+     (define-key org-mode-map (kbd "C-c k") 'crux-kill-other-buffers)
+     ;;     ;; another annoying overwrite of a useful org-mode command:
+     ;;     ;; (define-key map (kbd "C-c TAB") 'prelude-indent-rigidly-and-copy-to-clipboard)
+     (define-key org-mode-map (kbd "C-c I") 'crux-find-user-init-file)
+     (define-key org-mode-map (kbd "C-c S") 'crux-find-shell-init-file)
+     ;; replace not functioning 'prelude-goto-symbol with useful imenu-anywhere
+     (define-key org-mode-map (kbd "C-c i") 'imenu-anywhere)
+     ;;     ;; extra prefix for projectile
+     (define-key org-mode-map (kbd "s-p") 'projectile-command-map)
+     ;;     ;; make some use of the Super key
+     ;;(define-key org-mode-map (kbd "s-g") 'god-local-mode)
+     (define-key org-mode-map (kbd "s-r") 'crux-recentf-ido-find-file)
+     (define-key org-mode-map (kbd "s-j") 'crux-top-join-line)
+     (define-key org-mode-map (kbd "s-k") 'crux-kill-whole-line)
+     (define-key org-mode-map (kbd "s-o") 'crux-smart-open-line-above)
+     ))
+
+;; include docx when exporting to odt
+(setq org-odt-preferred-output-format "docx")
+;; start an org file with all headers collapsed
+(setq org-startup-folded t)
+;; syntax highlighting in src-blocks
+(setq org-src-fontify-natively t)
+#+end_src
+* COMMENT latex
+
+#+begin_src emacs-lisp
+;;  async compile current latex document with references and open it with external app
+(defun async-compile-latex-file-open-external ()
+  (interactive)
+  (let* ((tex-file (buffer-file-name))
+         (pdf-file (concat (file-name-sans-extension tex-file) ".pdf"))
+         (bib-file (concat (file-name-sans-extension tex-file) ".bib"))
+         (bib-command (when (file-exists-p bib-file) "bibtex"))
+         (command (concat "pdflatex -interaction=batchmode " tex-file "; " "pdflatex -interaction=batchmode " tex-file "; "
+                          (when bib-command
+                            (concat "bibtex " (file-name-sans-extension tex-file) "; "
+                                    "pdflatex -interaction=batchmode " tex-file "; "))
+                          "open " pdf-file)))
+    (shell-command command)))
+(add-hook 'latex-mode-hook
+          (lambda ()
+            (local-set-key (kbd "C-l 0") 'async-compile-latex-file-open-external)))
+
+;; word count latex
+(defun latex-word-count ()
+  (interactive)
+  (shell-command (concat "/Library/TeX/texbin/texcount "
+                                        ; "uncomment then options go here "
+                         (buffer-file-name))))
+#+end_src
+* dired
+
+#+begin_src emacs-lisp
+;; Commentary:
+;; Hide details when using dired
+
+;; Code:
+(defun dired-open-dir-in-finder ()
+  "Open the current directory in Finder."
+  (interactive)
+  (shell-command "open ."))
+
+(define-key dired-mode-map (kbd "O") 'dired-open-dir-in-finder)
+
+(add-hook 'dired-mode-hook
+          (lambda ()
+            (dired-hide-details-mode)))
+;; overwite bad ido dired list
+(global-set-key (kbd "C-x d") 'ido-dired)
+(global-set-key (kbd "C-x C-d") 'ido-dired)
+
+
+;; q kills current buffer instead of quit
+(define-key dired-mode-map "q" 'kill-current-buffer)
+;; ------------------------------------
+#+end_src
+* global-keys
+
+#+begin_src emacs-lisp
+  
+  ;; Commentary:
+  ;; Configuration for personal keybindings
+
+  ;; Code:
+  ;; Remove C-l mapping and define new keymap prefix
+  (global-unset-key "\C-l")
+  (defvar ctl-l-map (make-keymap)
+    "Keymap for local bindings and functions, prefixed by (^L)")
+  (define-key global-map "\C-l" 'Control-L-prefix)
+  (fset 'Control-L-prefix ctl-l-map)
+#+end_src
+* text
+
+#+begin_src emacs-lisp
+
+  ;; Commentary:
+  ;; Configuration for personal keybindings
+
+  ;; Code:
+  ;; --- Text preferences ---
+
+  (set-face-attribute 'default nil :font "IBM Plex Mono")
+  (set-fontset-font t 'greek (font-spec :family "FreeMono"))
+
+  ;; detects a /path/to/file or https://example-url.com near point, can remap C-x C-f so it uses that guess as the default
+  (ffap-bindings)
+
+  ;; when marked region makes typed text replace the active region
+  (delete-selection-mode 1)
+
+  ;; ------ Text editing keybindings ------
+  ;; Define key for replace string
+  (define-key ctl-l-map "r"  'replace-string)
+  ;; Allow hash to be entered
+  (global-set-key (kbd "M-3") '(lambda () (interactive) (insert "#")))
+  ;; map fill region
+  (define-key ctl-l-map "f"  'fill-region)
+  ;; comment region
+  (global-set-key (kbd "C-M-;") 'comment-region)
+  ;; ------------------------------------
+  ;; indenting
+  (global-set-key (kbd "C-x TAB") 'indent-rigidly)
+
+
+#+end_src
+* now-today-text-insert
+
+#+begin_src emacs-lisp
+;; This file provides a number of personal function definitions
+
+;; Commentary:
+
+;; Code:
+
+;; function now (time) M-x now
+(defun now ()
+  "Insert string for the current time formatted like '2:34 PM'."
+  (interactive) ;; permit invocation in minibuffer
+  (insert (format-time-string "%Y-%m-%d %-I:%M %p")))
+(defun today ()
+  "Insert string for today's date nicely formatted in UK style,
+i.e. Sunday, 17 September, 2000."
+  (interactive) ;; permit invocation in minibuffer
+  (insert (format-time-string "%A, %e %B, %Y")))
+#+end_src
+* xah
+:PROPERTIES:
+:LEXICAL:  nil
+:END:
+
+#+begin_src emacs-lisp
+;; copy current buffer path
+(defun xah-copy-file-path (&optional DirPathOnlyQ)
+  "Copy current buffer file path or dired path.
+Result is full path.
+If `universal-argument' is called first, copy only the dir path.
+If in dired, copy the current or marked files.
+If a buffer is not file and not dired, copy value of `default-directory'.
+URL `http://xahlee.info/emacs/emacs/emacs_copy_file_path.html'
+Version 2018-06-18 2021-09-30"
+  (interactive "P")
+  (let (($fpath
+         (if (string-equal major-mode 'dired-mode)
+             (progn
+               (let (($result (mapconcat 'identity (dired-get-marked-files) "\n")))
+                 (if (equal (length $result) 0)
+                     (progn default-directory )
+                   (progn $result))))
+           (if (buffer-file-name)
+               (buffer-file-name)
+             (expand-file-name default-directory)))))
+    (kill-new
+     (if DirPathOnlyQ
+         (progn
+           (message "Directory copied: %s" (file-name-directory $fpath))
+           (file-name-directory $fpath))
+       (progn
+         (message "File path copied: %s" $fpath)
+         $fpath )))))
+;; open file with external app e.g. *txt with TextEdit
+;; disable the exact same function by prelude
+;; (global-unset-key (kbd "C-c o"))
+;; xah code
+(defun xah-open-in-external-app (&optional @fname)
+  "Open the current file or dired marked files in external app.
+When called in emacs lisp, if @fname is given, open that.
+URL `http://xahlee.info/emacs/emacs/emacs_dired_open_file_in_ext_apps.html'
+Version 2019-11-04 2021-02-16"
+  (interactive)
+  (let* (
+         ($file-list
+          (if @fname
+              (progn (list @fname))
+            (if (string-equal major-mode "dired-mode")
+                (dired-get-marked-files)
+              (list (buffer-file-name)))))
+         ($do-it-p (if (<= (length $file-list) 5)
+                       t
+                     (y-or-n-p "Open more than 5 files? "))))
+    (when $do-it-p
+      (cond
+       ((string-equal system-type "windows-nt")
+        (mapc
+         (lambda ($fpath)
+           (shell-command (concat "PowerShell -Command \"Invoke-Item -LiteralPath\" " "'" (shell-quote-argument (expand-file-name $fpath )) "'")))
+         $file-list))
+       ((string-equal system-type "darwin")
+        (mapc
+         (lambda ($fpath)
+           (shell-command
+            (concat "open " (shell-quote-argument $fpath))))  $file-list))
+       ((string-equal system-type "gnu/linux")
+        (mapc
+         (lambda ($fpath) (let ((process-connection-type nil))
+                            (start-process "" nil "xdg-open" $fpath))) $file-list))))))
+(defun xah-beginning-of-line-or-block ()
+  "Move cursor to beginning of line or previous paragraph.
+• When called first time, move cursor to beginning of char in current line. (if already, move to beginning of line.)
+• When called again, move cursor backward by jumping over any sequence of whitespaces containing 2 blank lines.
+URL `http://xahlee.info/emacs/emacs/emacs_keybinding_design_beginning-of-line-or-block.html'
+Version 2017-05-13"
+  (interactive)
+  (let (($p (point)))
+    (if (or (equal (point) (line-beginning-position))
+            (equal last-command this-command ))
+        (if (re-search-backward "\n[\t\n ]*\n+" nil "NOERROR")
+            (progn
+              (skip-chars-backward "\n\t ")
+              (forward-char ))
+          (goto-char (point-min)))
+      (progn
+        (back-to-indentation)
+        (when (eq $p (point))
+          (beginning-of-line))))))
+(defun xah-end-of-line-or-block ()
+  "Move cursor to end of line or next paragraph.
+• When called first time, move cursor to end of line.
+• When called again, move cursor forward by jumping over any sequence of whitespaces containing 2 blank lines.
+URL `http://xahlee.info/emacs/emacs/emacs_keybinding_design_beginning-of-line-or-block.html'
+Version 2017-05-30"
+  (interactive)
+  (if (or (equal (point) (line-end-position))
+          (equal last-command this-command ))
+      (progn
+        (re-search-forward "\n[\t\n ]*\n+" nil "NOERROR" ))
+    (end-of-line)))
+
+;; define keybindings
+(global-set-key (kbd "C-c x") 'xah-copy-file-path)
+(global-set-key (kbd "C-c o") 'xah-open-in-external-app)
+(global-set-key (kbd "C-a") 'xah-beginning-of-line-or-block) ;; replaces (crux-move-beginning-of-line ARG)
+(global-set-key (kbd "C-e") 'xah-end-of-line-or-block) ;; replaces (move-end-of-line ARG)
+
+#+end_src
+* notmuch-lieer-sync
+
+#+begin_src emacs-lisp
+
+;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Lexical-Binding.html
+(require 'subr-x)
+
+(defvar notmuch-sync--process nil
+  "Current notmuch sync process.")
+
+(defun notmuch-sync ()
+  "Run `notmuch new` asynchronously and log to *notmuch-sync*."
+  (interactive)
+  (when (process-live-p notmuch-sync--process)
+    (user-error "Notmuch sync already running"))
+
+  (let ((outbuf (get-buffer-create "*notmuch-sync*")))
+    (with-current-buffer outbuf
+      (erase-buffer)
+      (insert (format "[%s] starting: notmuch new\n\n"
+                      (format-time-string "%Y-%m-%d %H:%M:%S"))))
+
+    (setq notmuch-sync--process
+          (make-process
+           :name "notmuch-sync"
+           :buffer outbuf
+           :command (list "notmuch" "new")
+           :noquery t
+           :sentinel
+           (lambda (proc event)
+             (when (memq (process-status proc) '(exit signal))
+               (let* ((code (process-exit-status proc))
+                      (buf (process-buffer proc)))
+                 (setq notmuch-sync--process nil)
+                 (notmuch-refresh-this-buffer)
+                 (when (buffer-live-p buf)
+                   (with-current-buffer buf
+                     (goto-char (point-max))
+                     (insert (format "\n[%s] finished: %s (exit %d)\n"
+                                     (format-time-string "%Y-%m-%d %H:%M:%S")
+                                     (string-trim event)
+                                     code))))
+                 (if (eq code 0)
+                     (message "Notmuch sync OK")
+                   (when (buffer-live-p buf)
+                     (display-buffer buf))
+                   (message "Notmuch sync FAILED, see *notmuch-sync*")))))))))
+
+;; view html part in browser
+;; mapped to ".v" in elpa/notmuch-20240406.1803/notmuch-show.el
+(defun notmuch-show-view-html+ ()
+  "Open the text/html part of the current message using `notmuch-show-view-part' and bring Firefox to the foreground."
+  (interactive)
+  (save-excursion
+    ;; Navigate to the text/html part
+    (goto-char
+     (prop-match-beginning
+      (text-property-search-forward
+       :notmuch-part
+       "text/html"
+       (lambda (value notmuch-part)
+         (equal (plist-get notmuch-part :content-type)
+                value)))))
+    ;; View the part in an external browser
+    (let ((url (notmuch-show-view-part)))
+      ;; After a short delay, bring Firefox to the foreground using wmctrl
+      (start-process "wmctrl-focus-firefox" nil "sh" "-c"
+                     "sleep 0.5 && wmctrl -a Firefox"))))
+;; overwrite default
+(with-eval-after-load 'notmuch
+  (define-key notmuch-show-part-map "v" 'notmuch-show-view-html+))
+
+(defun notmuch-batch-tag-per-email ()
+  "Batch sorts ko00 & gmail"
+  (interactive)
+  (shell-command "notmuch tag --batch <<EOM
+        +gmail -- to:jason.skk98@gmail.com
+        +work -- to:"iason.svoronoskanavas@gmail.com" <iason.svoronoskanavas@gmail.com>
+        +windowslive -- to:ko00@windowslive.com
+        EOM"))
+
+;; mapped to ". l" in elpa/notmuch-20240406.1803/notmuch-show.el
+(defun notmuch-show-jump-to-latest ()
+  "Jump to the message in the current thread with the latest
+        timestamp."
+  (interactive)
+  (let ((timestamp 0)
+        latest)
+    (notmuch-show-mapc
+     (lambda () (let ((ts (notmuch-show-get-prop :timestamp)))
+                  (when (> ts timestamp)
+                    (setq timestamp ts
+                          latest (point))))))
+    (if latest
+        (goto-char latest)
+      (error "Cannot find latest message."))))
+(with-eval-after-load 'notmuch
+  (define-key notmuch-show-part-map "l" 'notmuch-show-jump-to-latest))
+
+;; notmuch-sync hook
+(add-hook 'notmuch-search-mode-hook
+          '(lambda ()
+             (define-key notmuch-search-mode-map (kbd ".") 'notmuch-sync)))
+
+;; disable wrap, characters
+(add-hook 'notmuch-mode (turn-off-auto-fill))
+(add-hook 'notmuch-message-mode (turn-off-auto-fill))
+(add-hook 'notmuch-message-mode-hook (lambda () (auto-fill-mode -1)))
+
+;; notmuch auto-load
+(autoload 'notmuch "notmuch" "notmuch mail" t)
+(global-set-key (kbd "C-l n") 'notmuch)
+
+;; Sign Emails
+;;(setq mml-secure-openpgp-sign-with-sender t)
+;; Sign messages by default.
+;;(add-hook 'message-setup-hook 'mml-secure-sign-pgpmime)
+
+;; SMTP Settings
+(setq message-directory "~/.mail")
+;; set up smtpmail
+(require 'smtpmail)
+;; Set the SMTP server and port
+(setq smtpmail-smtp-server "smtp.gmail.com")
+;; Enable STARTTLS / SSL/TLS
+(setq smtpmail-smtp-servicetpmail-smtp-service 587)
+(setq smtpmail-stream-type 'starttls)
+;; (setq smtpmail-smtp-service 465) ;; unsafe TLS
+;; (setq smtpmail-stream-type 'tls)
+;; make sure smtpmail reads from .authinfo
+(setq smtpmail-auth-credentials (expand-file-name "~/.authinfo"))
+;; use smptmail-send-it
+(setq message-send-mail-function 'smtpmail-send-it)
+
+;; send email from multiple accounts
+(setq message-sendmail-envelope-from 'header)
+(setq message-alternative-emails
+      '("jason.skk98@gmail.com" "iason.svoronoskanavas@gmail.com"))
+(setq notmuch-always-prompt-for-sender t)
+
+;; specify save drafts
+(setq message-auto-save-directory "~/.mail/drafts")
+(setq message-draft-headers "Subject:")
+
+;; Automatically collapse certain MIME types in notmuch-show and message mode
+(setq mm-inline-override-types '("text/x-diff"
+                                 "text/x-patch"
+                                 ;; "application/pdf"
+                                 ;; "application/octet-stream"
+                                 "image/jpeg"
+                                 "image/png"
+                                 ;; "application/zip"
+                                 ))
+
+;; dynamically setting smtp server
+(defun my-set-smtp-server ()
+  "Set the SMTP server and user based on the From address."
+  (let ((from (message-fetch-field "from")))
+    (cond
+     ;; Primary email account
+     ((string-match "iason.svoronoskanavas@gmail.com" from)
+      (setq smtpmail-smtp-user "iason.svoronoskanavas@gmail.com"
+            smtpmail-smtp-server "smtp.gmail.com"
+            smtpmail-smtp-service 587))
+     ;; Other email account
+     ((string-match "jason.skk98@gmail.com" from)
+      (setq smtpmail-smtp-user "jason.skk98@gmail.com"
+            smtpmail-smtp-server "smtp.gmail.com"
+            smtpmail-smtp-service 587)))))
+(add-hook 'message-send-hook 'my-set-smtp-server)
+
+
+#+end_src
+* ispell
+
+#+begin_src emacs-lisp
+  ;; This contains a collection of Ispell configurations.
+
+  ;; Commentary:
+
+  ;; Code:
+  ;; for cycling through Greek and UK English when using Ispell <C-1>
+  ;; You should have aspell-gr and aspell-en packages installed
+  (let ((langs '("british" "el" "de")))
+    (setq lang-ring (make-ring (length langs)))
+    (dolist (elem langs) (ring-insert lang-ring elem)))
+  (defun cycle-ispell-languages ()
+    (interactive)
+    (let ((lang (ring-ref lang-ring -1)))
+      (ring-insert lang-ring lang)
+      (ispell-change-dictionary lang)))
+  (global-set-key (kbd "C-M-!") 'cycle-ispell-languages)
+  ;; ignore spelling in LaTeX \commands
+  (setq ispell-tex-skip-alists
+        (list
+         (append
+          (car ispell-tex-skip-alists)
+          '(("\\\\mycommand"       ispell-tex-arg-end)
+            ("\\\\mycommandtwo"      ispell-tex-arg-end 2)))
+         (cadr ispell-tex-skip-alists)))
+  ;; Ispell continue
+  (global-set-key (kbd "s-;") 'ispell-continue)
+
+  ;; (add-hook 'LaTeX-mode-hook #'turn-on-flyspell)
+  ;;(add-hook 'org-mode-hook '(flyspell-mode t))
+  ;;(add-hook org-mode-hook #'turn-on-flyspell)
+  ;; toggle flyspell on open text-mode ~ all modes
+  ;; (add-hook 'text-mode-hook #'flyspell-mode)
+  ;; (add-hook 'flyspell-mode-hook #'flyspell-local-vars)
+  ;; (defun flyspell-local-vars ()
+  ;;  (add-hook 'hack-local-variables-hook #'flyspell-buffer))
+
+  ;; check the full buffer when you open a file (e.g., in text-mode, org-mode, etc.):
+  ;; (dolist (hook '(
+  ;;                 ;; org-mode-hook
+  ;;                 latex-mode-hook
+  ;;                 message-mode-hook
+  ;;                 markdown-mode-hook
+  ;;                 ;;text-mode-hook
+  ;;                 )) ;; keep if you still want it for plain text
+  ;;   (add-hook hook
+  ;;             (lambda ()
+  ;;               (flyspell-mode 1)
+  ;;               (flyspell-buffer))))
+
+
+#+end_src
+* flycheck
+
+#+begin_src emacs-lisp
+  ;; 260317, yes lag is observed, especially on autosave
+  ;; --> I suffered from this in my previous config. For now it remains commented out until issue is observed again.
+
+  ;; flycheck slows emacs down FIX
+  ;; Flycheck uses default config to check when a new-line is inserted or idle-change event occurs.
+  ;; To change this:
+  (setq flycheck-check-syntax-automatically '(save mode-enable))
+  ;; the default value was '(save idle-change new-line mode-enabled)
+
+  ;; This way, syntax checking will occur only when you save your file or change the major mode.
+  (setq flycheck-check-syntax-automatically '(save mode-enable))
+
+  ;; https://github.com/flycheck/flycheck/issues/1129#issuecomment-319600923
+  (with-eval-after-load 'flycheck
+    (advice-add 'flycheck-eslint-config-exists-p :override (lambda() t)))
+
+#+end_src
+* resize-frame
+
+#+begin_src emacs-lisp
+
+;; Copyright (C) 2014  kuanyui
+
+;; Author: kuanyui <azazabc123@gmail.com>
+;; Keywords: frames, tools, convenience
+;; License: WTFPL 1.0
+
+;; Commentary:
+
+;; Press "ESC `" and use arrow-keys or i/j/k/l to adjust frames.  press any key to done.
+
+;; Code:
+
+(defvar resize-frame-map
+  (let ((map (make-keymap)))
+    (define-key map (kbd "<up>") 'enlarge-window)
+    (define-key map (kbd "<down>") 'shrink-window)
+    (define-key map (kbd "<right>") 'enlarge-window-horizontally)
+    (define-key map (kbd "<left>") 'shrink-window-horizontally)
+    (set-char-table-range (nth 1 map) t 'resize-frame-done)
+    (define-key map (kbd "C-p") 'enlarge-window)
+    (define-key map (kbd "C-n") 'shrink-window)
+    (define-key map (kbd "C-f") 'enlarge-window-horizontally)
+    (define-key map (kbd "C-b") 'shrink-window-horizontally)
+    map))
+(define-minor-mode resize-frame
+  "A simple minor mode to resize-frame.
+C-c C-c to apply."
+  ;; The initial value.
+  :init-value nil
+  ;; The indicator for the mode line.
+  :lighter " ResizeFrame"
+  ;; The minor mode bindings.
+  :keymap resize-frame-map
+  :global t
+  (if (<= (length (window-list)) 1)
+      (progn (setq resize-frame nil)
+             (message "Only root frame exists, abort."))
+    (message "Use arrow-keys or i/j/k/l to adjust frames.")))
+(defun resize-frame-done ()
+  (interactive)
+  (setq resize-frame nil)
+  (message "Done."))
+(global-set-key (kbd "ESC `") 'resize-frame)
+(provide '042_resize-frame)
+;; 042_resize-frame.el ends here
+#+end_src
+* edit-server
+
+#+begin_src emacs-lisp
+
+;; Copyright (C) 2009-2013  Alex BennÃ©e
+;; Copyright (C) 2010-2011  Riccardo Murri
+
+;; Author: Alex BennÃ©e <alex@bennee.com>
+;; Maintainer: Alex BennÃ©e <alex@bennee.com>
+;; Version: 1.14
+;; Homepage: https://github.com/stsquad/emacs_chrome
+
+;; This file is not part of GNU Emacs.
+
+;; This file is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation; either version 3, or (at your option)
+;; any later version.
+
+;; This file is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;; Commentary:
+
+;; This provides an edit server to respond to requests from the Chrome
+;; Emacs Chrome plugin. This is my first attempt at doing something
+;; with sockets in Emacs. I based it on the following examples:
+;;
+;;   http://www.emacswiki.org/emacs/EmacsEchoServer
+;;   http://nullprogram.com/blog/2009/05/17/
+;;
+;; To use it ensure the file is in your load-path and add something
+;; like the following examples to your .emacs:
+;;
+;; To open pages for editing in new buffers in your existing Emacs
+;; instance:
+;;
+;;   (when (require 'edit-server nil t)
+;;     (setq edit-server-new-frame nil)
+;;     (edit-server-start))
+;;
+;; To open pages for editing in new frames using a running emacs
+;; started in --daemon mode:
+;;
+;;   (when (and (require 'edit-server nil t) (daemonp))
+;;     (edit-server-start))
+;;
+;; Buffers are edited in `text-mode' by default; to use a different
+;; major mode, change `edit-server-default-major-mode' or customize
+;; `edit-server-url-major-mode-alist' to specify major modes based
+;; on the remote URL:
+;;
+;;   (setq edit-server-url-major-mode-alist
+;;         '(("github\\.com" . markdown-mode)))
+;;
+;; Alternatively, set the mode in `edit-server-start-hook'.  For
+;; example:
+;;
+;; (add-hook 'edit-server-start-hook
+;;           (lambda ()
+;;             (when (string-match "github.com" (buffer-name))
+;;               (markdown-mode))))
+
+;; Code:
+
+;; uncomment to debug
+;; (setq debug-on-error t)
+;; (setq edebug-all-defs t)
+
+(unless (featurep 'make-network-process)
+  (error "Incompatible version of [X]Emacs - lacks make-network-process"))
+;; Customization
+
+(defcustom edit-server-port 9292
+  "Local port the edit server listens to."
+  :group 'edit-server
+  :type 'integer)
+(defcustom edit-server-host nil
+  "If not nil, accept connections from HOST address rather than just
+localhost. This may present a security issue."
+  :group 'edit-server
+  :type 'boolean)
+(defcustom edit-server-verbose nil
+  "If not nil, log connections and progress also to the echo area."
+  :group 'edit-server
+  :type 'boolean)
+(defcustom edit-server-done-hook nil
+  "Hook run when done editing a buffer for the Emacs HTTP edit-server.
+Current buffer holds the text that is about to be sent back to the client."
+  :group 'edit-server
+  :type 'hook)
+(defcustom edit-server-start-hook nil
+  "Hook run when starting a editing buffer.  Current buffer is
+the fully prepared editing buffer.  Use this hook to enable
+buffer-specific modes or add key bindings."
+  :group 'edit-server
+  :type 'hook)
+(defcustom edit-server-edit-mode-hook nil
+  "Hook run when we enter edit-server-edit-mode.  This is the final step of
+an edit session and is called when all frames and displays have been
+set-up.  You should not set any additional major modes here though as they
+may conflict with the edit-server-edit-mode, use the
+edit-server-start-hook instead."
+  :group 'edit-server
+  :type 'hook)
+;; frame options
+
+(defcustom edit-server-new-frame t
+  "If not nil, edit each buffer in a new frame (and raise it)."
+  :group 'edit-server
+  :type 'boolean)
+(defcustom edit-server-new-frame-alist
+  '((name . "Edit with Emacs FRAME")
+    (width . 80)
+    (height . 25)
+    (minibuffer . t)
+    (menu-bar-lines . t))
+  "Frame parameters for new frames.  See `make-frame' for examples.
+You will want to look at the VALUE of 'window-system', 'display' and
+'terminal' if you want to force any particular display type and
+not default to whatever is currently open. If nil, the new
+frame will use the existing `default-frame-alist' values."
+  :group 'edit-server
+  :type '(repeat (cons :format "%v"
+                       (symbol :tag "Parameter")
+                       (sexp :tag "Value"))))
+(defcustom edit-server-default-major-mode
+  'text-mode
+  "The default major mode to use in editing buffers, if no other
+mode is selected by `edit-server-url-major-mode-alist'."
+  :group 'edit-server
+  :type 'function)
+(defcustom edit-server-url-major-mode-alist
+  nil
+  "A-list of patterns and corresponding functions; when the first
+pattern is encountered which matches `edit-server-url', the
+corresponding function will be called in order to set the desired
+major mode. If no pattern matches,
+`edit-server-default-major-mode' will be used."
+  :group 'edit-server
+  :type '(alist :key-type (string :tag "Regexp")
+                :value-type (function :tag "Major mode function")))
+(defcustom edit-server-new-frame-mode-line t
+  "Show the emacs frame's mode-line if set to t; hide if nil."
+  :group 'edit-server
+  :type 'boolean)
+;; Variables
+
+(defconst edit-server-process-buffer-name " *edit-server*"
+  "Template name of the edit-server process buffers.")
+(defconst edit-server-log-buffer-name "*edit-server-log*"
+  "Name of the edit-server process buffers.")
+(defconst edit-server-edit-buffer-name "TEXTAREA"
+  "Template name of the edit-server text editing buffers.")
+(defvar edit-server-clients ()
+  "List of all client processes associated with the server process.")
+;; Buffer local variables
+;;
+;; These are all required to associate the edit buffer with the
+;; correct connection to the client and allow for the buffer to be sent
+;; back when ready. They are `permanent-local` to avoid being reset if
+;; the buffer changes major modes.
+
+(defvar edit-server-proc nil
+  "Network process associated with the current edit.")
+(make-variable-buffer-local 'edit-server-proc)
+(put 'edit-server-proc 'permanent-local t)
+(defvar edit-server-frame nil
+  "The frame created for a new edit-server process.")
+(make-variable-buffer-local 'edit-server-frame)
+(put 'edit-server-frame 'permanent-local t)
+(defvar edit-server-phase nil
+  "Symbol indicating the state of the HTTP request parsing.")
+(make-variable-buffer-local 'edit-server-phase)
+(put 'edit-server-phase 'permanent-local t)
+(defvar edit-server-received nil
+  "Number of bytes received so far in the client buffer.
+Depending on the character encoding, may be different from the buffer length.")
+(make-variable-buffer-local 'edit-server-received)
+(put 'edit-server-received 'permanent-local t)
+(defvar edit-server-request nil
+  "The HTTP request (GET, HEAD, POST) received.")
+(make-variable-buffer-local 'edit-server-request)
+(put 'edit-server-request 'permanent-local t)
+(defvar edit-server-request-url nil
+  "The HTTP request URL received.")
+(make-variable-buffer-local 'edit-server-request-url)
+(put 'edit-server-request-url 'permanent-local t)
+(defvar edit-server-content-length nil
+  "The value gotten from the HTTP `Content-Length' header.")
+(make-variable-buffer-local 'edit-server-content-length)
+(put 'edit-server-content-length 'permanent-local t)
+(defvar edit-server-url nil
+  "The value gotten from the HTTP `x-url' header.")
+(make-variable-buffer-local 'edit-server-url)
+(put 'edit-server-url 'permanent-local t)
+(defvar edit-server-file nil
+  "The value gotten from the HTTP `x-file' header.")
+(make-variable-buffer-local 'edit-server-file)
+(put 'edit-server-file 'permanent-local t)
+;; Mode magic
+;;
+;; We want to re-map some of the keys to trigger edit-server-done
+;; instead of the usual emacs like behaviour. However using
+;; local-set-key will affect all buffers of the same mode, hence we
+;; define a special (derived) mode for handling editing of text areas.
+
+(defvar edit-server-edit-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "C-x C-s") 'edit-server-save)
+    (define-key map (kbd "C-x #")   'edit-server-done)
+    (define-key map (kbd "C-c C-c") 'edit-server-done)
+    (define-key map (kbd "C-x C-c") 'edit-server-abort)
+    map)
+  "Keymap for minor mode `edit-server-edit-mode'.
+Redefine a few common Emacs keystrokes to functions that can
+deal with the response to the edit-server request.
+Any of the following keys will close the buffer and send the text
+to the HTTP client: C-x #, C-c C-c.
+Pressing C-x C-s will save the current state to the kill-ring.
+If any of the above isused with a prefix argument, the
+unmodified text is sent back instead.")
+(define-minor-mode edit-server-edit-mode
+  "Minor mode enabled on buffers opened by `edit-server-accept'.
+Its sole purpose is currently to enable
+`edit-server-edit-mode-map', which overrides common keystrokes to
+send a response back to the client."
+  :group 'edit-server
+  :lighter " EditSrv"
+  :init-value nil
+  :keymap edit-server-edit-mode-map
+  (when (and
+         (numberp arg)
+         (> arg 0))
+    (run-hooks 'edit-server-edit-mode-hook)))
+(defun turn-on-edit-server-edit-mode-if-server ()
+  "Turn on `edit-server-edit-mode' if in an edit-server buffer."
+  (when edit-server-proc
+    (edit-server-edit-mode t)))
+(define-globalized-minor-mode global-edit-server-edit-mode
+  edit-server-edit-mode turn-on-edit-server-edit-mode-if-server)
+(global-edit-server-edit-mode t)
+
+;; Edit Server socket code
+
+;; Avoid an unnecessary prompt about active processes when exiting
+;; emacs with no active edit-server clients
+;; https://github.com/stsquad/emacs_chrome/issues/67
+;;
+;; According to http://emacswiki.org/emacs/AdviceVsHooks advice is a
+;; sledgehammer which should be avoided if possible.  However, the
+;; only hooks run by save-buffers-kill-emacs are defined by
+;; kill-emacs-query-functions and run *after* the check for active
+;; processes which results in precisely the interactive prompt we want
+;; to avoid when edit-server has no active clients.  So it seems that
+;; advice is the only solution until save-buffers-kill-emacs offers an
+;; earlier hook.
+(defadvice save-buffers-kill-emacs
+    (before edit-server-stop-before-kill-emacs)
+  "Call `edit-server-stop' if there are no active clients, to
+avoid the user being prompted to kill the edit-server process."
+  (or edit-server-clients (edit-server-stop)))
+;;###autoload
+(defun edit-server-start (&optional verbose)
+  "Start the edit server.
+If argument VERBOSE is non-nil, logs all server activity to buffer
+`*edit-server-log*'.  When called interactivity, a prefix argument
+will cause it to be verbose."
+  (interactive "P")
+  (if (process-status "edit-server")
+      (message "An edit-server process is already running")
+    (if (null (condition-case err
+                  (let ((proc (make-network-process
+                               :name "edit-server"
+                               :buffer edit-server-process-buffer-name
+                               :family 'ipv4
+                               :host (or edit-server-host 'local)
+                               :service edit-server-port
+                               :log 'edit-server-accept
+                               :server t
+                               :noquery t)))
+                    (set-process-coding-system proc 'utf-8 'utf-8)
+                    proc)
+                (file-error nil)))
+        (message "Failed to start an edit-server")
+      (ad-activate 'save-buffers-kill-emacs)
+      (setq edit-server-clients '())
+      (when verbose (get-buffer-create edit-server-log-buffer-name))
+      (edit-server-log nil "Created a new edit-server process"))))
+(defun edit-server-stop nil
+  "Stop the edit server"
+  (interactive)
+  (while edit-server-clients
+    (edit-server-kill-client (car edit-server-clients))
+    (setq edit-server-clients (cdr edit-server-clients)))
+  (if (process-status "edit-server")
+      (delete-process "edit-server")
+    (message "No edit server running"))
+  (when (get-buffer edit-server-process-buffer-name)
+    (kill-buffer edit-server-process-buffer-name))
+  (ad-disable-advice 'save-buffers-kill-emacs
+                     'before 'edit-server-stop-before-kill-emacs)
+  ;; Disabling advice doesn't take effect until you (re-)activate
+  ;; all advice for the function.
+  (ad-activate 'save-buffers-kill-emacs))
+(defun edit-server-log (proc fmt &rest args)
+  "If a `*edit-server-log*' buffer exists, write STRING to it.
+This is done for logging purposes.  If `edit-server-verbose' is
+non-nil, then STRING is also echoed to the message line."
+  (let ((string (apply 'format fmt args)))
+    (when edit-server-verbose
+      (message string))
+    (when (get-buffer edit-server-log-buffer-name)
+      (with-current-buffer edit-server-log-buffer-name
+        (goto-char (point-max))
+        (insert (current-time-string)
+                " "
+                (if (processp proc)
+                    (concat
+                     (buffer-name (process-buffer proc))
+                     ": ")
+                  "") ; nil is not acceptable to 'insert
+                string)
+        (or (bolp) (newline))))))
+(defun edit-server-accept (server client msg)
+  "Accept a new client connection."
+  (let ((buffer (generate-new-buffer edit-server-process-buffer-name)))
+    (buffer-disable-undo buffer)
+    (set-process-buffer client buffer)
+    (set-process-filter client 'edit-server-filter)
+    ;; kill-buffer kills the associated process
+    (set-process-query-on-exit-flag client nil)
+    (with-current-buffer buffer
+      (setq edit-server-phase 'wait
+            edit-server-received 0
+            edit-server-request nil
+            edit-server-request-url nil))
+    (setq edit-server-content-length nil
+          edit-server-url nil
+          edit-server-file nil))
+  (add-to-list 'edit-server-clients client)
+  (edit-server-log client msg))
+(defun edit-server-filter (proc string)
+  "Process data received from the client."
+  ;; there is no guarantee that data belonging to the same client
+  ;; request will arrive all in one go; therefore, we must accumulate
+  ;; data in the buffer and process it in different phases, which
+  ;; requires us to keep track of the processing state.
+  (with-current-buffer (process-buffer proc)
+    (insert string)
+    (setq edit-server-received
+          (+ edit-server-received (string-bytes string)))
+    (when (eq edit-server-phase 'wait)
+      ;; look for a complete HTTP request string
+      (save-excursion
+        (goto-char (point-min))
+        (when (re-search-forward
+               "^\\([A-Z]+\\)\\s-+\\(\\S-+\\)\\s-+\\(HTTP/[0-9\.]+\\)\r?\n"
+               nil t)
+          (setq edit-server-request (match-string 1)
+                edit-server-request-url (match-string 2)
+                edit-server-content-length nil
+                edit-server-phase 'head)
+          (edit-server-log
+           proc "Got HTTP `%s' request of url `%s', processing in buffer `%s'..."
+           edit-server-request edit-server-request-url (current-buffer)))))
+    (when (eq edit-server-phase 'head)
+      ;; look for "Content-length" header
+      (save-excursion
+        (goto-char (point-min))
+        (when (re-search-forward "^Content-Length:\\s-+\\([0-9]+\\)" nil t)
+          (setq edit-server-content-length
+                (string-to-number (match-string 1)))))
+      ;; look for "x-url" header
+      (save-excursion
+        (goto-char (point-min))
+        (when (re-search-forward "^x-url: .*/\\{2,3\\}\\([^\r\n]+\\)" nil t)
+          (setq edit-server-url (match-string 1))))
+      ;; look for "x-file" header
+      (save-excursion
+        (goto-char (point-min))
+        (when (re-search-forward "^x-file: \\([^\r\n]+\\)" nil t)
+          (edit-server-log proc "Found x-file: %s" (match-string 1))
+          (setq edit-server-file (match-string 1))))
+      ;; look for head/body separator
+      (save-excursion
+        (goto-char (point-min))
+        (when (re-search-forward "\\(\r?\n\\)\\{2\\}" nil t)
+          ;; HTTP headers are pure ASCII (1 char = 1 byte), so we can subtract
+          ;; the buffer position from the count of received bytes
+          (setq edit-server-received
+                (- edit-server-received (- (match-end 0) (point-min))))
+          ;; discard headers - keep only HTTP content in buffer
+          (delete-region (point-min) (match-end 0))
+          (edit-server-log proc
+                           "Processed headers, length: %s, url: %s, file: %s"
+                           edit-server-content-length edit-server-url edit-server-file)
+          (setq edit-server-phase 'body))))
+    (when (eq edit-server-phase 'body)
+      (if (and edit-server-content-length
+               (> edit-server-content-length edit-server-received))
+          (edit-server-log proc
+                           "Received %d bytes of %d ..."
+                           edit-server-received edit-server-content-length)
+        ;; all content transferred - process request now
+        (cond
+         ((string-match "foreground" edit-server-request-url)
+          (edit-server-foreground-request (current-buffer))
+          (edit-server-send-response proc "edit-server received foreground request.\n")
+          (edit-server-kill-client proc))
+         ((string= edit-server-request "POST")
+          ;; create editing buffer, and move content to it
+          (edit-server-find-or-create-edit-buffer proc edit-server-file))
+         (t
+          ;; send 200 OK response to any other request
+          (edit-server-send-response proc "edit-server is running.\n")
+          (edit-server-kill-client proc)))
+        ;; wait for another connection to arrive
+        (setq edit-server-received 0)
+        (setq edit-server-phase 'wait)))))
+(defun edit-server-make-frame ()
+  "Create a frame for editing and return it."
+  (edit-server-log nil "Creating frame for %s" window-system)
+  (make-frame edit-server-new-frame-alist))
+(defun edit-server-foreground-request (buffer)
+  "Bring Emacs into the foreground after a request from Chrome.
+`buffer' is the process buffer which contains any potential contents
+to be passed into the kill ring.
+The new frame will have a specific frame parameter of
+`edit-server-forground-frame' set to 't"
+  (when (bufferp buffer)
+    (with-current-buffer buffer
+      (kill-ring-save (point-min) (point-max))))
+  (when edit-server-new-frame
+    (set-frame-parameter
+     (edit-server-make-frame) 'edit-server-forground-frame 't)))
+(defun edit-server-show-edit-buffer (buffer)
+  "Show edit `BUFFER' by creating a frame or raising the selected
+frame. If a frame was created it returns `FRAME'."
+  (let ((edit-frame nil))
+    (when edit-server-new-frame
+      (setq edit-frame (edit-server-make-frame))
+      (unless edit-server-new-frame-mode-line
+        (setq mode-line-format nil))
+      (select-frame edit-frame)
+      (when (and (eq window-system 'x)
+                 (fboundp 'x-send-client-message))
+        (x-send-client-message nil 0 nil
+                               "_NET_ACTIVE_WINDOW" 32
+                               '(1 0 0))))
+    (pop-to-buffer buffer)
+    (raise-frame edit-frame)
+    (select-frame-set-input-focus (window-frame (selected-window)))
+    edit-frame))
+(defun edit-server-choose-major-mode ()
+  "Use `edit-server-url-major-mode-alist' to choose a major mode
+initialization function based on `edit-server-url', or fall back
+to `edit-server-default-major-mode'"
+  (funcall (or (assoc-default edit-server-url
+                              edit-server-url-major-mode-alist 'string-match)
+               edit-server-default-major-mode)))
+(defun edit-server-find-or-create-edit-buffer (proc &optional existing)
+  "Find and existing or create an new edit buffer, place content in it
+and save the network process for the final call back"
+  ;; FIXME: `existing' is useless: see issue #104.
+  (let* ((existing-buffer (and (stringp existing) (get-buffer existing)))
+         (buffer (or existing-buffer (generate-new-buffer
+                                      (or edit-server-url
+                                          edit-server-edit-buffer-name)))))
+    (edit-server-log proc
+                     "using buffer %s for edit (existing-buffer is %s)"
+                     buffer existing-buffer)
+    ;; set multi-byte for proper UTF-8 handling (djb)
+    (when (fboundp 'set-buffer-multibyte)
+      (with-current-buffer buffer
+        (set-buffer-multibyte t)))
+    ;; I seem to be working around a bug here :-/
+    ;;
+    ;; For some reason the copy-to-buffer doesn't blat the existing contents.
+    ;; This screws up formatting as the contents were decoded before being
+    ;; sent back to the browser. As a kludge I save the returned contents
+    ;; in the kill-ring.
+    (when existing-buffer
+      (kill-ring-save (point-min) (point-max)))
+    (edit-server-log proc "copying new data into buffer")
+    (copy-to-buffer buffer (point-min) (point-max))
+    (with-current-buffer buffer
+      (setq edit-server-url (with-current-buffer (process-buffer proc) edit-server-url))
+      (edit-server-choose-major-mode)
+      ;; Allow `edit-server-start-hook' to override the major mode.
+      ;; (re)setting the minor mode seems to clear the buffer-local
+      ;; variables that we depend upon for the response, so call the
+      ;; hooks early on
+      (run-hooks 'edit-server-start-hook)
+      (set-buffer-modified-p 'nil)
+      (add-hook 'kill-buffer-hook 'edit-server-abort* nil t)
+      (buffer-enable-undo)
+      (setq edit-server-proc proc
+            edit-server-frame (edit-server-show-edit-buffer buffer))
+      (edit-server-edit-mode))))
+(defun edit-server-send-response (proc &optional body progress)
+  "Send an HTTP 200 OK response back to process PROC.
+Optional second argument BODY specifies the response content:
+- If nil, the HTTP response will have null content.
+- If a string, the string is sent as response content.
+- Any other value will cause the contents of the current
+buffer to be sent.
+If optional third argument progress is non-nil, then the response
+will include x-file and x-open headers to allow continuation of editing."
+  (interactive)
+  (edit-server-log proc "sending edit-server response")
+  (if (processp proc)
+      (let ((response-header (concat
+                              "HTTP/1.0 200 OK\n"
+                              (format "Server: Emacs/%s\n" emacs-version)
+                              "Date: "
+                              (format-time-string
+                               "%a, %d %b %Y %H:%M:%S GMT\n"
+                               (current-time))
+                              (when progress
+                                (format "x-file: %s\nx-open: true\n" (buffer-name))))))
+        (process-send-string proc response-header)
+        (process-send-string proc "\n")
+        (cond
+         ((stringp body)
+          (process-send-string proc (encode-coding-string body 'utf-8)))
+         ((not body) nil)
+         (t
+          (encode-coding-region (point-min) (point-max) 'utf-8)
+          (process-send-region proc (point-min) (point-max))))
+        (process-send-eof proc)
+        (edit-server-log proc "Editing done, sent HTTP OK response."))
+    (message "edit-server-send-response: invalid proc (bug?)")))
+(defun edit-server-kill-client (proc)
+  "Kill client process PROC and remove it from the list."
+  (let ((procbuf (process-buffer proc)))
+    (delete-process proc)
+    (when (buffer-live-p procbuf)
+      (kill-buffer procbuf))
+    (setq edit-server-clients (delq proc edit-server-clients))))
+(defun edit-server-done (&optional abort nokill)
+  "Finish editing: send HTTP response back, close client and editing buffers.
+The current contents of the buffer are sent back to the HTTP
+client, unless argument ABORT is non-nil, in which case then the
+original text is sent back.
+If optional second argument NOKILL is non-nil, then the editing
+buffer is not killed and the buffer name is passed to calling process.
+When called interactively, use prefix arg to abort editing."
+  (interactive "P")
+  ;; Do nothing if the connection is closed by the browser (tab killed, etc.)
+  (unless (eq (process-status edit-server-proc) 'closed)
+    (let ((buffer (current-buffer))
+          (proc edit-server-proc)
+          (procbuf (process-buffer edit-server-proc)))
+      ;; edit-server-* vars are buffer-local,
+      ;; so they must be used before issuing kill-buffer
+      (if abort
+          ;; send back original content
+          (with-current-buffer procbuf
+            (run-hooks 'edit-server-done-hook)
+            (edit-server-send-response proc t))
+        ;; send back edited content
+        (save-restriction
+          (widen)
+          (buffer-disable-undo)
+          ;; ensure any format encoding is done (like longlines)
+          (dolist (format buffer-file-format)
+            (format-encode-region (point-min) (point-max) format))
+          ;; send back
+          (run-hooks 'edit-server-done-hook)
+          (edit-server-send-response proc t nokill)
+          (edit-server-log proc "sent response to browser")))
+      (when edit-server-frame
+        (delete-frame edit-server-frame))
+      ;; delete-frame may change the current buffer
+      (unless nokill
+        ;; don't run abort twice in a row.
+        (remove-hook 'kill-buffer-hook 'edit-server-abort*)
+        (kill-buffer buffer)
+        (unless edit-server-new-frame
+          (delete-window)))
+      (edit-server-kill-client proc))))
+;; edit-server-save uses the iterative edit-server option (send a
+;; buffer back to the client which then returns new request to
+;; continue the session). The edit-server then switches back to the
+;; buffer referenced by the x-file header.
+;;
+
+(defun edit-server-save ()
+  "Save the current state of the edit buffer but don't close it."
+  (interactive)
+  (edit-server-done nil t))
+(defun edit-server-abort ()
+  "Discard editing and send the original text back to the browser."
+  (interactive)
+  (edit-server-done t))
+(defun edit-server-abort* ()
+  "Discard editing and send the original text back to the browser,
+but don't kill the editing buffer."
+  (interactive)
+  (edit-server-done t t))
+#+end_src
+* programming
+
+#+begin_src emacs-lisp
+  ;; --- C/C++ ---
+  ;; Set the default indentation level to 3 spaces for C/C++ modes
+  (setq c-basic-offset 3)
+
+  ;; Disable the use of tabs for indentation using spaces instead
+  (custom-set-variables '(indent-tabs-mode nil))
+
+  ;; configure indentation in C++ mode
+  (defun indentation-setup-c++-mode ()
+    ;; Set the basic indentation level to 3 spaces specifically for C++ mode
+    (setq c-basic-offset 3)
+    ;; braces don't get additional indentation (brace alignment with control structures)
+    (c-set-offset 'substatement-open 0))
+
+  (add-hook 'c++-mode-hook 'indentation-setup-c++-mode)
+  
+  ;; Prevent company-mode from automatically lowercasing completions
+  (setq company-dabbrev-downcase nil)
+#+end_src
+* gccjit
+
+#+begin_src emacs-lisp
+;; gccjit (GNU Compiler Collection Just-In-Time compilation) allows Emacs to natively compile Elisp code into machine code for improved performance.
+(setq native-comp-async-report-warnings-errors 'silent)
+(setq native-comp-speed 3)
+(setq native-comp-deferred-compilation t)
+(setq package-native-compile t)
+#+end_src
+
+* anna-iason
+
+#+begin_src emacs-lisp
+(defun anna-iason-time-together ()
+  "Calculate the number of years, months, and days between the start date (Feb 16, 2017) and today's date, including both dates."
+  (interactive)
+  (let* ((start-date (encode-time 0 0 0 16 2 2017))
+         (end-date (current-time))
+         (time-diff (time-subtract end-date start-date))
+         (years (floor (/ (float-time time-diff) 31557600)))
+         (months (floor (/ (mod (float-time time-diff) 31557600) 2629800)))
+         (days (floor (/ (mod (float-time time-diff) 2629800) 86400)))
+         (total-days (floor (/ (float-time time-diff) 86400))))
+    (message "We have been together for %d years, %d months, and %d days. (%d days in total)" years months days total-days)))
+#+end_src
+* authinfo-copy-password
+
+#+begin_src emacs-lisp
+;; authinfo.el -- hiding unnecessary passwords
+;;
+;; Copyright (C) 2017  Alex Schroeder <alex@gnu.org>
+;;
+;; Latest version:
+;; https://github.com/kensanata/emacs-setup/blob/master/config/authinfo-conf.el
+;;
+;; This program is free software: you can redistribute it and/or modify it
+;; under the terms of the GNU General Public License as published by the Free
+;; Software Foundation, either version 3 of the License, or (at your option)
+;; any later version.
+;;
+;; This program is distributed in the hope that it will be useful, but WITHOUT
+;; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+;; FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+;; more details.
+;;
+;; You should have received a copy of the GNU General Public License along
+;; with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.
+
+;; Commentary:
+;;
+;; I keep some passwords in my ~/.authinfo.gpg file. When I looked for
+;; a password, I used to open the file and search for the correct host
+;; name (i.e. the machine name). Sometimes there were people near my
+;; screen and I did not feel comfortable looking for passwords in such
+;; an environment, specially if there is an entire page full of them.
+;; So now I want to use C-c p to copy a password and have it removed
+;; from the clipboard after a few seconds.
+;;
+;; Things I might want to add in the future:
+;; - completion of hosts and usernames
+
+;; Code
+
+(require 'auth-source)
+(require 'cl)
+(global-set-key (kbd "C-l p") 'authinfo-copy-password)
+(defvar authinfo-copied-passwords nil)
+(defun authinfo-copy-password (host user)
+  "Copy the password entry for a particular entry.
+Remove the password from the kill ring after 10s.
+The passwords to be removed are temporarily stored in
+`authinfo-copied-passwords'."
+  (interactive (authinfo-prompt))
+  (let ((found (nth 0 (auth-source-search :host host :user user))))
+    (when found
+      (let ((secret (plist-get found :secret)))
+        (when (functionp secret)
+          (setq secret (funcall secret)))
+        (push secret authinfo-copied-passwords)
+        (kill-new secret)
+        (run-with-idle-timer 10 nil 'authinfo-clean-kill-ring)
+        (message "Copied password for user: %s" user)))))
+
+(defun authinfo-clean-kill-ring ()
+  "Remove all passwords from the kill-ring.
+The passwords to be removed are temporarily stored in
+`authinfo-copied-passwords'."
+  ;; some experiments on W32 seem to indicate that this is the one
+  (when (member (gui-get-selection 'CLIPBOARD) authinfo-copied-passwords)
+    (gui-set-selection 'CLIPBOARD "SECRET"))
+  ;; the kill-ring gets saved, too
+  (setq kill-ring (delete-if (lambda (s)
+                               (member s authinfo-copied-passwords))
+                             kill-ring)
+        authinfo-copied-passwords nil)
+  (message "Cleared passwords from the kill ring"))
+(defvar authinfo-host-history nil)
+(defun authinfo-prompt ()
+  "Prompt for host and username."
+  (let* ((hosts (delete-duplicates
+                 (loop for spec in
+                       (auth-source-search :max most-positive-fixnum)
+                       collect (plist-get spec :host))
+                 :test 'string=))
+         (host (completing-read "Host: " hosts nil t nil
+                                'authinfo-host-history))
+         (users (delete-duplicates
+                 (loop for spec in
+                       (auth-source-search :host host
+                                           :max most-positive-fixnum)
+                       collect (plist-get spec :user))
+                 :test 'string=))
+         (user (if (> (length users) 1)
+                   (completing-read (format "User for %s: " host)
+                                    users nil t nil
+                                    'authinfo-host-history)
+                 (car users))))
+    (list host user)))
+(provide 'authinfo)
+#+end_src
+* appearance
+
+#+begin_src emacs-lisp
+
+  ;; tool-bar-mode disabled
+  (tool-bar-mode 0)
+
+  ;; --- Date/time ---
+  ;; Display time
+  (display-time)
+  (setq display-time-format "%H:%M %Y %b %d %a")
+
+  ;; Display date
+  (display-time-mode 1)
+
+  ;; --- Window ---
+  ;; emacsclient new frames maximised
+  (add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+  ;; --- DISPLAY ---
+  
+  ;; line numbers
+  (global-display-line-numbers-mode) ;; display line numbers
+
+  ;; Reverse colors for the border to have nicer line
+  ;;(set-face-inverse-video-p 'vertical-border nil)
+  ;;(set-face-background 'vertical-border (face-background 'default))
+  ;; Set symbol for the border
+  ;;(set-display-table-slot standard-display-table
+  ;;                        'vertical-border
+  ;;                        (make-glyph-code ?┃))
+
+  ;; startup frame position
+  ;; (setq initial-frame-alist
+  ;;     '((top . 1)         ; Top edge of the screen
+  ;;     (left . 490)      ; Distance from the left edge of the screen
+  ;;   (width . 132)      ; Width of the frame
+  ;; (height . 61)))  ; Height of the frame
+
+  ;; set alpha value: transparency
+  ;; (set-frame-parameter(selected-frame)'alpha '(100. 0))
+  ;;(add-to-list 'default-frame-alist '(alpha . (100. 0)))
+
+  ;; startup buffers define 
+  ;; 1. Split the window horizontally
+  (split-window-horizontally)
+  ;; 2. Open the scratch buffer on the left
+  (switch-to-buffer "*scratch*")
+
+  ;; --- Themes ---
+  ;; disable theme after loading another one
+  (defun disable-all-themes ()
+    "disable all active themes."
+    (dolist (i custom-enabled-themes)
+      (disable-theme i)))
+  (defadvice load-theme (before disable-themes-first activate)
+    (disable-all-themes))
+
+#+end_src
+* COMMENT greek-qwertz
+
+#+begin_src emacs-lisp
+;; greek-qwertz.el --- Greek input method on German QWERTZ with symbols unchanged -*- lexical-binding: t; -*-
+
+(require 'quail)
+
+(quail-define-package
+ "greek-qwertz" "Greek" "GR-QWERTZ" nil
+ "Greek letters mapped to a German QWERTZ keyboard. All symbols and punctuation follow German layout 1:1."
+ nil t t t t nil nil nil nil nil t)
+
+(quail-define-rules
+ ;; Number row and punctuation as on German keyboard
+ ("1" ?1) ("2" ?2) ("3" ?3) ("4" ?4) ("5" ?5)
+ ("6" ?6) ("7" ?7) ("8" ?8) ("9" ?9) ("0" ?0)
+ ("ß" ?ß) ("´" ?´) ("^" ?^) ("+" ?+) ("#" ?#)
+ ("<" ?<) (">" ?>) ("-" ?-) ("_" ?_) ("=" ?=)
+ ("§" ?§) ("!" ?!) ("\"" ?\") ("$" ?$) ("%" ?%)
+ ("&" ?&) ("/" ?/) ("(" ?\() (")" ?\)) ("?" ??)
+ ("\\" ?\\) ("[" ?\[) ("]" ?\]) ("{" ?{) ("}" ?})
+ (";" ?-) (":" ?:)
+ ("«" ?<) ("»" ?>)
+
+ ;; QWERTZ: letters mapped to Greek
+ ("q" ?θ) ("Q" ?Θ)
+ ("w" ?ω) ("W" ?Ω)
+ ("e" ?ε) ("E" ?Ε)
+ ("r" ?ρ) ("R" ?Ρ)
+ ("t" ?τ) ("T" ?Τ)
+ ("z" ?ζ) ("Z" ?Ζ)  ;; Z key = ζ
+ ("u" ?υ) ("U" ?Υ)
+ ("i" ?ι) ("I" ?Ι)
+ ("o" ?ο) ("O" ?Ο)
+ ("p" ?π) ("P" ?Π)
+
+ ("a" ?α) ("A" ?Α)
+ ("s" ?σ) ("S" ?Σ)
+ ("d" ?δ) ("D" ?Δ)
+ ("f" ?φ) ("F" ?Φ)
+ ("g" ?γ) ("G" ?Γ)
+ ("h" ?η) ("H" ?Η)
+ ("j" ?ξ) ("J" ?Ξ)
+ ("k" ?κ) ("K" ?Κ)
+ ("l" ?λ) ("L" ?Λ)
+
+ ("y" ?υ) ("Y" ?Υ)  ;; Y key = υ (swapped with Z)
+ ("x" ?χ) ("X" ?Χ)
+ ("c" ?ψ) ("C" ?Ψ)
+ ("v" ?ν) ("V" ?Ν)
+ ("b" ?β) ("B" ?Β)
+ ("n" ?η) ("N" ?Η)
+ ("m" ?μ) ("M" ?Μ)
+ )
+
+#+end_src
+* COMMENT reverse-im
+
+#+begin_src emacs-lisp
+(require 'reverse-im)
+
+(setq reverse-im-input-methods '("greek-qwertz")) ; important: match the OS-level Greek layout
+(reverse-im-mode 1)
+
+;; some key-bindings just do not work and need to be mapped manually
+;; (global-set-key (kbd "C-ζ") 'yank)
+;; (global-set-key (kbd "M-»") 'end-of-buffer)
+;; (global-set-key (kbd "M-«") 'beggining-of-buffer)
+
+#+end_src
