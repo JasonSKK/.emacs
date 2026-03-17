@@ -13,6 +13,7 @@
 
 ;; for access bin
 (setq exec-path (append exec-path '("/usr/local/bin")))
+(setq exec-path (append exec-path '("/bin")))
 ;; set python interpreter path
 (setq python-interpreter "$HOME/venv/python3/bin/python3")
 
@@ -172,24 +173,7 @@
  '(org-modules
    '(ol-bbdb ol-bibtex ol-docview ol-doi ol-eww ol-gnus ol-info ol-irc
              ol-mhe ol-rmail org-tempo ol-w3m))
- '(package-selected-packages
-   '(ace-isearch ace-mc ace-popup-menu ace-window ag anzu
-                 auto-async-byte-compile avy-zap browse-kill-ring
-                 cdlatex cmake-mode company-anaconda company-auctex
-                 consult counsel crux csv-mode diff-hl diminish
-                 discover-my-major easy-kill elisp-slime-nav epl
-                 exec-path-from-shell expand-region fireplace flx-ido
-                 flycheck-plantuml gist git-commit git-modes
-                 git-timemachine gt guru-mode helm-ag helm-descbinds
-                 helm-projectile hl-todo ido-completing-read+
-                 ido-vertical-mode imenu-anywhere js2-mode json-mode
-                 key-chord lsp-ui magit-section marginalia mc-extras
-                 move-text nlinum notmuch operate-on-number orderless
-                 php-mode popup powerline rainbow-delimiters
-                 rainbow-mode reverse-im smartparens smartrep smex
-                 super-save telephone-line undo-tree use-package
-                 vertico vlf volatile-highlights web-mode xclip
-                 yaml-mode zop-to-char))
+ '(package-selected-packages nil)
  '(send-mail-function 'smtpmail-send-it)
  '(smtpmail-smtp-server "smtp.gmail.com")
  '(smtpmail-smtp-service 25)

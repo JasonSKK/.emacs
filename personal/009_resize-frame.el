@@ -1,5 +1,5 @@
-;;; resize-frame --- Exported from Org Mode
-;;; 2026-03-16 11:01:44 pm CET
+;; resize-frame --- Exported from Org Mode
+;; 2026-03-17  2:26:44 pm CET
 
 
 ;; Copyright (C) 2014  kuanyui
@@ -49,4 +49,4 @@ C-c C-c to apply."
 ;; 042_resize-frame.el ends here
 
 (provide 'resize-frame)
-;;; 009_resize-frame.el ends here
+;; 009_resize-frame.el ends here

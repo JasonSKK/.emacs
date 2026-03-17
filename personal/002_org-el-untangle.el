@@ -1,5 +1,5 @@
-;;; org-el-untangle --- Exported from Org Mode
-;;; 2026-03-16 11:01:44 pm CET
+;; org-el-untangle --- Exported from Org Mode
+;; 2026-03-17  2:26:44 pm CET
 
     ;; Commentary:
     ;; org-el-untangle:
@@ -120,4 +120,4 @@
      (define-key org-mode-map (kbd "C-c C-M-e") 'org-el-export-all-sections)))
 
 (provide 'org-el-untangle)
-;;; 002_org-el-untangle.el ends here
+;; 002_org-el-untangle.el ends here

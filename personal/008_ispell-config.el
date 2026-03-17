@@ -1,5 +1,5 @@
-;;; ispell-config --- Exported from Org Mode
-;;; 2026-03-16 11:01:44 pm CET
+;; ispell-config --- Exported from Org Mode
+;; 2026-03-17  2:26:44 pm CET
 
 ;; This contains a collection of Ispell configurations.
 
@@ -53,4 +53,4 @@
 
 
 (provide 'ispell-config)
-;;; 008_ispell-config.el ends here
+;; 008_ispell-config.el ends here

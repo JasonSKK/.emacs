@@ -4,7 +4,8 @@
 ;;
 ;; Author: Mark Karpov <markkarpov92@gmail.com>
 ;; URL: https://github.com/mrkkrp/avy-menu
-;; Version: 0.1.1
+;; Package-Version: 20230606.1519
+;; Package-Revision: e79d892afd97
 ;; Package-Requires: ((emacs "24.4") (avy "0.4.0"))
 ;; Keywords: convenience
 ;;

@@ -1,5 +1,5 @@
-;;; edit-server --- Exported from Org Mode
-;;; 2026-03-16 11:01:44 pm CET
+;; edit-server --- Exported from Org Mode
+;; 2026-03-17  2:26:44 pm CET
 
 
 ;; Copyright (C) 2009-2013  Alex BennÃ©e
@@ -606,4 +606,4 @@ but don't kill the editing buffer."
   (edit-server-done t t))
 
 (provide 'edit-server)
-;;; 010_edit-server.el ends here
+;; 010_edit-server.el ends here

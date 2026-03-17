@@ -1,5 +1,5 @@
-;;; xah --- Exported from Org Mode
-;;; 2026-03-16 11:01:44 pm CET
+;; xah --- Exported from Org Mode
+;; 2026-03-17  2:26:44 pm CET
 
 ;; copy current buffer path
 (defun xah-copy-file-path (&optional DirPathOnlyQ)
@@ -105,4 +105,4 @@ Version 2017-05-30"
 
 
 (provide 'xah)
-;;; 006_xah.el ends here
+;; 006_xah.el ends here

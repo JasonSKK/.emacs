@@ -1,5 +1,5 @@
-;;; c__-mode-config --- Exported from Org Mode
-;;; 2026-03-16 11:01:44 pm CET
+;; c__-mode-config --- Exported from Org Mode
+;; 2026-03-17  2:26:44 pm CET
 
 ;; Set the default indentation level to 3 spaces for C/C++ modes
 (setq c-basic-offset 3)
@@ -16,4 +16,4 @@
 (setq company-dabbrev-downcase nil)
 
 (provide 'c__-mode-config)
-;;; 011_c__-mode-config.el ends here
+;; 011_c__-mode-config.el ends here
