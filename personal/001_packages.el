@@ -1,5 +1,5 @@
 ;; packages --- Exported from Org Mode
-;; 2026-03-17  2:26:44 pm CET
+;; 2026-03-17  3:19:10 pm CET
 
   ;; Commentary:
   ;; this is all of the packages.
@@ -84,7 +84,10 @@
   ;; telephone line 
   (use-package telephone-line
     :init
-    (telephone-line-mode))
+    (setq telephone-line-subseparator-faces '())
+    (setq telephone-line-height 24
+    telephone-line-evil-use-short-tag t)
+    (telephone-line-mode 1))
 
   ;; key-chord
   (use-package key-chord
@@ -108,7 +111,14 @@
 
   ;; multiple-cursors
   (use-package multiple-cursors)
+  (use-package ace-mc)
 
+  ;; xclip
+  (use-package xclip
+    :init
+    (xclip-mode 1)
+    ;; sync kill ring into system clipboard
+    (setq x-select-enable-clipboard t))
 
 
 

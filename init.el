@@ -9,7 +9,7 @@
 
 (add-hook 'emacs-startup-hook #'my/reset-gc-after-startup)
 
-;;; --- Variables bin/exec ---
+;; --- Variables bin/exec ---
 
 ;; for access bin
 (setq exec-path (append exec-path '("/usr/local/bin")))
@@ -17,24 +17,16 @@
 ;; set python interpreter path
 (setq python-interpreter "$HOME/venv/python3/bin/python3")
 
-;;; ------------------------
+;; ------------------------
 
-;;; --- Text preferences ---
-
-(set-face-attribute 'default nil :font "IBM Plex Mono")
-(set-fontset-font t 'greek (font-spec :family "FreeMono"))
-
-;; detects a /path/to/file or https://example-url.com near point, can remap C-x C-f so it uses that guess as the default
-(ffap-bindings)
-
-;; when marked region makes typed text replace the active region
-(delete-selection-mode 1)
-
-
-;;; --- GPG ---
+;; --- Encryption ---
+;; GPG
 (setenv "GPG_AGENT_INFO" nil)
 
-;;; --- LISP ---
+;; solves epa-decrypt-region -- bug
+(setf epa-pinentry-mode 'loopback)
+
+;; --- LISP ---
 ;; Slime config sbcl
 (setq inferior-lisp-program (executable-find "sbcl"))
 
@@ -47,65 +39,13 @@
 
 ;; --- EMAIL ---
 
-
-;; solves epa-decrypt-region -- bug
-(setf epa-pinentry-mode 'loopback)
-
-;:; ---  go-translate config ---
-;; your languages pair used to translate
-
-;; (require 'go-translate)
-;; (setq gts-translate-list '(("en" "ru") ("ru" "en") ("el" "en") ("en" "el") ("de" "en") ("en" "de")))
-
-;; ;; (setq gts-default-translator (gts-translator :engines (gts-bing-engine)))
-;; (setq gts-default-translator
-;;       (gts-translator
-;;        :picker (gts-prompt-picker)
-;;        :engines (list (gts-bing-engine) (gts-google-engine))
-;;        :render (gts-buffer-render)))
-
-;;; --- plantuml config ---
-;; active Org-babel languages
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '(;; other Babel languages
-   (plantuml . t)))
-
-(setq org-plantuml-jar-path
-      (expand-file-name "/home/iason1/bin/plantuml/plantuml-1.2025.2.jar"))
-
-;;; --- XCLIP ---
-;; enable xclip-mode globally
-;; (xclip-mode 1)
-;; sync kill ring into system clipboard
-;; (setq x-select-enable-clipboard t)
-
-;; startup buffers
-;; Split the window horizontally
-(split-window-horizontally)
-;; Open the scratch buffer on the left
-(switch-to-buffer "*scratch*")
-
-;; flycheck slows emacs down FIX
-;; Flycheck uses default config to check when a new-line is inserted or idle-change event occurs.
-;; To change this:
-(setq flycheck-check-syntax-automatically '(save mode-enable))
-;; the default value was '(save idle-change new-line mode-enabled)
-
-;; This way, syntax checking will occur only when you save your file or change the major mode.
-(setq flycheck-check-syntax-automatically '(save mode-enable))
-
-;; https://github.com/flycheck/flycheck/issues/1129#issuecomment-319600923
-(with-eval-after-load 'flycheck
-  (advice-add 'flycheck-eslint-config-exists-p :override (lambda() t)))
-
-;;; --- Load paths ---
-;;; Add load paths for all packages in personal/packages.
+;; --- Load paths ---
+;; Add load paths for all packages in personal/packages.
 ;; (mapc (lambda (path)
 ;;        (add-to-list 'load-path (concat path "/")))
 ;;       (file-expand-wildcards "~/.emacs.d/personal/packages/*"))
 
-;;; Load all customization files in alphabetical order.
+;; Load all customization files in alphabetical order.
 (mapcar (lambda (path)
           (load-file path))
         (file-expand-wildcards "~/.emacs.d/personal/*.el"))
@@ -115,9 +55,9 @@
           (load-file path))
         (file-expand-wildcards "~/.emacs.d/personal/prelude/*.el"))
 
-;;; ------------------------
+;; ------------------------
 
-;;; --- Startup time --- Should ALWAYS be LAST 
+;; --- Startup time --- Should ALWAYS be LAST 
 (defun efs/display-startup-time ()
   (message
    "Emacs loaded in %s with %d garbage collections."
@@ -173,7 +113,10 @@
  '(org-modules
    '(ol-bbdb ol-bibtex ol-docview ol-doi ol-eww ol-gnus ol-info ol-irc
              ol-mhe ol-rmail org-tempo ol-w3m))
- '(package-selected-packages nil)
+ '(package-selected-packages
+   '(ace-mc ace-window auto-async-byte-compile avy-menu avy-zap consult
+            gt key-chord marginalia notmuch orderless telephone-line
+            vertico xclip))
  '(send-mail-function 'smtpmail-send-it)
  '(smtpmail-smtp-server "smtp.gmail.com")
  '(smtpmail-smtp-service 25)

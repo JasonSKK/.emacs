@@ -1,5 +1,5 @@
 ;; org-el-untangle --- Exported from Org Mode
-;; 2026-03-17  2:26:44 pm CET
+;; 2026-03-17  3:19:10 pm CET
 
     ;; Commentary:
     ;; org-el-untangle:
@@ -55,9 +55,9 @@
                  "  " " "
                  (format "\n* %s\n"
                          (replace-regexp-in-string "_" " " fname-base))))
-        (insert "\n#+BEGIN_SRC emacs-lisp\n")
+        (insert "\n#+begin_src emacs-lisp\n")
         (insert body)
-        (insert "#+END_SRC")))))
+        (insert "#+end_src")))))
 (defun org-el-export-all-sections ()
   "Export each sections' emacs-lisp block to a separate file.
     Add header and footer parts required by flycheck."

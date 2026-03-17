@@ -1,6 +1,6 @@
-
 * packages
-#+BEGIN_SRC emacs-lisp
+
+#+begin_src emacs-lisp
   ;; Commentary:
   ;; this is all of the packages.
 
@@ -84,7 +84,10 @@
   ;; telephone line 
   (use-package telephone-line
     :init
-    (telephone-line-mode))
+    (setq telephone-line-subseparator-faces '())
+    (setq telephone-line-height 24
+    telephone-line-evil-use-short-tag t)
+    (telephone-line-mode 1))
 
   ;; key-chord
   (use-package key-chord
@@ -108,50 +111,20 @@
 
   ;; multiple-cursors
   (use-package multiple-cursors)
+  (use-package ace-mc)
+
+  ;; xclip
+  (use-package xclip
+    :init
+    (xclip-mode 1)
+    ;; sync kill ring into system clipboard
+    (setq x-select-enable-clipboard t))
 
 
-
-#+END_SRC
-* COMMENT prelude-load-packages
-
-#+BEGIN_SRC emacs-lisp
-(prelude-load-require-packages '(avy-zap avy-menu auto-async-byte-compile anzu ace-window ace-popup-menu ace-isearch))
-(prelude-load-require-packages '(multiple-cursors ace-mc)) ;; mc-extras
-
-;; re-builder package
-;; https://www.masteringemacs.org/article/re-builder-interactive-regexp-builder
-(prelude-require-package 're-builder)
-(setq reb-re-syntax 'string)
-#+END_SRC
-* COMMENT multiple-cursors
-
-#+BEGIN_SRC emacs-lisp
-;; ace-mc
-(global-set-key (kbd "C-c )") 'ace-mc-add-multiple-cursors)
-(global-set-key (kbd "C-M-)") 'ace-mc-add-single-cursor)
-;; multiple-cursors
-
-(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
-(global-set-key (kbd "C->") 'mc/mark-next-like-this)
-(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
-;; mc-extras
-
-;; (define-key mc/keymap (kbd "C-. C-d") 'mc/remove-current-cursor)
-;; (define-key mc/keymap (kbd "C-. d")   'mc/remove-duplicated-cursors)
-;; (define-key mc/keymap (kbd "C-. C-.") 'mc/freeze-fake-cursors-dwim)
-;; (define-key mc/keymap (kbd "C-. =")   'mc/compare-chars)
-;; ;; Emac
-s 24.4+ comes with rectangle-mark-mode.
-(define-key rectangle-mark-mode-map (kbd "C-. C-,")
-            'mc/rect-rectangle-to-multiple-cursors)
-;;(define-key cua--rectangle-keymap   (kbd "C-. C-,")
-;;'mc/cua-rectangle-to-multiple-cursors)
-;;(mc/cua-rectangle-setup)
-#+END_SRC
+#+end_src
 * org-el-untangle
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
     ;; Commentary:
     ;; org-el-untangle:
     ;; import muliple el files from one folder into one org mode file.
@@ -206,9 +179,9 @@ s 24.4+ comes with rectangle-mark-mode.
                  "  " " "
                  (format "\n* %s\n"
                          (replace-regexp-in-string "_" " " fname-base))))
-        (insert "\n#+BEGIN_SRC emacs-lisp\n")
+        (insert "\n#+begin_src emacs-lisp\n")
         (insert body)
-        (insert "#+END_SRC")))))
+        (insert "#+end_src")))))
 (defun org-el-export-all-sections ()
   "Export each sections' emacs-lisp block to a separate file.
     Add header and footer parts required by flycheck."
@@ -269,10 +242,36 @@ s 24.4+ comes with rectangle-mark-mode.
      ;; Note: This keybinding is in analogy to the default keybinding:
      ;; C-c . -> org-time-stamp
      (define-key org-mode-map (kbd "C-c C-M-e") 'org-el-export-all-sections)))
-#+END_SRC
+#+end_src
+* multiple-cursors
+
+#+begin_src emacs-lisp
+;; ace-mc
+(global-set-key (kbd "C-c )") 'ace-mc-add-multiple-cursors)
+(global-set-key (kbd "C-M-)") 'ace-mc-add-single-cursor)
+
+;; multiple-cursors
+
+(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+(global-set-key (kbd "C->") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+;; mc-extras
+
+;; (define-key mc/keymap (kbd "C-. C-d") 'mc/remove-current-cursor)
+;; (define-key mc/keymap (kbd "C-. d")   'mc/remove-duplicated-cursors)
+;; (define-key mc/keymap (kbd "C-. C-.") 'mc/freeze-fake-cursors-dwim)
+;; (define-key mc/keymap (kbd "C-. =")   'mc/compare-chars)
+;; ;; Emacs 24.4+ comes with rectangle-mark-mode.
+(define-key rectangle-mark-mode-map (kbd "C-. C-,")
+            'mc/rect-rectangle-to-multiple-cursors)
+;;(define-key cua--rectangle-keymap   (kbd "C-. C-,")
+;;'mc/cua-rectangle-to-multiple-cursors)
+;;(mc/cua-rectangle-setup)
+#+end_src
 * COMMENT org-mode
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 ;; Commentary:
 
 ;; customize some org mode settings
@@ -360,9 +359,9 @@ If called with ARG, do not insert time."
   (re-search-forward " ")
   (org-cycle))
 (defun org-find-next-src-block ()
-  "Search for next #+BEGIN_SRC block header."
+  "Search for next #+begin_src block header."
   (interactive)
-  (re-search-forward "\\#\\+BEGIN_SRC " nil t))
+  (re-search-forward "\\#\\+begin_src " nil t))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; This is run once after loading org for the first time
@@ -437,10 +436,10 @@ If called with ARG, do not insert time."
 (setq org-startup-folded t)
 ;; syntax highlighting in src-blocks
 (setq org-src-fontify-natively t)
-#+END_SRC
-* COMMENT latex-config
+#+end_src
+* COMMENT latex
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 ;;  async compile current latex document with references and open it with external app
 (defun async-compile-latex-file-open-external ()
   (interactive)
@@ -464,10 +463,10 @@ If called with ARG, do not insert time."
   (shell-command (concat "/Library/TeX/texbin/texcount "
                                         ; "uncomment then options go here "
                          (buffer-file-name))))
-#+END_SRC
-* COMMENT dired-config
+#+end_src
+* dired
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 ;; Commentary:
 ;; Hide details when using dired
 
@@ -490,52 +489,59 @@ If called with ARG, do not insert time."
 ;; q kills current buffer instead of quit
 (define-key dired-mode-map "q" 'kill-current-buffer)
 ;; ------------------------------------
-#+END_SRC
-* prefix-ctrl-l
+#+end_src
+* global-keys
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
+  
+  ;; Commentary:
+  ;; Configuration for personal keybindings
 
-;; Commentary:
-;; Configuration for personal keybindings
+  ;; Code:
+  ;; Remove C-l mapping and define new keymap prefix
+  (global-unset-key "\C-l")
+  (defvar ctl-l-map (make-keymap)
+    "Keymap for local bindings and functions, prefixed by (^L)")
+  (define-key global-map "\C-l" 'Control-L-prefix)
+  (fset 'Control-L-prefix ctl-l-map)
+#+end_src
+* text
 
-;; Code:
-;; Remove C-l mapping and define new keymap prefix
-(global-unset-key "\C-l")
-(defvar ctl-l-map (make-keymap)
-  "Keymap for local bindings and functions, prefixed by (^L)")
-(define-key global-map "\C-l" 'Control-L-prefix)
-(fset 'Control-L-prefix ctl-l-map)
-#+END_SRC
-* text-editing-keybindings
+#+begin_src emacs-lisp
 
-#+BEGIN_SRC emacs-lisp
-;; Commentary:
-;; Configuration for personal keybindings
+  ;; Commentary:
+  ;; Configuration for personal keybindings
 
-;; Code:
-;; Remove C-l mapping and define new keymap prefix
-(global-unset-key "\C-l")
-(defvar ctl-l-map (make-keymap)
-  "Keymap for local bindings and functions, prefixed by (^L)")
-(define-key global-map "\C-l" 'Control-L-prefix)
-(fset 'Control-L-prefix ctl-l-map)
-;; ------ Text editing bindings ------
-;; Define key for replace string
-(define-key ctl-l-map "r"  'replace-string)
-;; Allow hash to be entered
-(global-set-key (kbd "M-3") '(lambda () (interactive) (insert "#")))
-;; map fill region
-(define-key ctl-l-map "f"  'fill-region)
-;; comment region
-(global-set-key (kbd "C-M-;") 'comment-region)
-;; ------------------------------------
-;; indenting
-(global-set-key (kbd "C-x TAB") 'indent-rigidly)
+  ;; Code:
+  ;; --- Text preferences ---
 
-#+END_SRC
+  (set-face-attribute 'default nil :font "IBM Plex Mono")
+  (set-fontset-font t 'greek (font-spec :family "FreeMono"))
+
+  ;; detects a /path/to/file or https://example-url.com near point, can remap C-x C-f so it uses that guess as the default
+  (ffap-bindings)
+
+  ;; when marked region makes typed text replace the active region
+  (delete-selection-mode 1)
+
+  ;; ------ Text editing keybindings ------
+  ;; Define key for replace string
+  (define-key ctl-l-map "r"  'replace-string)
+  ;; Allow hash to be entered
+  (global-set-key (kbd "M-3") '(lambda () (interactive) (insert "#")))
+  ;; map fill region
+  (define-key ctl-l-map "f"  'fill-region)
+  ;; comment region
+  (global-set-key (kbd "C-M-;") 'comment-region)
+  ;; ------------------------------------
+  ;; indenting
+  (global-set-key (kbd "C-x TAB") 'indent-rigidly)
+
+
+#+end_src
 * now-today-text-insert
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 ;; This file provides a number of personal function definitions
 
 ;; Commentary:
@@ -552,14 +558,13 @@ If called with ARG, do not insert time."
 i.e. Sunday, 17 September, 2000."
   (interactive) ;; permit invocation in minibuffer
   (insert (format-time-string "%A, %e %B, %Y")))
-#+END_SRC
+#+end_src
 * xah
 :PROPERTIES:
 :LEXICAL:  nil
 :END:
 
-
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 ;; copy current buffer path
 (defun xah-copy-file-path (&optional DirPathOnlyQ)
   "Copy current buffer file path or dired path.
@@ -662,9 +667,10 @@ Version 2017-05-30"
 (global-set-key (kbd "C-a") 'xah-beginning-of-line-or-block) ;; replaces (crux-move-beginning-of-line ARG)
 (global-set-key (kbd "C-e") 'xah-end-of-line-or-block) ;; replaces (move-end-of-line ARG)
 
-#+END_SRC
+#+end_src
 * notmuch-lieer-sync
-#+BEGIN_SRC emacs-lisp
+
+#+begin_src emacs-lisp
 
 ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Lexical-Binding.html
 (require 'subr-x)
@@ -834,64 +840,83 @@ Version 2017-05-30"
 (add-hook 'message-send-hook 'my-set-smtp-server)
 
 
-#+END_SRC
-* ispell-config
+#+end_src
+* ispell
 
-#+BEGIN_SRC emacs-lisp
-;; This contains a collection of Ispell configurations.
+#+begin_src emacs-lisp
+  ;; This contains a collection of Ispell configurations.
 
   ;; Commentary:
 
   ;; Code:
-;; for cycling through Greek and UK English when using Ispell <C-1>
-;; You should have aspell-gr and aspell-en packages installed
-(let ((langs '("british" "el" "de")))
-  (setq lang-ring (make-ring (length langs)))
-  (dolist (elem langs) (ring-insert lang-ring elem)))
-(defun cycle-ispell-languages ()
-  (interactive)
-  (let ((lang (ring-ref lang-ring -1)))
-    (ring-insert lang-ring lang)
-    (ispell-change-dictionary lang)))
-(global-set-key (kbd "C-M-!") 'cycle-ispell-languages)
-;; ignore spelling in LaTeX \commands
-(setq ispell-tex-skip-alists
-      (list
-       (append
-        (car ispell-tex-skip-alists)
-        '(("\\\\mycommand"       ispell-tex-arg-end)
-          ("\\\\mycommandtwo"      ispell-tex-arg-end 2)))
-       (cadr ispell-tex-skip-alists)))
-;; Ispell continue
-(global-set-key (kbd "s-;") 'ispell-continue)
+  ;; for cycling through Greek and UK English when using Ispell <C-1>
+  ;; You should have aspell-gr and aspell-en packages installed
+  (let ((langs '("british" "el" "de")))
+    (setq lang-ring (make-ring (length langs)))
+    (dolist (elem langs) (ring-insert lang-ring elem)))
+  (defun cycle-ispell-languages ()
+    (interactive)
+    (let ((lang (ring-ref lang-ring -1)))
+      (ring-insert lang-ring lang)
+      (ispell-change-dictionary lang)))
+  (global-set-key (kbd "C-M-!") 'cycle-ispell-languages)
+  ;; ignore spelling in LaTeX \commands
+  (setq ispell-tex-skip-alists
+        (list
+         (append
+          (car ispell-tex-skip-alists)
+          '(("\\\\mycommand"       ispell-tex-arg-end)
+            ("\\\\mycommandtwo"      ispell-tex-arg-end 2)))
+         (cadr ispell-tex-skip-alists)))
+  ;; Ispell continue
+  (global-set-key (kbd "s-;") 'ispell-continue)
 
-;; (add-hook 'LaTeX-mode-hook #'turn-on-flyspell)
-;;(add-hook 'org-mode-hook '(flyspell-mode t))
-;;(add-hook org-mode-hook #'turn-on-flyspell)
-;; toggle flyspell on open text-mode ~ all modes
-;; (add-hook 'text-mode-hook #'flyspell-mode)
-;; (add-hook 'flyspell-mode-hook #'flyspell-local-vars)
-;; (defun flyspell-local-vars ()
-;;  (add-hook 'hack-local-variables-hook #'flyspell-buffer))
+  ;; (add-hook 'LaTeX-mode-hook #'turn-on-flyspell)
+  ;;(add-hook 'org-mode-hook '(flyspell-mode t))
+  ;;(add-hook org-mode-hook #'turn-on-flyspell)
+  ;; toggle flyspell on open text-mode ~ all modes
+  ;; (add-hook 'text-mode-hook #'flyspell-mode)
+  ;; (add-hook 'flyspell-mode-hook #'flyspell-local-vars)
+  ;; (defun flyspell-local-vars ()
+  ;;  (add-hook 'hack-local-variables-hook #'flyspell-buffer))
 
-;; check the full buffer when you open a file (e.g., in text-mode, org-mode, etc.):
-;; (dolist (hook '(
-;;                 ;; org-mode-hook
-;;                 latex-mode-hook
-;;                 message-mode-hook
-;;                 markdown-mode-hook
-;;                 ;;text-mode-hook
-;;                 )) ;; keep if you still want it for plain text
-;;   (add-hook hook
-;;             (lambda ()
-;;               (flyspell-mode 1)
-;;               (flyspell-buffer))))
+  ;; check the full buffer when you open a file (e.g., in text-mode, org-mode, etc.):
+  ;; (dolist (hook '(
+  ;;                 ;; org-mode-hook
+  ;;                 latex-mode-hook
+  ;;                 message-mode-hook
+  ;;                 markdown-mode-hook
+  ;;                 ;;text-mode-hook
+  ;;                 )) ;; keep if you still want it for plain text
+  ;;   (add-hook hook
+  ;;             (lambda ()
+  ;;               (flyspell-mode 1)
+  ;;               (flyspell-buffer))))
 
 
-#+END_SRC
+#+end_src
+* COMMENT flycheck
+
+#+begin_src emacs-lisp
+  ;; I suffered from this in my previous config. For now it remains commented out until issue is observed again.
+  
+  ;; flycheck slows emacs down FIX
+  ;; Flycheck uses default config to check when a new-line is inserted or idle-change event occurs.
+  ;; To change this:
+  (setq flycheck-check-syntax-automatically '(save mode-enable))
+  ;; the default value was '(save idle-change new-line mode-enabled)
+
+  ;; This way, syntax checking will occur only when you save your file or change the major mode.
+  (setq flycheck-check-syntax-automatically '(save mode-enable))
+
+  ;; https://github.com/flycheck/flycheck/issues/1129#issuecomment-319600923
+  (with-eval-after-load 'flycheck
+    (advice-add 'flycheck-eslint-config-exists-p :override (lambda() t)))
+
+#+end_src
 * resize-frame
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 
 ;; Copyright (C) 2014  kuanyui
 
@@ -938,10 +963,10 @@ C-c C-c to apply."
 (global-set-key (kbd "ESC `") 'resize-frame)
 (provide '042_resize-frame)
 ;; 042_resize-frame.el ends here
-#+END_SRC
+#+end_src
 * edit-server
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 
 ;; Copyright (C) 2009-2013  Alex BennÃ©e
 ;; Copyright (C) 2010-2011  Riccardo Murri
@@ -1545,27 +1570,47 @@ When called interactively, use prefix arg to abort editing."
 but don't kill the editing buffer."
   (interactive)
   (edit-server-done t t))
-#+END_SRC
-* c++-mode-config
+#+end_src
+* programming
 
-#+BEGIN_SRC emacs-lisp
-;; Set the default indentation level to 3 spaces for C/C++ modes
-(setq c-basic-offset 3)
-;; Disable the use of tabs for indentation using spaces instead
-(custom-set-variables '(indent-tabs-mode nil))
-;; configure indentation in C++ mode
-(defun indentation-setup-c++-mode ()
-  ;; Set the basic indentation level to 3 spaces specifically for C++ mode
-  (setq c-basic-offset 3)
-  ;; braces don't get additional indentation (brace alignment with control structures)
-  (c-set-offset 'substatement-open 0))
-(add-hook 'c++-mode-hook 'indentation-setup-c++-mode)
-;; Prevent company-mode from automatically lowercasing completions
-(setq company-dabbrev-downcase nil)
-#+END_SRC
-* gccjit
 #+begin_src emacs-lisp
-                                        ;: Enable gccjit  in Emacs
+  ;; --- C/C++ ---
+  ;; Set the default indentation level to 3 spaces for C/C++ modes
+  (setq c-basic-offset 3)
+
+  ;; Disable the use of tabs for indentation using spaces instead
+  (custom-set-variables '(indent-tabs-mode nil))
+
+  ;; configure indentation in C++ mode
+  (defun indentation-setup-c++-mode ()
+    ;; Set the basic indentation level to 3 spaces specifically for C++ mode
+    (setq c-basic-offset 3)
+    ;; braces don't get additional indentation (brace alignment with control structures)
+    (c-set-offset 'substatement-open 0))
+
+  (add-hook 'c++-mode-hook 'indentation-setup-c++-mode)
+  
+  ;; Prevent company-mode from automatically lowercasing completions
+  (setq company-dabbrev-downcase nil)
+#+end_src
+* plantUML
+
+#+begin_src emacs-lisp
+
+  ;; active Org-babel languages
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '(;; other Babel languages
+     (plantuml . t)))
+
+  ;; set path plantuml lib
+  (setq org-plantuml-jar-path
+        (expand-file-name "~/bin/plantuml/plantuml-1.2025.2.jar"))
+
+#+end_src
+* gccjit
+
+#+begin_src emacs-lisp
 ;; gccjit (GNU Compiler Collection Just-In-Time compilation) allows Emacs to natively compile Elisp code into machine code for improved performance.
 (setq native-comp-async-report-warnings-errors 'silent)
 (setq native-comp-speed 3)
@@ -1575,7 +1620,7 @@ but don't kill the editing buffer."
 
 * anna-iason
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun anna-iason-time-together ()
   "Calculate the number of years, months, and days between the start date (Feb 16, 2017) and today's date, including both dates."
   (interactive)
@@ -1587,91 +1632,10 @@ but don't kill the editing buffer."
          (days (floor (/ (mod (float-time time-diff) 2629800) 86400)))
          (total-days (floor (/ (float-time time-diff) 86400))))
     (message "We have been together for %d years, %d months, and %d days. (%d days in total)" years months days total-days)))
-#+END_SRC
-* appearance
-
-#+BEGIN_SRC emacs-lisp
-
-;; tool-bar-mode disabled
-(tool-bar-mode 0)
-
-;; emacsclient new frames maximised
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
-
-;; --- DISPLAY ---
-;; (split-window-right) ;; split to 2 windows right on startup
-;; display numbers
-;;(global-display-line-numbers-mode) ;; display line numbers
-;; Reverse colors for the border to have nicer line
-;;(set-face-inverse-video-p 'vertical-border nil)
-;;(set-face-background 'vertical-border (face-background 'default))
-;; Set symbol for the border
-;;(set-display-table-slot standard-display-table
-;;                        'vertical-border
-;;                        (make-glyph-code ?┃))
-
-;; Display time
-(display-time)
-(setq display-time-format "%H:%M %Y %b %d %a")
-;; display date
-(display-time-mode 1)
-;; --- Window ---
-;; startup frame position
-(setq initial-frame-alist
-      '((top . 1)         ; Top edge of the screen
-        (left . 490)      ; Distance from the left edge of the screen
-        (width . 132)      ; Width of the frame
-        (height . 61)))  ; Height of the frame
-;; set alpha value: transparency
-;; (set-frame-parameter(selected-frame)'alpha '(100. 0))
-;;(add-to-list 'default-frame-alist '(alpha . (100. 0)))
-
-;; telephone-line-config
-(setq telephone-line-subseparator-faces '())
-(setq telephone-line-height 24
-      telephone-line-evil-use-short-tag t)
-(require 'telephone-line)
-(telephone-line-mode 1)
-
-;; disable theme after loading another one
-(defun disable-all-themes ()
-  "disable all active themes."
-  (dolist (i custom-enabled-themes)
-    (disable-theme i)))
-(defadvice load-theme (before disable-themes-first activate)
-  (disable-all-themes))
-
-#+END_SRC
-* COMMENT whitespace
-
-#+BEGIN_SRC emacs-lisp
-;; Commentary:
-;; turn off whitespace and turn on visual line modes,
-;; for these main modes:
-;; js, css, web, html, markdown, python, latex
-
-(defun whitespace-off ()
-  "Make turning whitespace mode off a command callable from key."
-  (interactive)
-  (whitespace-mode -1))
-(add-hook 'markdown-mode-hook 'whitespace-off)
-(add-hook 'css-mode-hook 'whitespace-off)
-(add-hook 'html-mode-hook 'whitespace-off)
-(add-hook 'web-mode-hook 'whitespace-off)
-(add-hook 'js-mode-hook 'whitespace-off)
-(add-hook 'python-mode-hook 'whitespace-off)
-(add-hook 'latex-mode-hook 'whitespace-off)
-(add-hook 'markdown-mode-hook 'visual-line-mode)
-(add-hook 'css-mode-hook 'visual-line-mode)
-(add-hook 'html-mode-hook 'visual-line-mode)
-(add-hook 'web-mode-hook 'visual-line-mode)
-(add-hook 'js-mode-hook 'visual-line-mode)
-(add-hook 'python-mode-hook 'visual-line-mode)
-(add-hook 'latex-mode-hook 'visual-line-mode)
-#+END_SRC
+#+end_src
 * authinfo-copy-password
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 ;; authinfo.el -- hiding unnecessary passwords
 ;;
 ;; Copyright (C) 2017  Alex Schroeder <alex@gnu.org>
@@ -1763,101 +1727,67 @@ The passwords to be removed are temporarily stored in
                  (car users))))
     (list host user)))
 (provide 'authinfo)
-#+END_SRC
-* COMMENT go-translate
-#+BEGIN_SRC emacs-lisp
-;; go-translate v3 configuration
-(require 'gt)
+#+end_src
+* appearance
 
+#+begin_src emacs-lisp
 
-;; Define preset translators (recommended)
-(setq gt-default-translator
-      (gt-translator
-       :taker   (gt-taker :langs '(de en el ru) :text 'buffer :pick 'paragraph)
-       :engines (list (gt-deepl-engine) (gt-google-engine))
-       :render  (gt-buffer-render)))
+  ;; tool-bar-mode disabled
+  (tool-bar-mode 0)
 
-;; Optional: Set a default translator (if you don't want to use the first preset as default)
-;; If gt-default-translator is nil, the first preset in gt-preset-translators will be used.
-;; (setq gt-default-translator nil) ;; or you can set it to one of the preset translator
+  ;; --- Date/time ---
+  ;; Display time
+  (display-time)
+  (setq display-time-format "%H:%M %Y %b %d %a")
 
-;; Example of setting a default translator
-;; (setq gt-default-translator
-;;       (gt-translator
-;;        :taker (gt-taker :langs '(en ru))
-;;        :engines (list (gt-bing-engine) (gt-google-engine))
-;;        :render (gt-buffer-render)))
+  ;; Display date
+  (display-time-mode 1)
 
-;; Optional: Configure global languages (used if taker doesn't specify langs)
-;; (setq gt-langs '(en ru))
+  ;; --- Window ---
+  ;; emacsclient new frames maximised
+  (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
-;; Optional: Configure taker defaults (if you want to change the default behavior)
-;; (setq gt-taker-text 'word)      ; Default: word under cursor
-;; (setq gt-taker-pick 'paragraph) ; Default: split by paragraphs
-;; (setq gt-taker-prompt nil)      ; Default: no prompt
+  ;; --- DISPLAY ---
+  ;; (split-window-right) ;; split to 2 windows right on startup
+  ;; display numbers
+  ;;(global-display-line-numbers-mode) ;; display line numbers
+  ;; Reverse colors for the border to have nicer line
+  ;;(set-face-inverse-video-p 'vertical-border nil)
+  ;;(set-face-background 'vertical-border (face-background 'default))
+  ;; Set symbol for the border
+  ;;(set-display-table-slot standard-display-table
+  ;;                        'vertical-border
+  ;;                        (make-glyph-code ?┃))
 
-;; Optional: Configure default HTTP client (plz.el with curl is recommended)
-;; (require 'plz) ;; Ensure plz is loaded
+  ;; startup frame position
+  ;; (setq initial-frame-alist
+  ;;     '((top . 1)         ; Top edge of the screen
+  ;;     (left . 490)      ; Distance from the left edge of the screen
+  ;;   (width . 132)      ; Width of the frame
+  ;; (height . 61)))  ; Height of the frame
 
-;; (setq gt-default-http-client
-;;       (gt-plz-http-client :args '("--proxy" "socks5://127.0.0.1:9999")))
+  ;; set alpha value: transparency
+  ;; (set-frame-parameter(selected-frame)'alpha '(100. 0))
+  ;;(add-to-list 'default-frame-alist '(alpha . (100. 0)))
 
-;; Optional: Configure default cache
-;; (setq gt-cache-p t) ;; Enable global cache, or disable it.
-;; (setq gt-default-cacher (gt-memory-cacher :if 'word)) ;; only cache words.
+  ;; startup buffers define 
+  ;; 1. Split the window horizontally
+  (split-window-horizontally)
+  ;; 2. Open the scratch buffer on the left
+  (switch-to-buffer "*scratch*")
 
-;; Example of using gt-insert-render
-;; (setq gt-default-translator
-;;       (gt-translator
-;;        :taker (gt-taker :text 'paragraph :pick nil)
-;;        :engines (gt-google-engine)
-;;        :render (gt-insert-render :type 'replace)))
+  ;; --- Themes ---
+  ;; disable theme after loading another one
+  (defun disable-all-themes ()
+    "disable all active themes."
+    (dolist (i custom-enabled-themes)
+      (disable-theme i)))
+  (defadvice load-theme (before disable-themes-first activate)
+    (disable-all-themes))
 
-;; Example of using gt-overlay-render
-;; (setq gt-default-translator
-;;       (gt-translator
-;;        :taker (gt-taker :text 'buffer :pick 'word :pick-pred (lambda (w) (length> w 5)))
-;;        :engines (gt-google-engine)
-;;        :render (gt-overlay-render :type 'help-echo)))
-
-;; Example of using gt-posframe-pop-render
-;; (require 'posframe) ;;Ensure posframe is installed
-;; (setq gt-default-translator
-;;       (gt-translator
-;;        :taker (gt-taker :text 'word)
-;;        :engines (gt-google-engine)
-;;        :render (gt-posframe-pop-render)))
-
-;; Example of using gt-stardict-engine
-;; (setq gt-default-translator
-;;       (gt-translator
-;;        :engines (gt-stardict-engine
-;;                  :dir "~/.stardict/dic"
-;;                  :dict "dict-name"
-;;                  :exact t)
-;;        :render (gt-buffer-render)))
-
-;; Example of using gt-deepl-engine
-;; (setq gt-default-translator
-;;       (gt-translator
-;;        :engines (gt-deepl-engine :key "***")
-;;        :render (gt-buffer-render)))
-
-;; Example of using gt-chatgpt-engine
-;; (setq gt-chatgpt-key "YOUR-KEY") ;; or in your .authinfo
-;; (setq gt-default-translator
-;;       (gt-translator
-;;        :engines (gt-chatgpt-engine :stream t)
-;;        :render (gt-buffer-render)))
-
-;; Example of using gt-text-utility
-;; (defun my-generate-qr ()
-;;   (interactive)
-;;   (gt-start (gt-translator
-;;              :engines (gt-text-utility :type 'qrcode)
-;;              :render (gt-buffer-render))))
-#+END_SRC
+#+end_src
 * COMMENT greek-qwertz
+
 #+begin_src emacs-lisp
 ;; greek-qwertz.el --- Greek input method on German QWERTZ with symbols unchanged -*- lexical-binding: t; -*-
 
@@ -1913,7 +1843,8 @@ The passwords to be removed are temporarily stored in
 
 #+end_src
 * COMMENT reverse-im
-#+BEGIN_SRC emacs-lisp
+
+#+begin_src emacs-lisp
 (require 'reverse-im)
 
 (setq reverse-im-input-methods '("greek-qwertz")) ; important: match the OS-level Greek layout
@@ -1924,4 +1855,4 @@ The passwords to be removed are temporarily stored in
 ;; (global-set-key (kbd "M-»") 'end-of-buffer)
 ;; (global-set-key (kbd "M-«") 'beggining-of-buffer)
 
-#+END_SRC
+#+end_src
