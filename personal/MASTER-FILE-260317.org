@@ -46,14 +46,73 @@
     :init
     (savehist-mode))
 
+    ;; --- completion ---
+  (use-package corfu
+    ;; Optional customizations
+    ;; :custom
+    ;; (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+    ;; (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
+    ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
+    ;; (corfu-preview-current nil)    ;; Disable current candidate preview
+    ;; (corfu-preselect 'prompt)      ;; Preselect the prompt
+    ;; (corfu-on-exact-match 'insert) ;; Configure handling of exact matches
+
+    ;; Enable Corfu only for certain modes. See also `global-corfu-modes'.
+    ;; :hook ((prog-mode . corfu-mode)
+    ;;        (shell-mode . corfu-mode)
+    ;;        (eshell-mode . corfu-mode))
+
+    :init
+
+    ;; Recommended: Enable Corfu globally.  Recommended since many modes provide
+    ;; Capfs and Dabbrev can be used globally (M-/).  See also the customization
+    ;; variable `global-corfu-modes' to exclude certain modes.
+    (global-corfu-mode)
+
+    ;; Enable optional extension modes:
+    ;; (corfu-history-mode)
+    ;; (corfu-popupinfo-mode)
+    )
+
+  ;; A few more useful configurations...
+  (use-package emacs
+    :custom
+    ;; TAB cycle if there are only few candidates
+    ;; (completion-cycle-threshold 3)
+
+    ;; Enable indentation+completion using the TAB key.
+    ;; `completion-at-point' is often bound to M-TAB.
+    (tab-always-indent 'complete)
+
+    ;; Emacs 30 and newer: Disable Ispell completion function.
+    ;; Try `cape-dict' as an alternative.
+    (text-mode-ispell-word-completion nil)
+
+    ;; Hide commands in M-x which do not apply to the current mode.  Corfu
+    ;; commands are hidden, since they are not used via M-x. This setting is
+    ;; useful beyond Corfu.
+    (read-extended-command-predicate #'command-completion-default-include-p))
+
+  ;; Enable auto completion pop up, configure delay, trigger and quitting
+  ;; (setq corfu-auto t
+  ;;       corfu-auto-delay 0.2
+  ;;       corfu-auto-trigger "." ;; Custom trigger characters
+  ;;       corfu-quit-no-match 'separator) ;; or t
+
+  ;; --- completion ---
+  
   ;; flexible fuzzy matching via orderless
   (use-package orderless
     :ensure t
     :init
+    ;; corfu completion
+    ;; (orderless-style-dispatchers '(orderless-affix-dispatch))
+    ;; (orderless-component-separator #'orderless-escapable-split-on-space)
     (setq completion-styles '(orderless basic)
-          completion-category-defaults nil
-          completion-category-overrides
-          '((file (styles basic partial-completion)))))
+        completion-category-overrides '((file (styles partial-completion)))
+        completion-category-defaults nil ;; Disable defaults, use our settings
+        completion-pcm-leading-wildcard t)) ;; Emacs 31: partial-completion behaves like substring
+    
 
   ;; ignores case for find file
   (setq read-buffer-completion-ignore-case t
@@ -132,32 +191,32 @@
     (global-undo-tree-mode))
 
   (use-package ispell
-  :ensure nil
-  :custom
-  (ispell-program-name "aspell")
-  (ispell-dictionary "british")
-  :config
-  (defvar my/ispell-dictionaries '("british" "el" "de"))
+    :ensure nil
+    :custom
+    (ispell-program-name "aspell")
+    (ispell-dictionary "british")
+    :config
+    (defvar my/ispell-dictionaries '("british" "el" "de"))
 
-  (defvar my/ispell-dictionary-ring
-    (let ((ring (make-ring (length my/ispell-dictionaries))))
-      (dolist (dict my/ispell-dictionaries ring)
-        (ring-insert ring dict))))
+    (defvar my/ispell-dictionary-ring
+      (let ((ring (make-ring (length my/ispell-dictionaries))))
+        (dolist (dict my/ispell-dictionaries ring)
+          (ring-insert ring dict))))
 
-  (defun my/cycle-ispell-dictionary ()
-    (interactive)
-    (let ((dict (ring-ref my/ispell-dictionary-ring -1)))
-      (ring-insert my/ispell-dictionary-ring dict)
-      ;; critical: reset personal dictionary when changing language
-      (setq-local ispell-local-dictionary dict)
-      (setq-local ispell-personal-dictionary nil)
-      (ispell-kill-ispell t)
-      (ispell-change-dictionary dict)
-      (message "Local Ispell dictionary set to %s" dict)))
+    (defun my/cycle-ispell-dictionary ()
+      (interactive)
+      (let ((dict (ring-ref my/ispell-dictionary-ring -1)))
+        (ring-insert my/ispell-dictionary-ring dict)
+        ;; critical: reset personal dictionary when changing language
+        (setq-local ispell-local-dictionary dict)
+        (setq-local ispell-personal-dictionary nil)
+        (ispell-kill-ispell t)
+        (ispell-change-dictionary dict)
+        (message "Local Ispell dictionary set to %s" dict)))
 
-  (global-set-key (kbd "C-M-!") #'my/cycle-ispell-dictionary)
-  (global-set-key (kbd "s-;") #'ispell-continue))
-  
+    (global-set-key (kbd "C-M-!") #'my/cycle-ispell-dictionary)
+    (global-set-key (kbd "s-;") #'ispell-continue))
+
   ;; plantuml
   ;; (use-package plantuml-mode
   ;; :mode ("\\.puml\\'" "\\.plantuml\\'" "\\.pu\\'")
@@ -893,60 +952,7 @@ Version 2017-05-30"
 
 
 #+end_src
-* COMMENT ispell
 
-#+begin_src emacs-lisp
-  ;; This contains a collection of Ispell configurations.
-
-  ;; Commentary:
-
-  ;; Code:
-  ;; for cycling through Greek and UK English when using Ispell <C-1>
-  ;; You should have aspell-gr and aspell-en packages installed
-  (let ((langs '("british" "el" "de")))
-    (setq lang-ring (make-ring (length langs)))
-    (dolist (elem langs) (ring-insert lang-ring elem)))
-  (defun cycle-ispell-languages ()
-    (interactive)
-    (let ((lang (ring-ref lang-ring -1)))
-      (ring-insert lang-ring lang)
-      (ispell-change-dictionary lang)))
-  (global-set-key (kbd "C-M-!") 'cycle-ispell-languages)
-  ;; ignore spelling in LaTeX \commands
-  (setq ispell-tex-skip-alists
-        (list
-         (append
-          (car ispell-tex-skip-alists)
-          '(("\\\\mycommand"       ispell-tex-arg-end)
-            ("\\\\mycommandtwo"      ispell-tex-arg-end 2)))
-         (cadr ispell-tex-skip-alists)))
-  ;; Ispell continue
-  (global-set-key (kbd "s-;") 'ispell-continue)
-
-  ;; (add-hook 'LaTeX-mode-hook #'turn-on-flyspell)
-  ;;(add-hook 'org-mode-hook '(flyspell-mode t))
-  ;;(add-hook org-mode-hook #'turn-on-flyspell)
-  ;; toggle flyspell on open text-mode ~ all modes
-  ;; (add-hook 'text-mode-hook #'flyspell-mode)
-  ;; (add-hook 'flyspell-mode-hook #'flyspell-local-vars)
-  ;; (defun flyspell-local-vars ()
-  ;;  (add-hook 'hack-local-variables-hook #'flyspell-buffer))
-
-  ;; check the full buffer when you open a file (e.g., in text-mode, org-mode, etc.):
-  ;; (dolist (hook '(
-  ;;                 ;; org-mode-hook
-  ;;                 latex-mode-hook
-  ;;                 message-mode-hook
-  ;;                 markdown-mode-hook
-  ;;                 ;;text-mode-hook
-  ;;                 )) ;; keep if you still want it for plain text
-  ;;   (add-hook hook
-  ;;             (lambda ()
-  ;;               (flyspell-mode 1)
-  ;;               (flyspell-buffer))))
-
-
-#+end_src
 * flycheck
 
 #+begin_src emacs-lisp

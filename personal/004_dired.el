@@ -1,5 +1,5 @@
 ;; dired --- Exported from Org Mode
-;; 2026-03-17  8:59:53 pm CET
+;; 2026-03-18  9:10:45 pm CET
 
 ;; Commentary:
 ;; Hide details when using dired

@@ -25,22 +25,17 @@ Startup structure in blocks depicted here:
 #+begin_src
 cd ~/
 mv -vn .emacs.d .emacs.d.bak # dont f overwrite your prev config plz
-git clone git@github.com:JasonSKK/.emacs.git 
-git checkout debian-minimal
+git clone git@github.com:JasonSKK/.emacs.git
 mv -vn .emacs .emacs.d # rename with safety
+cd .emacs.d 
+
 #+end_src
 
 * Build optimised GNU Emacs 30.1
 
 Intel(R) Core(TM) i7-3770 CPU @ 3.40GHz
 
-1 Clean the Previous Build (if required)
-#+BEGIN_SRC 
-make clean
-make distclean
-#+END_SRC
-
-2 Install Dependencies
+1 Install Dependencies
 Run the following command based on your distro: Debian/Ubuntu
 #+BEGIN_SRC 
 sudo apt update && sudo apt install -y \
@@ -50,15 +45,26 @@ sudo apt update && sudo apt install -y \
   libmagickwand-dev libxml2-dev libgnutls28-dev \
   libsqlite3-dev libxaw3dxft-dev libgccjit0
 #+END_SRC
+I am using an IBM font, in case they don't render on certain systems you may install them, or remove from custom-set-variables in
 
-3 Download and Extract Emacs Source Code
+A. init
+#+begin_src 
+'(default-frame-alist '((fullscreen . maximized) (font . "IBM Plex Mono")))
+#+end_src
+B. personal/006_text.el
+#+begin_src 
+(set-face-attribute 'default nil :font "IBM Plex Mono")
+(set-fontset-font t 'greek (font-spec :family "FreeMono"))
+#+end_src
+
+2 Download and Extract Emacs Source Code
 #+BEGIN_SRC 
 curl -4O https://ftp.gnu.org/gnu/emacs/emacs-30.1.tar.xz
 tar -xf emacs-30.1.tar.xz
 cd emacs-30.1/
 #+END_SRC
 
-4 Configure with Optimal Flags
+3 Configure with Optimal Flags
 Run:
 #+BEGIN_SRC 
 ./configure --prefix=/opt/emacs30 \
@@ -95,10 +101,9 @@ Run:
 | CFLAGS='-march=native -O3 -pipe -fomit-frame-pointer' | Optimised compiler flags for best CPU performance.                   |
 | LDFLAGS='-Wl,-O1,--sort-common,--as-needed'           | Optimise linking for faster execution.                               |
 
-5 Compile and Install
+4 Compile and Install
 #+BEGIN_SRC 
 make -j$(nproc)
 sudo make install
 #+END_SRC
-
 

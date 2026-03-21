@@ -1,5 +1,5 @@
 ;; packages --- Exported from Org Mode
-;; 2026-03-17  8:59:53 pm CET
+;; 2026-03-18  9:10:45 pm CET
 
   ;; Commentary:
   ;; this is all of the packages.
@@ -46,14 +46,73 @@
     :init
     (savehist-mode))
 
+    ;; --- completion ---
+  (use-package corfu
+    ;; Optional customizations
+    ;; :custom
+    ;; (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+    ;; (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
+    ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
+    ;; (corfu-preview-current nil)    ;; Disable current candidate preview
+    ;; (corfu-preselect 'prompt)      ;; Preselect the prompt
+    ;; (corfu-on-exact-match 'insert) ;; Configure handling of exact matches
+
+    ;; Enable Corfu only for certain modes. See also `global-corfu-modes'.
+    ;; :hook ((prog-mode . corfu-mode)
+    ;;        (shell-mode . corfu-mode)
+    ;;        (eshell-mode . corfu-mode))
+
+    :init
+
+    ;; Recommended: Enable Corfu globally.  Recommended since many modes provide
+    ;; Capfs and Dabbrev can be used globally (M-/).  See also the customization
+    ;; variable `global-corfu-modes' to exclude certain modes.
+    (global-corfu-mode)
+
+    ;; Enable optional extension modes:
+    ;; (corfu-history-mode)
+    ;; (corfu-popupinfo-mode)
+    )
+
+  ;; A few more useful configurations...
+  (use-package emacs
+    :custom
+    ;; TAB cycle if there are only few candidates
+    ;; (completion-cycle-threshold 3)
+
+    ;; Enable indentation+completion using the TAB key.
+    ;; `completion-at-point' is often bound to M-TAB.
+    (tab-always-indent 'complete)
+
+    ;; Emacs 30 and newer: Disable Ispell completion function.
+    ;; Try `cape-dict' as an alternative.
+    (text-mode-ispell-word-completion nil)
+
+    ;; Hide commands in M-x which do not apply to the current mode.  Corfu
+    ;; commands are hidden, since they are not used via M-x. This setting is
+    ;; useful beyond Corfu.
+    (read-extended-command-predicate #'command-completion-default-include-p))
+
+  ;; Enable auto completion pop up, configure delay, trigger and quitting
+  ;; (setq corfu-auto t
+  ;;       corfu-auto-delay 0.2
+  ;;       corfu-auto-trigger "." ;; Custom trigger characters
+  ;;       corfu-quit-no-match 'separator) ;; or t
+
+  ;; --- completion ---
+  
   ;; flexible fuzzy matching via orderless
   (use-package orderless
     :ensure t
     :init
+    ;; corfu completion
+    ;; (orderless-style-dispatchers '(orderless-affix-dispatch))
+    ;; (orderless-component-separator #'orderless-escapable-split-on-space)
     (setq completion-styles '(orderless basic)
-          completion-category-defaults nil
-          completion-category-overrides
-          '((file (styles basic partial-completion)))))
+        completion-category-overrides '((file (styles partial-completion)))
+        completion-category-defaults nil ;; Disable defaults, use our settings
+        completion-pcm-leading-wildcard t)) ;; Emacs 31: partial-completion behaves like substring
+    
 
   ;; ignores case for find file
   (setq read-buffer-completion-ignore-case t
@@ -132,32 +191,32 @@
     (global-undo-tree-mode))
 
   (use-package ispell
-  :ensure nil
-  :custom
-  (ispell-program-name "aspell")
-  (ispell-dictionary "british")
-  :config
-  (defvar my/ispell-dictionaries '("british" "el" "de"))
+    :ensure nil
+    :custom
+    (ispell-program-name "aspell")
+    (ispell-dictionary "british")
+    :config
+    (defvar my/ispell-dictionaries '("british" "el" "de"))
 
-  (defvar my/ispell-dictionary-ring
-    (let ((ring (make-ring (length my/ispell-dictionaries))))
-      (dolist (dict my/ispell-dictionaries ring)
-        (ring-insert ring dict))))
+    (defvar my/ispell-dictionary-ring
+      (let ((ring (make-ring (length my/ispell-dictionaries))))
+        (dolist (dict my/ispell-dictionaries ring)
+          (ring-insert ring dict))))
 
-  (defun my/cycle-ispell-dictionary ()
-    (interactive)
-    (let ((dict (ring-ref my/ispell-dictionary-ring -1)))
-      (ring-insert my/ispell-dictionary-ring dict)
-      ;; critical: reset personal dictionary when changing language
-      (setq-local ispell-local-dictionary dict)
-      (setq-local ispell-personal-dictionary nil)
-      (ispell-kill-ispell t)
-      (ispell-change-dictionary dict)
-      (message "Local Ispell dictionary set to %s" dict)))
+    (defun my/cycle-ispell-dictionary ()
+      (interactive)
+      (let ((dict (ring-ref my/ispell-dictionary-ring -1)))
+        (ring-insert my/ispell-dictionary-ring dict)
+        ;; critical: reset personal dictionary when changing language
+        (setq-local ispell-local-dictionary dict)
+        (setq-local ispell-personal-dictionary nil)
+        (ispell-kill-ispell t)
+        (ispell-change-dictionary dict)
+        (message "Local Ispell dictionary set to %s" dict)))
 
-  (global-set-key (kbd "C-M-!") #'my/cycle-ispell-dictionary)
-  (global-set-key (kbd "s-;") #'ispell-continue))
-  
+    (global-set-key (kbd "C-M-!") #'my/cycle-ispell-dictionary)
+    (global-set-key (kbd "s-;") #'ispell-continue))
+
   ;; plantuml
   ;; (use-package plantuml-mode
   ;; :mode ("\\.puml\\'" "\\.plantuml\\'" "\\.pu\\'")

@@ -115,7 +115,7 @@
              ol-mhe ol-rmail org-tempo ol-w3m))
  '(package-selected-packages
    '(ace-mc ace-window auto-async-byte-compile avy-menu avy-zap consult
-            easy-kill gt key-chord marginalia notmuch orderless
+            corfu easy-kill gt key-chord marginalia notmuch orderless
             plantuml-mode telephone-line undo-tree vertico xclip))
  '(send-mail-function 'smtpmail-send-it)
  '(smtpmail-smtp-server "smtp.gmail.com")
