@@ -1,5 +1,5 @@
 ;; text --- Exported from Org Mode
-;; 2026-03-18  9:10:45 pm CET
+;; 2026-03-31  4:46:04 pm CEST
 
 
   ;; Commentary:
@@ -10,6 +10,11 @@
 
   (set-face-attribute 'default nil :font "IBM Plex Mono")
   (set-fontset-font t 'greek (font-spec :family "FreeMono"))
+
+  ;; increase/decrease text size on buffer
+  (global-set-key (kbd "C-+") 'text-scale-increase)
+  (global-set-key (kbd "C--") 'text-scale-decrease)
+
 
   ;; detects a /path/to/file or https://example-url.com near point, can remap C-x C-f so it uses that guess as the default
   (ffap-bindings)

@@ -1,5 +1,5 @@
 ;; packages --- Exported from Org Mode
-;; 2026-03-18  9:10:45 pm CET
+;; 2026-03-31  4:46:03 pm CEST
 
   ;; Commentary:
   ;; this is all of the packages.
@@ -100,7 +100,7 @@
   ;;       corfu-quit-no-match 'separator) ;; or t
 
   ;; --- completion ---
-  
+
   ;; flexible fuzzy matching via orderless
   (use-package orderless
     :ensure t
@@ -135,7 +135,7 @@
            :taker   (gt-taker :langs '(de en el ru)
                               :text 'buffer
                               :pick 'paragraph)
-           :engines (list (gt-libre-engine)
+           :engines (list (gt-deepl-engine)
                           ;; (gt-google-engine)
                           )
            :render  (gt-buffer-render))))
