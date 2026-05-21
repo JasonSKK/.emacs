@@ -1,5 +1,5 @@
 ;; packages --- Exported from Org Mode
-;; 2026-03-18  9:10:45 pm CET
+;; 2026-05-21  5:56:47 pm CEST
 
   ;; Commentary:
   ;; this is all of the packages.
@@ -135,7 +135,7 @@
            :taker   (gt-taker :langs '(de en el ru)
                               :text 'buffer
                               :pick 'paragraph)
-           :engines (list (gt-libre-engine)
+           :engines (list (gt-deepl-engine)
                           ;; (gt-google-engine)
                           )
            :render  (gt-buffer-render))))

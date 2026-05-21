@@ -68,6 +68,9 @@
 
 (add-hook 'emacs-startup-hook #'efs/display-startup-time)
 
+;; always org-overview when org-mode buffer
+(add-hook 'org-mode-hook 'org-overview)
+
 (provide 'init)
 
 ;;; init.el ends here

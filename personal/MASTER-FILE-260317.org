@@ -135,7 +135,7 @@
            :taker   (gt-taker :langs '(de en el ru)
                               :text 'buffer
                               :pick 'paragraph)
-           :engines (list (gt-libre-engine)
+           :engines (list (gt-deepl-engine)
                           ;; (gt-google-engine)
                           )
            :render  (gt-buffer-render))))
@@ -604,7 +604,7 @@ If called with ARG, do not insert time."
 * global-keys
 
 #+begin_src emacs-lisp
-  
+
   ;; Commentary:
   ;; Configuration for personal keybindings
 
@@ -615,6 +615,11 @@ If called with ARG, do not insert time."
     "Keymap for local bindings and functions, prefixed by (^L)")
   (define-key global-map "\C-l" 'Control-L-prefix)
   (fset 'Control-L-prefix ctl-l-map)
+
+  ;; increment/decrease text scale
+  (global-set-key (kbd "C-+") (lambda () (interactive) (text-scale-increase 1)))
+  (global-set-key (kbd "C--") (lambda () (interactive) (text-scale-decrease 1)))
+
 #+end_src
 * text
 
