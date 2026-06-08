@@ -68,6 +68,12 @@
 
 (add-hook 'emacs-startup-hook #'efs/display-startup-time)
 
+;; always org-overview when org-mode buffer
+(add-hook 'org-mode-hook 'org-overview)
+
+;; Some window managers (especially with compositors) block programmatic focus stealing.
+(select-frame-set-input-focus (selected-frame))
+
 (provide 'init)
 
 ;;; init.el ends here
@@ -171,10 +177,11 @@
  '(package-selected-packages
    '(ace-mc ace-window auto-async-byte-compile avy-menu avy-zap consult
             corfu easy-kill gt key-chord marginalia notmuch orderless
-            plantuml-mode telephone-line undo-tree vertico xclip))
+            pdd plantuml-mode telephone-line undo-tree vertico xclip))
  '(send-mail-function 'smtpmail-send-it)
  '(smtpmail-smtp-server "smtp.gmail.com")
  '(smtpmail-smtp-service 25)
+ '(undo-tree-auto-save-history nil)
  '(user-emacs-directory-warning t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

@@ -1,5 +1,9 @@
 ;; packages --- Exported from Org Mode
+<<<<<<< HEAD
 ;; 2026-03-31  4:46:03 pm CEST
+=======
+;; 2026-06-08  7:52:22 pm CEST
+>>>>>>> main
 
   ;; Commentary:
   ;; this is all of the packages.
@@ -127,6 +131,7 @@
     (recentf-auto-cleanup 'never))
 
   ;; translation
+<<<<<<< HEAD
   (use-package gt
     :ensure t
     :config
@@ -139,6 +144,49 @@
                           ;; (gt-google-engine)
                           )
            :render  (gt-buffer-render))))
+=======
+  ;;; Translation — go-translate (gt) with DeepL
+(use-package gt
+  :ensure t
+  :config
+
+  ;; --- DeepL fixes (run once gt's DeepL engine file is loaded) ---
+  (with-eval-after-load 'gt-engine-deepl
+
+    ;; 1) Add Greek. The shipped language table has no Greek entry,
+    ;;    even though DeepL itself supports it (API code "EL").
+    ;;    Without this, translating to/from Greek throws an error.
+    (add-to-list 'gt-deepl-langs-mapping '(el . "EL"))
+
+    ;; 2) Fix the result parser. DeepL's reply looks like:
+    ;;       {"translations":[{"text":"...","detected_source_language":"DE"}]}
+    ;;    The built-in parser grabbed a field *by position*, which broke
+    ;;    when DeepL reordered them — so it showed the language code ("EN")
+    ;;    instead of the translated text. This version grabs the "text"
+    ;;    field *by name*, so field order no longer matters.
+    (cl-defmethod gt-parse ((_ gt-deepl-parser) task)
+      (cl-loop for item in (oref task res)
+               for translations = (alist-get 'translations item)
+               for str = (mapconcat (lambda (tr) (or (alist-get 'text tr) ""))
+                                     (append translations nil) "\n")
+               collect (string-trim (decode-coding-string str 'utf-8)) into lst
+               finally (oset task res lst))))
+
+  ;; --- The default translator used by M-x gt-translate ---
+  (setq gt-default-translator
+        (gt-translator
+         ;; What text to grab and which languages to offer:
+         :taker (gt-taker
+                 :langs '(de en el ru)  ; languages you translate between
+                 :text 'buffer          ; take the whole buffer
+                 :pick 'paragraph       ; split it paragraph by paragraph
+                 :prompt t)             ; ask/confirm the from→to direction
+                                        ; (so it won't guess wrong, e.g. DE as EN)
+         ;; Which engine does the translating:
+         :engines (list (gt-deepl-engine))
+         ;; Where the result is shown:
+         :render (gt-buffer-render))))   ; pop up a buffer with the translation
+>>>>>>> main
 
   ;; telephone line 
   (use-package telephone-line

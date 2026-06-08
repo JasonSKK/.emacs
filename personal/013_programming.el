@@ -1,5 +1,9 @@
 ;; programming --- Exported from Org Mode
+<<<<<<< HEAD
 ;; 2026-03-31  4:46:05 pm CEST
+=======
+;; 2026-06-08  7:52:22 pm CEST
+>>>>>>> main
 
   ;; --- C/C++ ---
   ;; Set the default indentation level to 3 spaces for C/C++ modes
