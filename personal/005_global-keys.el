@@ -1,10 +1,6 @@
 ;; global-keys --- Exported from Org Mode
-<<<<<<< HEAD
-;; 2026-03-31  4:46:04 pm CEST
-=======
-;; 2026-06-08  7:52:22 pm CEST
+;; 2026-06-08  8:09:36 pm CEST
 
->>>>>>> main
 
   ;; Commentary:
   ;; Configuration for personal keybindings

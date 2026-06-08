@@ -127,7 +127,6 @@
     (recentf-auto-cleanup 'never))
 
   ;; translation
-<<<<<<< HEAD
   (use-package gt
     :ensure t
     :config
@@ -140,7 +139,7 @@
                           ;; (gt-google-engine)
                           )
            :render  (gt-buffer-render))))
-=======
+
   ;;; Translation — go-translate (gt) with DeepL
 (use-package gt
   :ensure t
@@ -182,7 +181,6 @@
          :engines (list (gt-deepl-engine))
          ;; Where the result is shown:
          :render (gt-buffer-render))))   ; pop up a buffer with the translation
->>>>>>> main
 
   ;; telephone line 
   (use-package telephone-line

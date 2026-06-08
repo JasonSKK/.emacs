@@ -1,9 +1,5 @@
 ;; packages --- Exported from Org Mode
-<<<<<<< HEAD
-;; 2026-03-31  4:46:03 pm CEST
-=======
-;; 2026-06-08  7:52:22 pm CEST
->>>>>>> main
+;; 2026-06-08  8:09:35 pm CEST
 
   ;; Commentary:
   ;; this is all of the packages.
@@ -131,7 +127,6 @@
     (recentf-auto-cleanup 'never))
 
   ;; translation
-<<<<<<< HEAD
   (use-package gt
     :ensure t
     :config
@@ -144,7 +139,7 @@
                           ;; (gt-google-engine)
                           )
            :render  (gt-buffer-render))))
-=======
+
   ;;; Translation — go-translate (gt) with DeepL
 (use-package gt
   :ensure t
@@ -186,7 +181,6 @@
          :engines (list (gt-deepl-engine))
          ;; Where the result is shown:
          :render (gt-buffer-render))))   ; pop up a buffer with the translation
->>>>>>> main
 
   ;; telephone line 
   (use-package telephone-line

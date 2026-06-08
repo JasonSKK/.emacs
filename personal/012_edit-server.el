@@ -1,9 +1,5 @@
 ;; edit-server --- Exported from Org Mode
-<<<<<<< HEAD
-;; 2026-03-31  4:46:05 pm CEST
-=======
-;; 2026-06-08  7:52:22 pm CEST
->>>>>>> main
+;; 2026-06-08  8:09:36 pm CEST
 
 
 ;; Copyright (C) 2009-2013  Alex BennÃ©e
