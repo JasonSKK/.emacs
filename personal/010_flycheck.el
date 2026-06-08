@@ -1,5 +1,5 @@
 ;; flycheck --- Exported from Org Mode
-;; 2026-05-21  5:56:47 pm CEST
+;; 2026-06-08  7:52:22 pm CEST
 
   ;; 260317, yes lag is observed, especially on autosave
   ;; --> I suffered from this in my previous config. For now it remains commented out until issue is observed again.

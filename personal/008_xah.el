@@ -1,5 +1,5 @@
 ;; xah --- Exported from Org Mode
-;; 2026-05-21  5:56:47 pm CEST
+;; 2026-06-08  7:52:22 pm CEST
 
 ;; copy current buffer path
 (defun xah-copy-file-path (&optional DirPathOnlyQ)

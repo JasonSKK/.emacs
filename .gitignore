@@ -35,3 +35,4 @@ eln-cache/
 network-security.data
 var/slack-files/
 *.pu
+\#*\#
