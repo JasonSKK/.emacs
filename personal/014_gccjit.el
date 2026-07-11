@@ -1,5 +1,5 @@
 ;; gccjit --- Exported from Org Mode
-;; 2026-06-08  8:09:36 pm CEST
+;; 2026-07-11 11:38:22 am CEST
 
 ;; gccjit (GNU Compiler Collection Just-In-Time compilation) allows Emacs to natively compile Elisp code into machine code for improved performance.
 (setq native-comp-async-report-warnings-errors 'silent)

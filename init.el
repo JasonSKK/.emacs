@@ -117,51 +117,7 @@
      ("f" ("+flagged") "Flag") ("s" ("+spam" "-inbox") "Mark as spam")
      ("d" ("+deleted" "-inbox") "Delete")))
  '(org-mode-hook
-   '(#[0
-       "\305\20\306\11>\203\24\0\307\12\310\311#\210\307\13\312\313#\210\307\13\314\315#\210\306\11>\203,\0\307\12\316\317#\210\307\12\320\321#\210\322\11>\203>\0\307\13\323\324#\210\307\13\325\324#\210\326\11>\203P\0\307\12\327\317#\210\307\12\330\321#\210\331\11>\203_\0\332\311\14\333BC\334#\210\335\11>\203k\0\332\311\336\334#\210\337\11>\203w\0\332\311\340\334#\210\341\342\343\344#\207"
-       [org-mouse-context-menu-function org-mouse-features
-                                        org-mouse-map org-mode-map
-                                        org-outline-regexp
-                                        org-mouse-context-menu
-                                        context-menu org-defkey
-                                        [mouse-3] nil [mouse-3]
-                                        org-mouse-show-context-menu
-                                        [down-mouse-1]
-                                        org-mouse-down-mouse
-                                        [C-drag-mouse-1]
-                                        org-mouse-move-tree
-                                        [C-down-mouse-1]
-                                        org-mouse-move-tree-start
-                                        yank-link [S-mouse-2]
-                                        org-mouse-yank-link
-                                        [drag-mouse-3] move-tree
-                                        [drag-mouse-3] [down-mouse-3]
-                                        activate-stars
-                                        font-lock-add-keywords
-                                        (0
-                                         `(face org-link mouse-face
-                                                highlight keymap
-                                                ,org-mouse-map)
-                                         'prepend)
-                                        t activate-bullets
-                                        (("^[ \11]*\\([-+*]\\|[0-9]+[.)]\\) +"
-                                          (1
-                                           `(face org-link keymap
-                                                  ,org-mouse-map
-                                                  mouse-face highlight)
-                                           'prepend)))
-                                        activate-checkboxes
-                                        (("^[ \11]*\\(?:[-+*]\\|[0-9]+[.)]\\)[ \11]+\\(?:\\[@\\(?:start:\\)?[0-9]+\\][ \11]*\\)?\\(\\[[- X]\\]\\)"
-                                          (1
-                                           `(face nil keymap
-                                                  ,org-mouse-map
-                                                  mouse-face highlight)
-                                           prepend)))
-                                        advice-add org-open-at-point
-                                        :around
-                                        org--mouse-open-at-point]
-       4]
-     org-tempo-setup
+   '(org-tempo-setup
      #[0 "\300\301\302\303\304$\207"
          [add-hook change-major-mode-hook org-fold-show-all append
                    local]
@@ -170,14 +126,11 @@
          [add-hook change-major-mode-hook org-babel-show-result-all
                    append local]
          5]
-     org-babel-result-hide-spec org-overview org-babel-hide-all-hashes))
+     org-babel-result-hide-spec org-overview org-babel-hide-all-hashes) t)
  '(org-modules
    '(ol-bbdb ol-bibtex ol-docview ol-doi ol-eww ol-gnus ol-info ol-irc
              ol-mhe ol-rmail org-tempo ol-w3m))
- '(package-selected-packages
-   '(ace-mc ace-window auto-async-byte-compile avy-menu avy-zap consult
-            corfu easy-kill gt key-chord marginalia notmuch orderless
-            pdd plantuml-mode telephone-line undo-tree vertico xclip))
+ '(package-selected-packages nil)
  '(send-mail-function 'smtpmail-send-it)
  '(smtpmail-smtp-server "smtp.gmail.com")
  '(smtpmail-smtp-service 25)
